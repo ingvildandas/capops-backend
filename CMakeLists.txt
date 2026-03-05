@@ -107,15 +107,7 @@ target_link_libraries(capops
         Qt6::Network
         Qt6::HttpServer
         Qt6::WebSockets
-)
-
-target_link_libraries(capops 
-    PRIVATE
         SQLite::SQLite3
-)
-
-target_link_libraries(capops 
-    PRIVATE 
         redis++::redis++
 )
 
