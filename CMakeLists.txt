@@ -34,7 +34,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Catch2)
 
 # ---- Fetch SQLite3 ----
-include(FetchContent)
 FetchContent_Declare(
     sqlite3 
     GIT_REPOSITORY https://github.com/sjinks/sqlite3-cmake.git 
@@ -42,6 +41,10 @@ FetchContent_Declare(
     GIT_SHALLOW TRUE
 )
 FetchContent_MakeAvailable(sqlite3)
+
+if(TARGET SQLite3)
+    target_compile_options(SQLite3 PRIVATE -Wno-stringop-overread)
+endif()
 
 # ---- Fetch hiredis (necessary redis-plus-plus dependency)
 FetchContent_Declare(
@@ -53,8 +56,6 @@ FetchContent_Declare(
 
 set(DISABLE_TESTS ON CACHE BOOL "Disable hiredis tests" FORCE)
 set(ENABLE_EXAMPLES OFF CACHE BOOL "Disable hiredis examples/tests" FORCE)
-set(ENABLE_TESTS OFF CACHE BOOL "Disable hiredis tests" FORCE)
-set(BUILD_TESTING OFF CACHE BOOL "Disable tests" FORCE)
 
 FetchContent_MakeAvailable(hiredis)
 
@@ -119,7 +120,6 @@ target_link_libraries(capops
 )
 
 # ---- Tests ----
-set(BUILD_TESTING ON CACHE BOOL "Enable tests" FORCE)
 add_executable(tests
     tests/test.cpp
 )
