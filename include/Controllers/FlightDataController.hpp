@@ -18,5 +18,7 @@ public:
     );
     ~FlightDataController() override;
 
-    QHttpServerResponse registerWebSocketConnection(const QHttpServerRequest& request);
+    QHttpServerResponse openConnection(const QHttpServerRequest& request);
+    QHttpServerResponse closeConnection(const QHttpServerRequest& request);
+    
 };
