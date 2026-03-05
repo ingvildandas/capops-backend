@@ -2,7 +2,6 @@
 
 #include <QHttpServer>
 
-class FlightDataController;
 class RiskEventController;
 
 class HttpRouter
@@ -10,7 +9,6 @@ class HttpRouter
 public:
     explicit HttpRouter(QHttpServer& server);
 
-    void registerFlightDataController(FlightDataController& flightDataController);
     void registerRiskEventController(RiskEventController& riskEventController);
 
 private:
