@@ -1,10 +1,12 @@
 #pragma once
 
 #include <QObject>
-#include <QWebSocket>
+#include <QPointer>
 #include <QMap>
 
 class QString;
+class QStringList;
+class QWebSocket;
 class FlightDataDto;
 
 class WebSocketSessionManager : public QObject
@@ -12,19 +14,18 @@ class WebSocketSessionManager : public QObject
     Q_OBJECT
 
 public:
-    static WebSocketSessionManager& instance();
-
-    WebSocketSessionManager(const WebSocketSessionManager&) = delete;
-    WebSocketSessionManager& operator=(const WebSocketSessionManager&) = delete;
-
-    void registerSession(/*session*/);
-    void removeSession(/*session*/);
-    void broadcast(FlightDataDto& payload);
-    void sendToClient(const QString& sessionId, const QString& msg);
-    void listActiveSessions();
-
-private:
     explicit WebSocketSessionManager(QObject* parent = nullptr);
-    QMap<QString, QWebSocket *> _activeSessions; 
+
+    QStringList getActiveSessionIds() const;
+    int getActiveSessionCount() const;
+
+    QString registerSession(QWebSocket* socket);
+    void removeSession(const QString& sessionId);
+
+    void broadcast(const FlightDataDto& payload);
+    void sendToClient(const QString& sessionId, const QString& msg);
+    
+private:
+    QMap<QString, QPointer<QWebSocket>> _activeSessions; 
 };
 
