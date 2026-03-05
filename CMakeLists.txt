@@ -50,7 +50,26 @@ FetchContent_Declare(
     GIT_TAG v1.3.0
     GIT_SHALLOW TRUE
 )
+
+set(DISABLE_TESTS ON CACHE BOOL "Disable hiredis tests" FORCE)
+set(ENABLE_EXAMPLES OFF CACHE BOOL "Disable hiredis examples/tests" FORCE)
+set(ENABLE_TESTS OFF CACHE BOOL "Disable hiredis tests" FORCE)
+set(BUILD_TESTING OFF CACHE BOOL "Disable tests" FORCE)
+
 FetchContent_MakeAvailable(hiredis)
+
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/hiredis_include/hiredis)
+
+file(COPY
+    ${hiredis_SOURCE_DIR}/hiredis.h
+    ${hiredis_SOURCE_DIR}/read.h
+    ${hiredis_SOURCE_DIR}/sds.h
+    ${hiredis_SOURCE_DIR}/async.h
+    ${hiredis_SOURCE_DIR}/alloc.h
+    DESTINATION ${CMAKE_BINARY_DIR}/hiredis_include/hiredis
+)
+set(HIREDIS_HEADER ${CMAKE_BINARY_DIR}/hiredis_include)
+set(HIREDIS_LIB hiredis)
 
 if(TARGET hiredis AND NOT TARGET hiredis::hiredis)
     add_library(hiredis::hiredis ALIAS hiredis)
@@ -100,6 +119,7 @@ target_link_libraries(capops
 )
 
 # ---- Tests ----
+set(BUILD_TESTING ON CACHE BOOL "Enable tests" FORCE)
 add_executable(tests
     tests/test.cpp
 )
