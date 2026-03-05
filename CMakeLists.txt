@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.31)
+cmake_minimum_required(VERSION 3.5)
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
 project(capops
   VERSION 0.1.0
@@ -15,7 +16,12 @@ set(CMAKE_AUTORCC ON)
 include(CTest) 
 
 # ---- Find Qt6 ----
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
+find_package(Qt6 REQUIRED COMPONENTS 
+    Core 
+    Network 
+    HttpServer 
+    WebSockets
+)
 
 # ---- Fetch Catch2 ----
 include(FetchContent)
@@ -23,6 +29,7 @@ FetchContent_Declare(
     Catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
     GIT_TAG v3.5.4
+    GIT_SHALLOW TRUE
 )
 FetchContent_MakeAvailable(Catch2)
 
@@ -32,6 +39,7 @@ FetchContent_Declare(
     sqlite3 
     GIT_REPOSITORY https://github.com/sjinks/sqlite3-cmake.git 
     GIT_TAG v3.49.1
+    GIT_SHALLOW TRUE
 )
 FetchContent_MakeAvailable(sqlite3)
 
@@ -39,19 +47,33 @@ FetchContent_MakeAvailable(sqlite3)
 FetchContent_Declare(
     hiredis
     GIT_REPOSITORY https://github.com/redis/hiredis.git
-    GIT_TAG v3.5.4
+    GIT_TAG v1.3.0
+    GIT_SHALLOW TRUE
 )
 FetchContent_MakeAvailable(hiredis)
+
+if(TARGET hiredis AND NOT TARGET hiredis::hiredis)
+    add_library(hiredis::hiredis ALIAS hiredis)
+endif()
 
 # ---- Fetch redis-plus-plus ----
 FetchContent_Declare(
     redis-plus-plus
     GIT_REPOSITORY https://github.com/sewenew/redis-plus-plus.git
-    GIT_TAG v3.5.4
-    FIND_PACKAGE_ARGS DISABLE_TESTS 
+    GIT_TAG 1.3.9
+    GIT_SHALLOW TRUE
 )
 set(REDIS_PLUS_PLUS_BUILD_TEST OFF CACHE BOOL "Disable building redis-plus-plus tests" FORCE)
 FetchContent_MakeAvailable(redis-plus-plus)
+
+# ---- Executables ----
+file(GLOB_RECURSE APP_SOURCES 
+    app/main.cpp
+    src/*.cpp
+    include/*.hpp
+    resources/*.qrc
+)
+add_executable(capops ${APP_SOURCES})
 
 # ---- Library ----
 target_include_directories(capops 
@@ -64,7 +86,7 @@ target_link_libraries(capops
         Qt6::Core 
         Qt6::Network
         Qt6::HttpServer
-        Qt6::WebSocket
+        Qt6::WebSockets
 )
 
 target_link_libraries(capops 
@@ -77,15 +99,6 @@ target_link_libraries(capops
         redis++::redis++
 )
 
-# ---- Executables ----
-file(GLOB_RECURSE APP_SOURCES 
-    app/main.cpp
-    src/*.cpp
-    include/*.hpp
-    resources/*.qrc
-)
-add_executable(capops ${APP_SOURCES})
-
 # ---- Tests ----
 add_executable(tests
     tests/test.cpp
@@ -93,6 +106,5 @@ add_executable(tests
 
 target_link_libraries(tests 
     PRIVATE 
-    Catch2::Catch2WithMain 
-    Qt6::Core Qt6::Widgets
+        Catch2::Catch2WithMain 
 )
