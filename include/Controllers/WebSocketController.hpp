@@ -4,21 +4,25 @@
 #include <QHttpServerRequest>
 #include <QHttpServerResponse>
 
-class RiskEventService;
-class SectorSummaryService;
-class TrackService;
+class QWebSocket;
+class WebSocketSessionManager;
 
-class FlightDataController : public QObject
+class WebSocketController : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit FlightDataController(
-        QObject *parent = nullptr
+    explicit WebSocketController(
+        WebSocketSessionManager& sessionManager, 
+        QObject* parent = nullptr
     );
-    ~FlightDataController() override;
+    
+    void handleNewConnection(QWebSocket* socket);
 
-    QHttpServerResponse openConnection(const QHttpServerRequest& request);
-    QHttpServerResponse closeConnection(const QHttpServerRequest& request);
+private:
+    WebSocketSessionManager& _sessionManager;
+
+private slots:
+    void onDisconnected();
     
 };
