@@ -41,7 +41,9 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(sqlite3)
 
 if(TARGET SQLite3)
-    target_compile_options(SQLite3 PRIVATE -Wno-stringop-overread)
+    target_compile_options(SQLite3 PRIVATE
+        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang>:-Wno-stringop-overread>
+    )
 endif()
 
 # ---- Fetch hiredis (necessary redis-plus-plus dependency)
