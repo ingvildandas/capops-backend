@@ -13,7 +13,7 @@ class RiskEventController : public QObject
 public:
     explicit RiskEventController(
         RiskEventService& service,
-        QObject *parent = nullptr
+        QObject* parent = nullptr
     );
     ~RiskEventController() override;
 
