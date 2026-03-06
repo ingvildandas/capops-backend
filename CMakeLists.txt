@@ -13,8 +13,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-include(CTest) 
-
 # ---- Find Qt6 ----
 find_package(Qt6 REQUIRED COMPONENTS 
     Core 
@@ -112,11 +110,21 @@ target_link_libraries(capops
 )
 
 # ---- Tests ----
-add_executable(tests
-    tests/test.cpp
-)
+option(BUILD_TESTING "Build tests" ON)
 
-target_link_libraries(tests 
-    PRIVATE 
-        Catch2::Catch2WithMain 
-)
+if(BUILD_TESTING)
+    include(CTest) 
+    enable_testing()
+    
+    add_executable(tests
+        tests/test.cpp
+    )
+
+    target_link_libraries(tests 
+        PRIVATE 
+            Catch2::Catch2WithMain 
+    )
+
+    include(Catch)
+    catch_discover_tests(tests)
+endif()
