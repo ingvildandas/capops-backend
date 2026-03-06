@@ -3,9 +3,9 @@
 #include <QObject>
 #include <QPointer>
 #include <QMap>
+#include <QStringList>
 
 class QString;
-class QStringList;
 class QWebSocket;
 class FlightDataDto;
 
