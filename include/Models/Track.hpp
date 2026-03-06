@@ -8,7 +8,7 @@
 class Track
 {
 public:
-    Track(
+    explicit Track(
         const std::string& icao24,
         const std::chrono::system_clock::time_point& timestamp,
         const TrackGlobalPosition& globalPosition,
@@ -18,13 +18,13 @@ public:
         const double headingDegrees
     );
 
-    std::string getIcao24() const;
-    std::chrono::system_clock::time_point getTimestamp() const;
+    const std::string& getIcao24() const;
+    const std::chrono::system_clock::time_point& getTimestamp() const;
     const TrackGlobalPosition& getGlobalPosition() const;
     const TrackLocalPosition& getLocalPosition() const;
     const TrackGlobalVelocity& getGlobalVelocity() const;
     const TrackLocalVelocity& getLocalVelocity() const;
-    double getHeadingDegrees() const;
+    const double getHeadingDegrees() const;
 
 private:
     std::string _icao24;
