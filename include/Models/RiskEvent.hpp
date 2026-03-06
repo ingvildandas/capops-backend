@@ -12,15 +12,15 @@ public:
         const bool acknowledged
     );
 
-    const int getRiskEventId();
-    const int getRiskSeverity();
-    const std::string& getMessage();
-    const bool getAcknowledged();
+    const int getRiskEventId() const;
+    const int getRiskSeverity() const;
+    const std::string& getMessage() const;
+    const bool getAcknowledged() const;
 
 private:
     int _riskEventId;
     int _riskSeverity;
     std::string _message;
-    bool acknowledged;
+    bool _acknowledged;
 };
 
