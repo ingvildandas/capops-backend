@@ -3,48 +3,41 @@
 #include <chrono>
 #include <string>
 
+#include "Structs/TrackStructs.hpp";
+
 class Track
 {
 public:
     Track(
         const std::string& icao24,
         const std::chrono::system_clock::time_point& timestamp,
-        const std::string& positionFrame,
-        const double latitudeDegrees,
-        const double longitudeDegrees,
-        const double altitudeMeters,
-        const std::string& velocityFrame,
-        const double velocityMetersPerSecond,
-        const double xVelocityMetersPerSecond,
-        const double yVelocityMetersPerSecond,
-        const double zVelocityMetersPerSecond,
+        const TrackGlobalPosition& globalPosition,
+        const TrackLocalPosition& localPosition,
+        const TrackGlobalVelocity& globalVelocity,
+        const TrackLocalVelocity& localVelocity, 
         const double headingDegrees
     );
 
-    std::string getIcao24();
-    std::chrono::system_clock::time_point getTimestamp();
-    std::string getPositionFrame();
-    double getLatitudeDegrees();
-    double getLongitudeDegrees();
-    double getAltitudeMeters();
-    std::string velocityFrame();
-    double getVelocityMetersPerSecond();
-    double getXVelocityMetersPerSecond();
-    double getYVelocityMetersPerSecond();
-    double getZVelocityMetersPerSecond();
-    double getHeadingDegrees();
+    std::string getIcao24() const;
+    std::chrono::system_clock::time_point getTimestamp() const;
+    const TrackGlobalPosition& getGlobalPosition() const;
+    const TrackLocalPosition& getLocalPosition() const;
+    const TrackGlobalVelocity& getGlobalVelocity() const;
+    const TrackLocalVelocity& getLocalVelocity() const;
+    double getHeadingDegrees() const;
 
 private:
     std::string _icao24;
     std::chrono::system_clock::time_point _timestamp;
-    std::string positionFrame;
-    double _latitudeDegrees;
-    double _longitudeDegrees;
-    double _altitudeMeters;
-    std::string _velocityFrame;
-    double _velocityMetersPerSecond;
-    double _xVelocityMetersPerSecond;
-    double _yVelocityMetersPerSecond;
-    double _zVelocityMetersPerSecond;
+    TrackGlobalPosition _globalPosition;
+    TrackLocalPosition _localPosition;
+    TrackGlobalVelocity _globalVelocity;
+    TrackLocalVelocity _localVelocity;
     double _headingDegrees;
+
+private:
+    void validateGlobalPosition(const TrackGlobalPosition globalPosition);
+    void validateLocalPosition(const TrackLocalPosition localPosition);
+    void validateGlobalVelocity(const TrackGlobalVelocity globalVelocity);
+    void validateLocalVelocity(const TrackLocalVelocity localVelocity);
 };
