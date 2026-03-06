@@ -15,7 +15,6 @@ public:
         RiskEventService& service,
         QObject* parent = nullptr
     );
-    ~RiskEventController() override;
 
     QHttpServerResponse getRiskEvent(const int id, const QHttpServerRequest& request);
     QHttpServerResponse getMostRecentRiskEvents(const QHttpServerRequest& request);
