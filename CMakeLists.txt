@@ -13,8 +13,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-include(CTest) 
-
 # ---- Find Qt6 ----
 find_package(Qt6 REQUIRED COMPONENTS 
     Core 
@@ -43,7 +41,9 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(sqlite3)
 
 if(TARGET SQLite3)
-    target_compile_options(SQLite3 PRIVATE -Wno-stringop-overread)
+    target_compile_options(SQLite3 PRIVATE
+        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang>:-Wno-stringop-overread>
+    )
 endif()
 
 # ---- Fetch hiredis (necessary redis-plus-plus dependency)
@@ -112,11 +112,21 @@ target_link_libraries(capops
 )
 
 # ---- Tests ----
-add_executable(tests
-    tests/test.cpp
-)
+option(BUILD_TESTING "Build tests" ON)
 
-target_link_libraries(tests 
-    PRIVATE 
-        Catch2::Catch2WithMain 
-)
+if(BUILD_TESTING)
+    include(CTest) 
+    enable_testing()
+    
+    add_executable(tests
+        tests/test.cpp
+    )
+
+    target_link_libraries(tests 
+        PRIVATE 
+            Catch2::Catch2WithMain 
+    )
+
+    include(Catch)
+    catch_discover_tests(tests)
+endif()
