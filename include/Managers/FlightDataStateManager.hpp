@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "Structs/FlightDataStructs.hpp"
+
 class FlightDataDto;
 class RiskEvent;
 class SectorSummary;
@@ -19,11 +21,6 @@ public:
     void setTracks(std::vector<Track>& tracks);
 
 private:
-    struct FlightDataState {
-        int totalAircraftsCount;
-        std::vector<RiskEvent> riskEvents;
-        std::vector<SectorSummary> sectorSummaries;
-        std::vector<Track> tracks;
-    };
+    FlightDataState _state;
 };
 
