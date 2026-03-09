@@ -18,11 +18,11 @@ FlightDataDto FlightDataStateManager::getState()
     );
 }
 
-void setRiskEvents(std::vector<RiskEvent>& riskEvents)
+void FlightDataStateManager::setRiskEvents(std::vector<RiskEvent>& riskEvents)
 {}
 
-void setSectorSummaries(std::vector<SectorSummary>& sectorSummaries)
+void FlightDataStateManager::setSectorSummaries(std::vector<SectorSummary>& sectorSummaries)
 {}
 
-void setTracks(std::vector<Track>& tracks)
+void FlightDataStateManager::setTracks(std::vector<Track>& tracks)
 {}
