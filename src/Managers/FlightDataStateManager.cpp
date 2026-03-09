@@ -1,5 +1,3 @@
-#pragma once
-
 #include <vector>
 
 #include "Dtos/FlightDataDto.hpp"
@@ -10,7 +8,15 @@
 #include "Structs/FlightDataStructs.hpp"
 
 FlightDataDto FlightDataStateManager::getState()
-{}
+{
+    return FlightDataDto
+    (
+        _state->totalAircraftsCount, 
+        _state->riskEvents, 
+        _state->sectorSummaries, 
+        _state->tracks
+    );
+}
 
 void setRiskEvents(std::vector<RiskEvent>& riskEvents)
 {}

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 
 #include "Structs/FlightDataStructs.hpp"
@@ -21,6 +22,6 @@ public:
     void setTracks(std::vector<Track>& tracks);
 
 private:
-    FlightDataState _state;
+    std::unique_ptr<FlightDataState> _state = nullptr;
 };
 
