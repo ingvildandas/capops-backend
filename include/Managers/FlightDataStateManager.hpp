@@ -12,7 +12,7 @@ class Track;
 class FlightDataStateManager
 {
 public:
-    FlightDataStateManager();
+    FlightDataStateManager() = default;
 
     FlightDataDto getState();
 

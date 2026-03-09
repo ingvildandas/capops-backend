@@ -2,9 +2,9 @@
 
 #include <vector>
 
-class RiskEvent;
-class SectorSummary;
-class Track;
+#include "Models/RiskEvent.hpp"
+#include "Models/SectorSummary.hpp"
+#include "Models/Track.hpp"
 
 struct FlightDataState {
     int totalAircraftsCount;
