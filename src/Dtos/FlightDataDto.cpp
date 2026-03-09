@@ -1,4 +1,9 @@
+#include <vector>
+
 #include "Dtos/FlightDataDto.hpp"
+#include "Models/RiskEvent.hpp"
+#include "Models/SectorSummary.hpp"
+#include "Models/Track.hpp"
 
 FlightDataDto::FlightDataDto
 (
