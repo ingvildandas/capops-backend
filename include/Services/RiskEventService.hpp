@@ -11,7 +11,11 @@ class RiskEvent;
 class RiskEventService 
 {
 public:
-    explicit RiskEventService(IRiskEventRepository& repository);
+    explicit RiskEventService
+    (
+        IRiskEventRepository& repository, 
+        FlightDataStateManager& stateManager
+    );
 
     RiskEvent getRiskEvent(const int riskEventId);
     std::vector<const RiskEvent> getMostRecentRiskEvents(const int count);
