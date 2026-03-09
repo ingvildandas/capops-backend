@@ -36,11 +36,11 @@ void RiskEventRepository::insert(const RiskEvent& riskEvent)
 
 void RiskEventRepository::insertMultiple
 (
-    std::vector<const RiskEvent *> riskEvents
+    std::vector<const RiskEvent*>& riskEvents
 ) 
 {}
 
-void RiskEventRepository::update(const RiskEvent& riskEvent) 
+void RiskEventRepository::updateAcknowledged(const int riskEventId, const bool acknowledged) 
 {}
 
 void RiskEventRepository::deleteById(const int riskEventId) 
