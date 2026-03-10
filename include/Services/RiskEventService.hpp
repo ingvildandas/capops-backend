@@ -6,7 +6,7 @@
 #include "Managers/FlightDataStateManager.hpp"
 
 class RiskEvent;
-class QTimeZone;
+class QDateTime;
 
 class RiskEventService 
 {
@@ -22,8 +22,8 @@ public:
     (
         const int count,
         const bool acknowledged,
-        const QTimeZone& from,
-        const QTimeZone& to
+        const QDateTime& from,
+        const QDateTime& to
     );
 
     void registerRiskEvent(const RiskEvent& riskEvent);

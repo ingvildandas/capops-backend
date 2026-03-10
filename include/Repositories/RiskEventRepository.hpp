@@ -6,7 +6,7 @@
 
 class DatabaseConnection;
 class RiskEvent;
-class QTimeZone;
+class QDateTime;
 
 class RiskEventRepository : public IRiskEventRepository
 {
@@ -19,8 +19,8 @@ public:
     (
         const int count,
         const bool acknowledged,
-        const QTimeZone& from,
-        const QTimeZone& to
+        const QDateTime& from,
+        const QDateTime& to
     ) override;
 
     void insert(const RiskEvent& riskEvent) override;

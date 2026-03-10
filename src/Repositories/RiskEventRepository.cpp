@@ -26,8 +26,8 @@ std::vector<RiskEvent> RiskEventRepository::selectByBetweenTimestamps
 (
     const int count,
     const bool acknowledged,
-    const QTimeZone& from,
-    const QTimeZone& to
+    const QDateTime& from,
+    const QDateTime& to
 )
 {
     return std::vector<RiskEvent>{};

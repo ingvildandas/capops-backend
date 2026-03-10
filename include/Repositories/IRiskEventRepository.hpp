@@ -3,7 +3,7 @@
 #include <vector>
 
 class RiskEvent;
-class QTimeZone;
+class QDateTime;
 
 class IRiskEventRepository
 {
@@ -16,8 +16,8 @@ public:
     (
         const int count,
         const bool acknowledged,
-        const QTimeZone& from,
-        const QTimeZone& to
+        const QDateTime& from,
+        const QDateTime& to
     ) = 0;
 
     virtual void insert(const RiskEvent& riskEvent) = 0;
