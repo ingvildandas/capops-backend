@@ -1,8 +1,11 @@
+#include <vector>
+
 #include <QHttpServerResponse>
 #include <QHttpServerResponder>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QObject>
+#include <QDateTime>
 #include <QWebSocket>
 
 #include "Controllers/RiskEventController.hpp"
@@ -59,7 +62,31 @@ QHttpServerResponse RiskEventController::getMultipleRiskEvents
         const QString& to
 )
 {
-    return QHttpServerResponder::StatusCode::NotImplemented;
+
+    try
+    {
+        const QDateTime fromTimestamp = QDateTime::fromString(from, Qt::ISODate);
+        const QDateTime toTimestamp = QDateTime::fromString(to, Qt::ISODate);
+
+        std::vector<const RiskEvent> riskEvents = _service.getMultipleRiskEvents
+        (
+            count, 
+            acknowledged, 
+            fromTimestamp, 
+            toTimestamp
+        );
+        QJsonObject json = RiskEventConverter::toJson(riskEvents);
+
+        return QHttpServerResponse
+        (
+            "application/json", 
+            QJsonDocument(json).toJson()
+        );
+    }
+    catch(...)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
+    }
 }
 
 QHttpServerResponse RiskEventController::updateRiskEvent
