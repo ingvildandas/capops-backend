@@ -4,6 +4,7 @@
 #include <QHttpServerRequest>
 #include <QHttpServerResponse>
 
+class QString;
 class QWebSocket;
 class WebSocketSessionManager;
 
@@ -23,6 +24,6 @@ private:
     WebSocketSessionManager& _sessionManager;
 
 private slots:
-    void onDisconnected();
+    void onDisconnected(QString sessionId);
     
 };
