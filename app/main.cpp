@@ -8,11 +8,12 @@
 #include <QWebSocketServer>
 
 #include "Database/DatabaseConnection.hpp"
-#include "Network/HttpRouter.hpp"
 #include "Controllers/RiskEventController.hpp"
 #include "Controllers/WebSocketController.hpp"
 #include "Managers/FlightDataStateManager.hpp"
 #include "Managers/WebSocketSessionManager.hpp"
+#include "Network/HttpServer.hpp"
+#include "Network/WebSocketServer.hpp"
 #include "Repositories/RiskEventRepository.hpp"
 #include "Services/RiskEventService.hpp"
 
@@ -20,54 +21,25 @@ int main(int argc, char* argv[])
 {
     QCoreApplication app(argc, argv);
 
-    QHttpServer httpServer;
-
     auto conn = DatabaseConnection("capops.db");
     qDebug() << "Database connection successful";
     
     RiskEventRepository riskEventRepository(conn);
     FlightDataStateManager flightDataStateManager;
+
     RiskEventService riskEventService(riskEventRepository, flightDataStateManager);
     RiskEventController riskEventController(riskEventService);
+
+    WebSocketSessionManager sessionManager;
+    WebSocketController webSocketController(sessionManager);
     
-    HttpRouter router(httpServer);
-    router.registerRiskEventController(riskEventController);
-
-    QTcpServer tcpServer;
-    if (!tcpServer.listen(QHostAddress::Any, 8080))
-    {
-        qCritical() << "HTTP server failed to start";
-        return -1;
-    }
-
-    httpServer.bind(&tcpServer);
+    HttpServer httpServer(8080);
+    httpServer.registerRiskEventController(riskEventController);
+    if (!httpServer.start()) return -1; 
     
-    qDebug() << "HTTP server listening on port 8080";
-
-    WebSocketSessionManager webSocketSessionManager;
-    WebSocketController webSocketController(webSocketSessionManager);
-
-    QWebSocketServer wsServer
-    (
-        "CaoOps WebScoket Server", 
-        QWebSocketServer::NonSecureMode
-    );
-    if (!wsServer.listen(QHostAddress::Any, 8081))
-    {
-        qCritical() << "WebSocket server failed to start";
-        return -1;
-    }
-
-    qDebug() << "Websocket server listening on port 8081";
-
-    QObject::connect(
-        &wsServer,
-        &QWebSocketServer::newConnection,
-        [&]() {
-            QWebSocket* socket = wsServer.nextPendingConnection();
-            webSocketController.handleNewConnection(socket);
-        }
-    );
+    WebSocketServer wsServer(8081);
+    wsServer.registerWebSocketController(webSocketController);
+    if (!wsServer.start()) return -1;
 
     return app.exec();
 }
