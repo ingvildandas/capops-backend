@@ -2,6 +2,7 @@
 
 #include <QHttpServerResponse>
 #include <QHttpServerResponder>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QObject>
@@ -84,12 +85,12 @@ QHttpServerResponse RiskEventController::getMultipleRiskEvents
             fromTimestamp, 
             toTimestamp
         );
-        QJsonObject json = RiskEventConverter::toJson(riskEvents);
+        QJsonArray jsonArray = RiskEventConverter::toJson(riskEvents);
 
         return QHttpServerResponse
         (
             "application/json", 
-            QJsonDocument(json).toJson()
+            QJsonDocument(jsonArray).toJson()
         );
     }
     catch(...)
@@ -137,9 +138,26 @@ QHttpServerResponse RiskEventController::updateRiskEvent
 
 QHttpServerResponse RiskEventController::deleteRiskEvent
 (
-    const int id, 
+    const int riskEventId, 
     const QHttpServerRequest& request
 )
 {
-    return QHttpServerResponder::StatusCode::NotImplemented;
+    if (riskEventId <= 0)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
+    }
+
+    try
+    {
+        _service.deleteRiskEvent(riskEventId);
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::NoContent);
+    }
+    catch (const std::runtime_error&)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::NotFound);
+    }
+    catch (...)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
+    }
 }
