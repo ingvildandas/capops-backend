@@ -30,8 +30,19 @@ QHttpServerResponse RiskEventController::getMostRecentRiskEvents
     return QHttpServerResponder::StatusCode::NotImplemented;
 }
 
+QHttpServerResponse RiskEventController::getMostRecentRiskEvents
+(
+    const int count,
+    const QHttpServerRequest& request
+)
+{
+    return QHttpServerResponder::StatusCode::NotImplemented;
+}
+
 QHttpServerResponse RiskEventController::getRiskEventsBetween
 (
+    const QString& from,
+    const QString& to,
     const QHttpServerRequest& request
 )
 {

@@ -18,7 +18,17 @@ public:
 
     QHttpServerResponse getRiskEvent(const int id, const QHttpServerRequest& request);
     QHttpServerResponse getMostRecentRiskEvents(const QHttpServerRequest& request);
-    QHttpServerResponse getRiskEventsBetween(const QHttpServerRequest& request);
+    QHttpServerResponse getMostRecentRiskEvents
+    (
+        const int count, 
+        const QHttpServerRequest& request
+    );
+    QHttpServerResponse getRiskEventsBetween
+    (
+        const QString& from, 
+        const QString& to, 
+        const QHttpServerRequest& request
+    );
     QHttpServerResponse updateRiskEvent(const int id, const QHttpServerRequest& request);
     QHttpServerResponse deleteRiskEvent(const int id, const QHttpServerRequest& request);
 
