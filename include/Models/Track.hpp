@@ -3,7 +3,7 @@
 #include <chrono>
 #include <string>
 
-#include "Structs/TrackStructs.hpp";
+#include "Structs/TrackStructs.hpp"
 
 class Track
 {

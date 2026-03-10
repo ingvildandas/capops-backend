@@ -9,11 +9,12 @@ class Track;
 class FlightDataDto
 {
 public:
-    FlightDataDto(
+    FlightDataDto
+    (
         const int totalAircraftsCount,
-        std::vector<RiskEvent> riskEvents,
-        std::vector<SectorSummary> sectorSummaries,
-        std::vector<Track> tracks
+        std::vector<RiskEvent>& riskEvents,
+        std::vector<SectorSummary>& sectorSummaries,
+        std::vector<Track>& tracks
     );
 
     int getTotalAircraftsCount() const;

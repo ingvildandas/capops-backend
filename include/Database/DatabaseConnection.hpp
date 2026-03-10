@@ -21,5 +21,5 @@ public:
     void execute(const std::string& query);
     ResultSet executeResult(const std::string& query);
 private:
-    sqlite3* _databaseConnection{nullptr};
+    sqlite3* _handle{nullptr};
 };

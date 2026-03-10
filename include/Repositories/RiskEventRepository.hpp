@@ -22,8 +22,8 @@ public:
     ) override;
 
     void insert(const RiskEvent& riskEvent) override;
-    void insertMultiple(std::vector<const RiskEvent *> riskEvents) override;
-    void update(const RiskEvent& riskEvent) override;
+    void insertMultiple(std::vector<const RiskEvent*>& riskEvents) override;
+    void updateAcknowledged(const int riskEventId, const bool acknowledged) override;
     void deleteById(const int riskEventId) override;
 
 private:

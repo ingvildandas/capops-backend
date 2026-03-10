@@ -1,6 +1,9 @@
 #pragma once
 
+#include <memory>
 #include <vector>
+
+#include "Structs/FlightDataStructs.hpp"
 
 class FlightDataDto;
 class RiskEvent;
@@ -10,7 +13,7 @@ class Track;
 class FlightDataStateManager
 {
 public:
-    FlightDataStateManager();
+    FlightDataStateManager() = default;
 
     FlightDataDto getState();
 
@@ -19,11 +22,6 @@ public:
     void setTracks(std::vector<Track>& tracks);
 
 private:
-    struct FlightDataState {
-        int totalAircraftsCount;
-        std::vector<RiskEvent> riskEvents;
-        std::vector<SectorSummary> sectorSummaries;
-        std::vector<Track> tracks;
-    };
+    std::unique_ptr<FlightDataState> _state = nullptr;
 };
 
