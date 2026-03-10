@@ -1,6 +1,6 @@
 #include <QHttpServer>
 
-#include "Http/HttpRouter.hpp"
+#include "Network/HttpRouter.hpp"
 #include "Controllers/RiskEventController.hpp"
 
 HttpRouter::HttpRouter(QHttpServer& server) : _server(server)
