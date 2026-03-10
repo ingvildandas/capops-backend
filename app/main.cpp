@@ -1,11 +1,7 @@
 #include <QCoreApplication>
 #include <QDebug>
-#include <QHostAddress>
-#include <QHttpServer>
 #include <QObject>
-#include <QTcpServer>
 #include <QtGlobal>
-#include <QWebSocketServer>
 
 #include "Database/DatabaseConnection.hpp"
 #include "Controllers/RiskEventController.hpp"
