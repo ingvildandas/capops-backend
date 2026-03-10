@@ -1,10 +1,9 @@
-#include "WebSocketServer.hpp"
-
 #include <QDebug>
 #include <QHostAddress>
 #include <QWebSocket>
 
-#include "../Controllers/WebSocketController.hpp"
+#include "Network/WebSocketServer.hpp"
+#include "Controllers/WebSocketController.hpp"
 
 WebSocketServer::WebSocketServer
 (

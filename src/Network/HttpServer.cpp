@@ -1,9 +1,8 @@
-#include "HttpServer.hpp"
-
 #include <QDebug>
 #include <QHostAddress>
 
-#include "../Controllers/RiskEventController.hpp"
+#include "Network/HttpServer.hpp"
+#include "Controllers/RiskEventController.hpp"
 
 HttpServer::HttpServer(quint16 port, QObject* parent)
     : QObject(parent),
