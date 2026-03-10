@@ -3,7 +3,6 @@
 #include <QDebug>
 #include <QHostAddress>
 
-#include "../Network/HttpRouter.hpp"
 #include "../Controllers/RiskEventController.hpp"
 
 HttpServer::HttpServer(quint16 port, QObject* parent)
@@ -28,8 +27,28 @@ bool HttpServer::start()
 }
 
 
-void HttpRouter::registerRiskEventController
+void HttpServer::registerRiskEventController
 (
     RiskEventController& riskEventController
 )
-{}
+{
+    _httpServer.route("/albums/<arg>", QHttpServerRequest::Method::Get,
+        [&riskEventController](int riskEventId, const QHttpServerRequest& request) {
+            return riskEventController.getRiskEvent(riskEventId, request);
+        });
+        
+    _httpServer.route("/albums", QHttpServerRequest::Method::Get,
+        [&riskEventController](const QHttpServerRequest& request) {
+            return riskEventController.getMostRecentRiskEvents(request);
+        });
+        
+    _httpServer.route("/albums/<arg>", QHttpServerRequest::Method::Put,
+        [&riskEventController](int riskEventId, const QHttpServerRequest& request) {
+            return riskEventController.updateRiskEvent(riskEventId, request);
+        });
+        
+    _httpServer.route("/albums/<arg>", QHttpServerRequest::Method::Delete,
+        [&riskEventController](int riskEventId, const QHttpServerRequest& request) {
+            return riskEventController.deleteRiskEvent(riskEventId, request);
+        });
+}
