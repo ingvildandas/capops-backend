@@ -36,7 +36,7 @@ void HttpServer::registerRiskEventController
             return riskEventController.getRiskEvent(riskEventId, request);
         });
         
-    _httpServer.route("/risk-event/recent", QHttpServerRequest::Method::Get,
+    _httpServer.route("/risk-event", QHttpServerRequest::Method::Get,
         [&riskEventController](const QHttpServerRequest& request) {
 
             int* count = nullptr;
