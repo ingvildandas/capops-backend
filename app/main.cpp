@@ -2,8 +2,10 @@
 #include <QDebug>
 #include <QHostAddress>
 #include <QHttpServer>
+#include <QObject>
 #include <QTcpServer>
 #include <QtGlobal>
+#include <QWebSocketServer>
 
 #include "Database/DatabaseConnection.hpp"
 #include "Http/HttpRouter.hpp"
@@ -31,15 +33,41 @@ int main(int argc, char* argv[])
     HttpRouter router(httpServer);
     router.registerRiskEventController(riskEventController);
 
+    QTcpServer tcpServer;
+    if (!tcpServer.listen(QHostAddress::Any, 8080))
+    {
+        qCritical() << "HTTP server failed to start";
+        return -1;
+    }
+
+    httpServer.bind(&tcpServer);
+    
+    qDebug() << "HTTP server listening on port 8080";
+
     WebSocketSessionManager webSocketSessionManager;
     WebSocketController webSocketController(webSocketSessionManager);
 
-    auto tcpServer = new QTcpServer();
-    if (!tcpServer->listen(QHostAddress::Any, 8080))
+    QWebSocketServer wsServer
+    (
+        "CaoOps WebScoket Server", 
+        QWebSocketServer::NonSecureMode
+    );
+    if (!wsServer.listen(QHostAddress::Any, 8081))
     {
-        delete tcpServer;
+        qCritical() << "WebSocket server failed to start";
         return -1;
     }
-    
+
+    qDebug() << "Websocket server listening on port 8081";
+
+    QObject::connect(
+        &wsServer,
+        &QWebSocketServer::newConnection,
+        [&]() {
+            QWebSocket* socket = wsServer.nextPendingConnection();
+            webSocketController.handleNewConnection(socket);
+        }
+    );
+
     return app.exec();
 }
