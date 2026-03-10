@@ -1,9 +1,13 @@
 #include <QHttpServerResponse>
 #include <QHttpServerResponder>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QObject>
 #include <QWebSocket>
 
 #include "Controllers/RiskEventController.hpp"
+#include "ModelConverters/RiskEventConverter.hpp"
+#include "Services/RiskEventService.hpp"
 
 RiskEventController::RiskEventController
 (
@@ -15,11 +19,35 @@ RiskEventController::RiskEventController
 
 QHttpServerResponse RiskEventController::getRiskEvent
 (
-    const int id, 
+    const int riskEventId, 
     const QHttpServerRequest& request
 )
 {
-    return QHttpServerResponder::StatusCode::NotImplemented;
+    if (riskEventId <= 0)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
+    }
+
+    try
+    {
+        RiskEvent riskEvent = _service.getRiskEvent(riskEventId);
+        QJsonObject json = RiskEventConverter::toJson(riskEvent);
+
+        return QHttpServerResponse
+        (
+            "application/json", 
+            QJsonDocument(json).toJson()
+        );
+    }
+    catch (const std::runtime_error&)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::NotFound);
+    }
+    catch(...)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
+    }
+    
 }
 
 QHttpServerResponse RiskEventController::getMultipleRiskEvents

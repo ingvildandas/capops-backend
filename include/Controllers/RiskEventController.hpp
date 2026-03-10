@@ -16,7 +16,11 @@ public:
         QObject* parent = nullptr
     );
 
-    QHttpServerResponse getRiskEvent(const int id, const QHttpServerRequest& request);
+    QHttpServerResponse getRiskEvent
+    (
+        const int riskEventid, 
+        const QHttpServerRequest& request
+    );
     QHttpServerResponse getMultipleRiskEvents(
         const QHttpServerRequest& request,
         const int count = DEFAULT_COUNT,
