@@ -16,6 +16,7 @@ class WebSocketSessionManager : public QObject
 public:
     explicit WebSocketSessionManager(QObject* parent = nullptr);
 
+    QString getSessionId(QWebSocket* socket) const;
     QStringList getActiveSessionIds() const;
     int getActiveSessionCount() const;
 
