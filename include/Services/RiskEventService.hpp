@@ -2,12 +2,11 @@
 
 #include <vector>
 
-#include <QTimeZone>
-
 #include "Repositories/IRiskEventRepository.hpp"
 #include "Managers/FlightDataStateManager.hpp"
 
 class RiskEvent;
+class QTimeZone;
 
 class RiskEventService 
 {
