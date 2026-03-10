@@ -24,8 +24,10 @@ std::vector<RiskEvent> RiskEventRepository::selectOrderByTimestamp
 
 std::vector<RiskEvent> RiskEventRepository::selectByBetweenTimestamps
 (
-    const std::chrono::system_clock::time_point& startTimestamp,
-    const std::chrono::system_clock::time_point& endTimestamp
+    const int count,
+    const bool acknowledged,
+    const QTimeZone& from,
+    const QTimeZone& to
 )
 {
     return std::vector<RiskEvent>{};

@@ -1,12 +1,12 @@
 #pragma once
 
-#include <chrono>
 #include <vector>
 
 #include "IRiskEventRepository.hpp"
 
-class RiskEvent;
 class DatabaseConnection;
+class RiskEvent;
+class QTimeZone;
 
 class RiskEventRepository : public IRiskEventRepository
 {
@@ -17,8 +17,10 @@ public:
     std::vector<RiskEvent> selectOrderByTimestamp(const int count) override;
     std::vector<RiskEvent> selectByBetweenTimestamps
     (
-        const std::chrono::system_clock::time_point& startTimestamp,
-        const std::chrono::system_clock::time_point& endTimestamp
+        const int count,
+        const bool acknowledged,
+        const QTimeZone& from,
+        const QTimeZone& to
     ) override;
 
     void insert(const RiskEvent& riskEvent) override;

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <chrono>
 #include <vector>
 
 class RiskEvent;
+class QTimeZone;
 
 class IRiskEventRepository
 {
@@ -14,8 +14,10 @@ public:
     virtual std::vector<RiskEvent> selectOrderByTimestamp(const int count) = 0;
     virtual std::vector<RiskEvent> selectByBetweenTimestamps
     (
-        const std::chrono::system_clock::time_point& startTimestamp,
-        const std::chrono::system_clock::time_point& endTimestamp
+        const int count,
+        const bool acknowledged,
+        const QTimeZone& from,
+        const QTimeZone& to
     ) = 0;
 
     virtual void insert(const RiskEvent& riskEvent) = 0;
