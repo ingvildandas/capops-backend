@@ -8,6 +8,11 @@ RiskEventService::RiskEventService(
     : _repository(repository), _stateManager(stateManager)
 {}
 
+RiskEvent RiskEventService::getRiskEvent(const int riskEventId)
+{
+    return RiskEvent(0, 0, "", false);
+}
+
 std::vector<RiskEvent> RiskEventService::getMultipleRiskEvents
 (
     const int count,
