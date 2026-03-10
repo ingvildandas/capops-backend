@@ -5,6 +5,7 @@
 #include <QTcpServer>
 
 class RiskEventController;
+class QHttpServerRequest;
 
 class HttpServer : public QObject
 {
@@ -23,12 +24,14 @@ private:
     QTcpServer _tcpServer;
 
 private:
-    static void handleQueryParams
-    (
-        const QHttpServerRequest& request,
-        int* count, 
-        bool* acknowledged,
-        QString* from,
-        QString* to
-    );
+    struct RiskEventQuery
+    {
+        int count;
+        bool acknowledged;
+        QString from;
+        QString to;
+    };
+
+private:
+    static RiskEventQuery parseRiskEventQuery(const QHttpServerRequest& request);
 };

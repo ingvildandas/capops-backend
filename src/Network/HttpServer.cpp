@@ -39,19 +39,15 @@ void HttpServer::registerRiskEventController
     _httpServer.route("/risk-event", QHttpServerRequest::Method::Get,
         [&riskEventController](const QHttpServerRequest& request) {
 
-            int* count = nullptr;
-            bool* acknowledged = nullptr;
-            QString* from = nullptr;
-            QString* to = nullptr;
+            RiskEventQuery params = HttpServer::parseRiskEventQuery(request);
 
-            HttpServer::handleQueryParams(request, count, acknowledged, from, to);
             return riskEventController.getMultipleRiskEvents
             (
                 request, 
-                *count, 
-                *acknowledged,
-                *from,
-                *to
+                params.count, 
+                params.acknowledged,
+                params.from,
+                params.to
             );
         });
         
@@ -66,35 +62,32 @@ void HttpServer::registerRiskEventController
         });
 }
 
-void HttpServer::handleQueryParams
-(
-    const QHttpServerRequest& request,
-    int* count, 
-    bool* acknowledged,
-    QString* from,
-    QString* to
-)
+HttpServer::RiskEventQuery HttpServer::parseRiskEventQuery(const QHttpServerRequest& request)
 {
-    *count = RiskEventController::DEFAULT_COUNT;
-    *acknowledged = RiskEventController::DEFAULT_ACKNOWLEDGED;
-    *from = RiskEventController::DEFAULT_FROM;
-    *to = RiskEventController::DEFAULT_TO;
+    RiskEventQuery params {
+        RiskEventController::DEFAULT_COUNT,
+        RiskEventController::DEFAULT_ACKNOWLEDGED,
+        RiskEventController::DEFAULT_FROM,
+        RiskEventController::DEFAULT_TO
+    };
 
     auto query = request.query();
     if (query.hasQueryItem("count"))
     {
-        *count = query.queryItemValue("count").toInt();
+        params.count = query.queryItemValue("count").toInt();
     }
     if (query.hasQueryItem("acknowledged"))
     {
-        *acknowledged = QVariant(query.queryItemValue("acknowledged")).toBool();
+        params.acknowledged = QVariant(query.queryItemValue("acknowledged")).toBool();
     }
     if (query.hasQueryItem("from"))
     {
-        *from = query.queryItemValue("from");
+        params.from = query.queryItemValue("from");
     }
     if (query.hasQueryItem("to"))
     {
-        *to = query.queryItemValue("to");
+        params.to = query.queryItemValue("to");
     }
+
+    return params;
 }
