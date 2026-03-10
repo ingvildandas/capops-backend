@@ -78,7 +78,7 @@ QHttpServerResponse RiskEventController::getMultipleRiskEvents
 
     try
     {
-        std::vector<const RiskEvent> riskEvents = _service.getMultipleRiskEvents
+        std::vector<RiskEvent> riskEvents = _service.getMultipleRiskEvents
         (
             count, 
             acknowledged, 
