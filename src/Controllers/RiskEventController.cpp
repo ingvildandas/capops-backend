@@ -62,12 +62,21 @@ QHttpServerResponse RiskEventController::getMultipleRiskEvents
         const QString& to
 )
 {
+    QDateTime fromTimestamp = QDateTime::fromSecsSinceEpoch(0);
+    QDateTime toTimestamp = QDateTime::currentDateTimeUtc();
+
+    if (!from.isEmpty() && QDateTime::fromString(from).isValid())
+    {
+        fromTimestamp = QDateTime::fromString(from);
+    }
+    
+    if (!to.isEmpty() && QDateTime::fromString(to).isValid())
+    {
+        toTimestamp = QDateTime::fromString(to);
+    }
 
     try
     {
-        const QDateTime fromTimestamp = QDateTime::fromString(from, Qt::ISODate);
-        const QDateTime toTimestamp = QDateTime::fromString(to, Qt::ISODate);
-
         std::vector<const RiskEvent> riskEvents = _service.getMultipleRiskEvents
         (
             count, 
