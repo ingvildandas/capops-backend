@@ -1,5 +1,7 @@
 #include <string>
+#include <vector>
 
+#include <QJsonArray>
 #include <QJsonObject>
 
 #include "ModelConverters/RiskEventConverter.hpp"
@@ -24,4 +26,15 @@ QJsonObject RiskEventConverter::toJson(const RiskEvent& riskEvent)
         { "message", QString::fromStdString(riskEvent.getMessage()) },
         { "acknowledged", riskEvent.getAcknowledged() }
     };
+}
+
+QJsonArray RiskEventConverter::toJson(const std::vector<RiskEvent>& riskEvents)
+{
+    QJsonArray riskEventArray;
+    for (RiskEvent riskEvent : riskEvents)
+    {
+        riskEventArray.append(toJson(riskEvent));
+    }
+
+    return riskEventArray;
 }
