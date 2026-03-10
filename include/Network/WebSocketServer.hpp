@@ -13,17 +13,19 @@ public:
     WebSocketServer
     (
         quint16 port, 
-        WebSocketController& controller, 
         QObject* parent = nullptr
     );
 
     bool start();
 
+    void registerWebSocketController(WebSocketController& webSocketController);
+
 private:
     quint16 _port;
-    WebSocketController& _controller;
     QWebSocketServer _server;
 
+    WebSocketController* _webSocketController;
+    
 private slots:
     void onNewConnection();
 };

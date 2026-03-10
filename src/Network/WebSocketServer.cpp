@@ -6,12 +6,12 @@
 
 #include "../Controllers/WebSocketController.hpp"
 
-WebSocketServer::WebSocketServer(
+WebSocketServer::WebSocketServer
+(
     quint16 port,
-    WebSocketController& controller,
     QObject* parent
 )
-    : QObject(parent), _port(port), _controller(controller),
+    : QObject(parent), _port(port),
         _server("CaoOps WebSocket Server", QWebSocketServer::NonSecureMode)
 {}
 
@@ -37,6 +37,16 @@ bool WebSocketServer::start()
 
 void WebSocketServer::onNewConnection()
 {
+    if (!_webSocketController) return;
+
     auto socket = _server.nextPendingConnection();
-    _controller.handleNewConnection(socket);
+    _webSocketController->handleNewConnection(socket);
+}
+
+void WebSocketServer::registerWebSocketController
+(
+    WebSocketController& webSocketController
+)
+{
+    _webSocketController = &webSocketController;
 }
