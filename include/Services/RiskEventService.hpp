@@ -18,7 +18,7 @@ public:
     );
 
     RiskEvent getRiskEvent(const int riskEventId);
-    std::vector<const RiskEvent> getMultipleRiskEvents
+    std::vector<RiskEvent> getMultipleRiskEvents
     (
         const int count,
         const bool acknowledged,
