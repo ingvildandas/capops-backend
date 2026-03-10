@@ -28,8 +28,16 @@ public:
         const QString& from = DEFAULT_FROM,
         const QString& to = DEFAULT_TO
     );
-    QHttpServerResponse updateRiskEvent(const int id, const QHttpServerRequest& request);
-    QHttpServerResponse deleteRiskEvent(const int id, const QHttpServerRequest& request);
+    QHttpServerResponse updateRiskEvent
+    (
+        const int riskEventId, 
+        const QHttpServerRequest& request
+    );
+    QHttpServerResponse deleteRiskEvent
+    (
+        const int riskEventId, 
+        const QHttpServerRequest& request
+    );
 
 private:
     RiskEventService& _service;

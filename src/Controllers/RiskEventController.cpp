@@ -100,11 +100,39 @@ QHttpServerResponse RiskEventController::getMultipleRiskEvents
 
 QHttpServerResponse RiskEventController::updateRiskEvent
 (
-    const int id, 
+    const int riskEventId, 
     const QHttpServerRequest& request
 )
 {
-    return QHttpServerResponder::StatusCode::NotImplemented;
+    if (riskEventId <= 0)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
+    }
+
+    const QJsonDocument document = QJsonDocument::fromJson(request.body());
+    if (!document.isObject())
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
+    }
+
+    try
+    {
+        RiskEvent riskEvent = RiskEventConverter::fromJson(document.object());
+        _service.updateAcknowledged
+        (
+            riskEvent.getRiskEventId(), 
+            riskEvent.getAcknowledged()
+        );
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::NoContent);
+    }
+    catch (const std::runtime_error&)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::NotFound);
+    }
+    catch (...)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
+    }
 }
 
 QHttpServerResponse RiskEventController::deleteRiskEvent
