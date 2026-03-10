@@ -19,7 +19,16 @@ public:
 
 private:
     quint16 _port;
-
     QHttpServer _httpServer;
     QTcpServer _tcpServer;
+
+private:
+    static void handleQueryParams
+    (
+        const QHttpServerRequest& request,
+        int* count, 
+        bool* acknowledged,
+        QString* from,
+        QString* to
+    );
 };
