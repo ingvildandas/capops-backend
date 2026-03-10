@@ -22,8 +22,7 @@ public:
 private:
     quint16 _port;
     WebSocketController& _controller;
-
-    QWebSocketServer m_server;
+    QWebSocketServer _server;
 
 private slots:
     void onNewConnection();
