@@ -38,7 +38,7 @@ int WebSocketSessionManager::getActiveSessionCount() const
 
 QString WebSocketSessionManager::registerSession(QWebSocket* socket)
 {
-    QString sessionId = QUuid::createUuid().toString();
+    QString sessionId = QUuid::createUuid().toString(QUuid::WithoutBraces);
     _activeSessions.insert(sessionId, socket);
     return sessionId;
 }
@@ -54,7 +54,12 @@ void WebSocketSessionManager::removeSession(const QString& sessionId)
 }
 
 void WebSocketSessionManager::broadcast(const FlightDataDto& payload)
-{}
+{
+    for (auto socket : _activeSessions)
+    {
+        if (!socket) continue;
+    }
+}
 
 void WebSocketSessionManager::sendToClient
 (
