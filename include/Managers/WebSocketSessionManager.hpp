@@ -2,7 +2,7 @@
 
 #include <QObject>
 #include <QPointer>
-#include <QMap>
+#include <QHash>
 #include <QStringList>
 
 class QString;
@@ -27,6 +27,6 @@ public:
     void sendToClient(const QString& sessionId, const QString& msg);
     
 private:
-    QMap<QString, QPointer<QWebSocket>> _activeSessions; 
+    QHash<QString, QPointer<QWebSocket>> _activeSessions; 
 };
 

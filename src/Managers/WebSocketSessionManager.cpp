@@ -1,4 +1,4 @@
-#include <QMap>
+#include <QHash>
 #include <QObject>
 #include <QPointer>
 #include <QString>
