@@ -24,6 +24,6 @@ private:
     WebSocketSessionManager& _sessionManager;
 
 private slots:
-    void onDisconnected(QString sessionId);
+    void onDisconnected(const QString& sessionId);
     
 };

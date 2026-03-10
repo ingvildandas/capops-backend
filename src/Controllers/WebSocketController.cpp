@@ -26,7 +26,7 @@ void WebSocketController::handleNewConnection(QWebSocket* socket)
     );
 }
 
-void WebSocketController::onDisconnected(QString sessionId)
+void WebSocketController::onDisconnected(const QString& sessionId)
 {
     _sessionManager.removeSession(sessionId);
 }
