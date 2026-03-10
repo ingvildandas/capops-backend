@@ -33,7 +33,7 @@ QStringList WebSocketSessionManager::getActiveSessionIds() const
 
 int WebSocketSessionManager::getActiveSessionCount() const
 {
-    return 0;
+    return _activeSessions.size();
 }
 
 QString WebSocketSessionManager::registerSession(QWebSocket* socket)
