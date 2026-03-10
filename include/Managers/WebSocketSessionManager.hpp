@@ -2,7 +2,7 @@
 
 #include <QObject>
 #include <QPointer>
-#include <QMap>
+#include <QHash>
 #include <QStringList>
 
 class QString;
@@ -16,6 +16,7 @@ class WebSocketSessionManager : public QObject
 public:
     explicit WebSocketSessionManager(QObject* parent = nullptr);
 
+    QString getSessionId(QWebSocket* socket) const;
     QStringList getActiveSessionIds() const;
     int getActiveSessionCount() const;
 
@@ -26,6 +27,6 @@ public:
     void sendToClient(const QString& sessionId, const QString& msg);
     
 private:
-    QMap<QString, QPointer<QWebSocket>> _activeSessions; 
+    QHash<QString, QPointer<QWebSocket>> _activeSessions; 
 };
 

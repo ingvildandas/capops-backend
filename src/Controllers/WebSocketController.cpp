@@ -1,4 +1,5 @@
 #include <QObject>
+#include <QString>
 #include <QWebSocket>
 
 #include "Controllers/WebSocketController.hpp"
@@ -12,6 +13,20 @@ WebSocketController::WebSocketController
     : _sessionManager(sessionManager), QObject(parent)
 {}
 
-void WebSocketController::handleNewConnection(QWebSocket* socket) {}
+void WebSocketController::handleNewConnection(QWebSocket* socket)
+{
+    QString sessionId = _sessionManager.registerSession(socket);
 
-void WebSocketController::onDisconnected() {}
+    connect
+    (
+        socket, 
+        &QWebSocket::disconnected, 
+        this, 
+        [this, sessionId](){ onDisconnected(sessionId); } 
+    );
+}
+
+void WebSocketController::onDisconnected(const QString& sessionId)
+{
+    _sessionManager.removeSession(sessionId);
+}
