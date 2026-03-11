@@ -10,7 +10,7 @@
 #include <QWebSocket>
 
 #include "Controllers/RiskEventController.hpp"
-#include "ModelConverters/RiskEventConverter.hpp"
+#include "Converters/RiskEventConverter.hpp"
 #include "Services/RiskEventService.hpp"
 
 RiskEventController::RiskEventController

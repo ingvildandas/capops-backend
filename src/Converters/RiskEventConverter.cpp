@@ -4,7 +4,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
-#include "ModelConverters/RiskEventConverter.hpp"
+#include "Converters/RiskEventConverter.hpp"
 #include "Models/RiskEvent.hpp"
 
 RiskEvent RiskEventConverter::fromJson(const QJsonObject& json)
