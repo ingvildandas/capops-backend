@@ -1,10 +1,10 @@
 #pragma once
 
-#include <string>
+#include <QString>
 
 struct TrackGlobalPosition
 {
-    const std::string frame;
+    const QString frame;
     const double latitudeDegrees;
     const double longitudeDegrees;
     const double altitudeMeters;
@@ -12,7 +12,7 @@ struct TrackGlobalPosition
 
 struct TrackLocalPosition
 {
-    const std::string frame;
+    const QString frame;
     const double xPosition;
     const double yPosition;
     const double zPosition;
