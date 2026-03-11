@@ -17,6 +17,20 @@ RiskEvent RiskEventConverter::fromJson(const QJsonObject& json)
     return RiskEvent(riskEventId, riskSeverity, message, acknowledged);
 }
 
+std::vector<RiskEvent> RiskEventConverter::fromJson(const QJsonArray& jsonArray)
+{
+    std::vector<RiskEvent> riskEvents;
+    riskEvents.reserve(jsonArray.size());
+
+    for (const auto& value : jsonArray)
+    {
+        QJsonObject obj = value.toObject();
+        riskEvents.push_back(fromJson(obj));
+    }
+
+    return riskEvents;
+}
+
 QJsonObject RiskEventConverter::toJson(const RiskEvent& riskEvent)
 {
     return 
