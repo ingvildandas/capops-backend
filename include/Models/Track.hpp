@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Structs/TrackStructs.hpp"
+#include <QDateTime>
+#include <QString>
 
-class QDateTime;
-class QString;
+#include "Structs/TrackStructs.hpp"
 
 class Track
 {
