@@ -41,6 +41,7 @@ int WebSocketSessionManager::getActiveSessionCount() const
 
 QString WebSocketSessionManager::registerSession(QWebSocket* socket)
 {
+    socket->setParent(this);
     QString sessionId = QUuid::createUuid().toString(QUuid::WithoutBraces);
     _activeSessions.insert(sessionId, socket);
     return sessionId;
