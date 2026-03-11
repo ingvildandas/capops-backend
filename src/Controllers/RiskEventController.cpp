@@ -1,9 +1,17 @@
+#include <vector>
+
 #include <QHttpServerResponse>
 #include <QHttpServerResponder>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QObject>
+#include <QDateTime>
 #include <QWebSocket>
 
 #include "Controllers/RiskEventController.hpp"
+#include "ModelConverters/RiskEventConverter.hpp"
+#include "Services/RiskEventService.hpp"
 
 RiskEventController::RiskEventController
 (
@@ -15,43 +23,141 @@ RiskEventController::RiskEventController
 
 QHttpServerResponse RiskEventController::getRiskEvent
 (
-    const int id, 
+    const int riskEventId, 
     const QHttpServerRequest& request
 )
 {
-    return QHttpServerResponder::StatusCode::NotImplemented;
+    if (riskEventId <= 0)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
+    }
+
+    try
+    {
+        RiskEvent riskEvent = _service.getRiskEvent(riskEventId);
+        QJsonObject json = RiskEventConverter::toJson(riskEvent);
+
+        return QHttpServerResponse
+        (
+            "application/json", 
+            QJsonDocument(json).toJson()
+        );
+    }
+    catch (const std::runtime_error&)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::NotFound);
+    }
+    catch(...)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
+    }
+    
 }
 
-QHttpServerResponse RiskEventController::getMostRecentRiskEvents
+QHttpServerResponse RiskEventController::getMultipleRiskEvents
 (
-    const QHttpServerRequest& request
+        const QHttpServerRequest& request,
+        const int count,
+        const bool acknowledged,
+        const QString& from,
+        const QString& to
 )
 {
-    return QHttpServerResponder::StatusCode::NotImplemented;
-}
+    QDateTime fromTimestamp = QDateTime::fromSecsSinceEpoch(0);
+    QDateTime toTimestamp = QDateTime::currentDateTimeUtc();
 
-QHttpServerResponse RiskEventController::getRiskEventsBetween
-(
-    const QHttpServerRequest& request
-)
-{
-    return QHttpServerResponder::StatusCode::NotImplemented;
+    if (!from.isEmpty() && QDateTime::fromString(from).isValid())
+    {
+        fromTimestamp = QDateTime::fromString(from);
+    }
+    
+    if (!to.isEmpty() && QDateTime::fromString(to).isValid())
+    {
+        toTimestamp = QDateTime::fromString(to);
+    }
+
+    try
+    {
+        std::vector<RiskEvent> riskEvents = _service.getMultipleRiskEvents
+        (
+            count, 
+            acknowledged, 
+            fromTimestamp, 
+            toTimestamp
+        );
+        QJsonArray jsonArray = RiskEventConverter::toJson(riskEvents);
+
+        return QHttpServerResponse
+        (
+            "application/json", 
+            QJsonDocument(jsonArray).toJson()
+        );
+    }
+    catch(...)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
+    }
 }
 
 QHttpServerResponse RiskEventController::updateRiskEvent
 (
-    const int id, 
+    const int riskEventId, 
     const QHttpServerRequest& request
 )
 {
-    return QHttpServerResponder::StatusCode::NotImplemented;
+    if (riskEventId <= 0)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
+    }
+
+    const QJsonDocument document = QJsonDocument::fromJson(request.body());
+    if (!document.isObject())
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
+    }
+
+    try
+    {
+        RiskEvent riskEvent = RiskEventConverter::fromJson(document.object());
+        _service.updateAcknowledged
+        (
+            riskEvent.getRiskEventId(), 
+            riskEvent.getAcknowledged()
+        );
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::NoContent);
+    }
+    catch (const std::runtime_error&)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::NotFound);
+    }
+    catch (...)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
+    }
 }
 
 QHttpServerResponse RiskEventController::deleteRiskEvent
 (
-    const int id, 
+    const int riskEventId, 
     const QHttpServerRequest& request
 )
 {
-    return QHttpServerResponder::StatusCode::NotImplemented;
+    if (riskEventId <= 0)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
+    }
+
+    try
+    {
+        _service.deleteRiskEvent(riskEventId);
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::NoContent);
+    }
+    catch (const std::runtime_error&)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::NotFound);
+    }
+    catch (...)
+    {
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
+    }
 }
