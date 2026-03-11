@@ -5,9 +5,9 @@
 #include <QHash>
 #include <QStringList>
 
+class FlightDataDto;
 class QString;
 class QWebSocket;
-class FlightDataDto;
 
 class WebSocketSessionManager : public QObject
 {
@@ -23,7 +23,7 @@ public:
     QString registerSession(QWebSocket* socket);
     void removeSession(const QString& sessionId);
 
-    void broadcast(const FlightDataDto& payload);
+    void broadcast(const FlightDataDto& dto);
     void sendToClient(const QString& sessionId, const QString& msg);
     
 private:
