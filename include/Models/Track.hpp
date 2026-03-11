@@ -34,10 +34,4 @@ private:
     TrackGlobalVelocity _globalVelocity;
     TrackLocalVelocity _localVelocity;
     double _headingDegrees;
-
-private:
-    void validateGlobalPosition(const TrackGlobalPosition globalPosition);
-    void validateLocalPosition(const TrackLocalPosition localPosition);
-    void validateGlobalVelocity(const TrackGlobalVelocity globalVelocity);
-    void validateLocalVelocity(const TrackLocalVelocity localVelocity);
 };
