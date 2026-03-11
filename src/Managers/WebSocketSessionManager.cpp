@@ -1,5 +1,6 @@
 #include <QByteArray>
 #include <QHash>
+#include <QJsonDocument>
 #include <QJsonObject>
 #include <QObject>
 #include <QPointer>
