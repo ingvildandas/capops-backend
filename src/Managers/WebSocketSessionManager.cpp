@@ -1,4 +1,7 @@
+#include <QByteArray>
 #include <QHash>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QObject>
 #include <QPointer>
 #include <QString>
@@ -6,8 +9,9 @@
 #include <QUuid>
 #include <QWebSocket>
 
-#include "Managers/WebSocketSessionManager.hpp"
+#include "Converters/FlightDataDtoConverter.hpp"
 #include "Dtos/FlightDataDto.hpp"
+#include "Managers/WebSocketSessionManager.hpp"
 
 WebSocketSessionManager::WebSocketSessionManager(QObject* parent)
     : QObject(parent)
@@ -38,6 +42,7 @@ int WebSocketSessionManager::getActiveSessionCount() const
 
 QString WebSocketSessionManager::registerSession(QWebSocket* socket)
 {
+    socket->setParent(this);
     QString sessionId = QUuid::createUuid().toString(QUuid::WithoutBraces);
     _activeSessions.insert(sessionId, socket);
     return sessionId;
@@ -53,11 +58,19 @@ void WebSocketSessionManager::removeSession(const QString& sessionId)
     }
 }
 
-void WebSocketSessionManager::broadcast(const FlightDataDto& payload)
+void WebSocketSessionManager::broadcast(const FlightDataDto& dto)
 {
-    for (auto socket : _activeSessions)
+    if (getActiveSessionCount() == 0) return;
+    
+    QJsonObject json = FlightDataDtoConverter::toJson(dto);
+    QByteArray payload = QJsonDocument(json).toJson(QJsonDocument::Compact);
+
+    for (auto [sessionId, socket] : _activeSessions.asKeyValueRange())
     {
         if (!socket) continue;
+        if (socket->state() != QAbstractSocket::ConnectedState) continue;
+
+        socket->sendBinaryMessage(payload);
     }
 }
 
@@ -66,4 +79,10 @@ void WebSocketSessionManager::sendToClient
     const QString& sessionId, 
     const QString& msg
 )
-{}
+{
+    QWebSocket* socket = _activeSessions.value(sessionId, nullptr);
+    if (!socket) return;
+    if (socket->state() != QAbstractSocket::ConnectedState) return;
+    
+    socket->sendBinaryMessage(msg.toUtf8());
+}
