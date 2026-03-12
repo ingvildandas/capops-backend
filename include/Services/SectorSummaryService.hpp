@@ -11,7 +11,7 @@ class SectorSummaryService
 public:
     SectorSummaryService(FlightDataStateManager& stateManager);
 
-    void updateState(std::vector<const SectorSummary*>& sectorSummaries);
+    void updateState(std::vector<SectorSummary>& sectorSummaries);
 
 private:
     FlightDataStateManager& _stateManager;

@@ -11,7 +11,7 @@ class TrackService
 public:
     TrackService(FlightDataStateManager& stateManager);
 
-    void updateState(std::vector<const Track*>& tracks);
+    void updateState(std::vector<Track>& tracks);
 
 private:
     FlightDataStateManager& _stateManager;
