@@ -114,6 +114,7 @@ target_include_directories(capops
         include
         ${PROTO_GEN_DIR}
         ${Protobuf_INCLUDE_DIRS}
+        ${CMAKE_BINARY_DIR}
 )
 
 target_link_libraries(capops 
