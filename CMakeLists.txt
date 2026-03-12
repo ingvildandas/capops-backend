@@ -89,16 +89,15 @@ FetchContent_MakeAvailable(redis-plus-plus)
 # ---- Fetch Protobuf ----
 FetchContent_Declare(protobuf
   GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
-  GIT_TAG        v29.6
-  SOURCE_SUBDIR  cmake
+  GIT_TAG v6.31.1
   FIND_PACKAGE_ARGS NAMES protobuf
 )
+set(protobuf_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(protobuf_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(protobuf)
 
-SET(PROTO_DIR ${CMAKE_CURRENT_SOURCE_DIR}/proto)
-SET (PROTO_FILES ${PROTO_DIR}/flightdata.proto)
-
-protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_FILES})
+SET(PROTO_DIR ${CMAKE_SOURCE_DIR}/proto)
+SET(PROTO_FILES ${PROTO_DIR}/flightdata.proto)
 
 # ---- Executables ----
 file(GLOB_RECURSE APP_SOURCES 
@@ -109,15 +108,17 @@ file(GLOB_RECURSE APP_SOURCES
 )
 add_executable(capops 
     ${APP_SOURCES}
-    ${PROTO_SRCS}
-    ${PROTO_HDRS}
+)
+protobuf_generate(
+    TARGET capops
+    PROTOS ${PROTO_FILES}
 )
 
 # ---- Library ----
 target_include_directories(capops 
     PRIVATE 
         include
-        ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_BINARY_DIR}
 )
 
 target_link_libraries(capops 
