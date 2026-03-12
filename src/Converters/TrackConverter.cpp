@@ -286,7 +286,7 @@ TrackLocalVelocity TrackConverter::localVelocityFromProto
     double yVelocityMetersPerSecond = localVelocity.yvelocitymeterspersecond();
     double zVelocityMetersPerSecond = localVelocity.zvelocitymeterspersecond();
 
-    LocalVelocityProto
+    return LocalVelocityProto
     (
         xVelocityMetersPerSecond,
         yVelocityMetersPerSecond,
