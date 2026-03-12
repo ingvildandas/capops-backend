@@ -9,6 +9,9 @@
 
 #include "Network/RedisEventBusReceiver.hpp"
 #include "Converters/FlightDataDtoConverter.hpp"
+#include "Converters/RiskEventConverter.hpp"
+#include "Converters/SectorSummaryConverter.hpp"
+#include "Converters/TrackConverter.hpp"
 #include "Dtos/FlightDataDto.hpp"
 #include "Managers/WebSocketSessionManager.hpp"
 #include "Proto/FlightData.hpp"
