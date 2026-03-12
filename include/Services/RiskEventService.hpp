@@ -31,7 +31,7 @@ public:
     void updateAcknowledged(const int riskEventId, const bool acknowledged);
     void deleteRiskEvent(const int riskEventId);
 
-    void updateState(std::vector<RiskEvent>& riskEvents);
+    void updateState(const std::vector<RiskEvent>& riskEvents);
 private:
     IRiskEventRepository& _repository;
     FlightDataStateManager& _stateManager;

@@ -36,5 +36,5 @@ void RiskEventService::updateAcknowledged(const int riskEventId, const bool ackn
 void RiskEventService::deleteRiskEvent(const int riskEventId)
 {}
 
-void RiskEventService::updateState(std::vector<RiskEvent>& riskEvents)
+void RiskEventService::updateState(const std::vector<RiskEvent>& riskEvents)
 {}

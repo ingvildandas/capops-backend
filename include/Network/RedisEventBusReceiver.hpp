@@ -16,7 +16,7 @@
 class FlightDataDto;
 class QString;
 
-class RedisEventBusReceiver
+class RedisEventBusReceiver : public QObject
 {
     Q_OBJECT
 
@@ -37,7 +37,7 @@ public:
 
 private:
     void runSubscriber();
-    void handleMessage(const QString& channel, const QString& payload);
+    void handleMessage(const std::string& channel, const std::string& payload);
 
     FlightDataDto deserialize(const QString& payload);
 
