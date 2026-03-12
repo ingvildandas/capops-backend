@@ -11,6 +11,7 @@
 #include "Converters/FlightDataDtoConverter.hpp"
 #include "Dtos/FlightDataDto.hpp"
 #include "Managers/WebSocketSessionManager.hpp"
+#include "Proto/FlightData.hpp"
 #include "Services/RiskEventService.hpp"
 #include "Services/SectorSummaryService.hpp"
 #include "Services/TrackService.hpp"
@@ -90,7 +91,7 @@ void RedisEventBusReceiver::handleMessage(const std::string& channel, const std:
 {
     try
     {
-        auto dto = FlightDataDtoConverter::fromProtobuf(QString::fromStdString(payload));
+        auto dto = deserialize(payload);
 
         if (!dto.getTracks().empty())
         {
@@ -109,4 +110,28 @@ void RedisEventBusReceiver::handleMessage(const std::string& channel, const std:
     {
         qWarning() << "Event bus error: " << e.what();
     }
+}
+
+FlightDataDto RedisEventBusReceiver::deserialize
+(
+    const std::string& payload
+)
+{
+    FlightData proto;
+
+    if (!proto.ParseFromString(payload))
+    {
+        throw std::runtime_error("Invalid FlightData protobuf");
+    }
+
+    // Metadata metadata = MetadataConverter::fromProto(proto.tracks());
+
+    std::vector<Track> tracks = 
+        TrackConverter::fromProto(proto.tracks());
+    std::vector<SectorSummary> sectorSummaries = 
+        SectorSummaryConverter::fromProto(proto.sector_summaries());
+    std::vector<RiskEvent> riskEvents = 
+        RiskEventConverter::fromProto(proto.risk_events());
+
+    return FlightDataDto(0, riskEvents, sectorSummaries, tracks);
 }

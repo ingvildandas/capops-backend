@@ -39,7 +39,7 @@ private:
     void runSubscriber();
     void handleMessage(const std::string& channel, const std::string& payload);
 
-    FlightDataDto deserialize(const QString& payload);
+    FlightDataDto deserialize(const std::string& payload);
 
 private:
     QString _redisUri;
