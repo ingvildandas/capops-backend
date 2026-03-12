@@ -20,6 +20,10 @@ public:
     static std::vector<Track> fromJson(const QJsonArray& jsonArray);
     static QJsonObject toJson(const Track& track);
     static QJsonArray toJson(const std::vector<Track>& tracks);
+    static std::vector<Track> fromProto
+    (
+        const google::protobuf::RepeatedPtrField<TrackProto>& protoTracks
+    );
 
 private:
     static TrackGlobalPosition globalPositionFromJson(const QJsonObject& json);
@@ -31,11 +35,6 @@ private:
     static QJsonObject localPositionToJson(const TrackLocalPosition& position);
     static QJsonObject globalVelocityToJson(const TrackGlobalVelocity& velocity);
     static QJsonObject localVelocityToJson(const TrackLocalVelocity& velocity);
-
-    static Track fromProto
-    (
-        const google::protobuf::RepeatedPtrField<TrackProto>& protoTracks
-    );
 
     static TrackGlobalPosition globalPositionFromProto
     (

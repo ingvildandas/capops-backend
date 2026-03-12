@@ -182,7 +182,7 @@ QJsonObject TrackConverter::localVelocityToJson(const TrackLocalVelocity& veloci
     };
 }
 
-Track TrackConverter::fromProto
+std::vector<Track> TrackConverter::fromProto
 (
     const google::protobuf::RepeatedPtrField<TrackProto>& protoTracks
 )
