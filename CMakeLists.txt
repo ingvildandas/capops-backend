@@ -90,11 +90,12 @@ FetchContent_MakeAvailable(redis-plus-plus)
 FetchContent_Declare(protobuf
   GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
   GIT_TAG v6.31.1
-  FIND_PACKAGE_ARGS NAMES protobuf
 )
 set(protobuf_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(protobuf_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(protobuf)
+
+include(${protobuf_SOURCE_DIR}/cmake/protobuf-generate.cmake)
 
 SET(PROTO_DIR ${CMAKE_SOURCE_DIR}/proto)
 SET(PROTO_FILES ${PROTO_DIR}/flightdata.proto)
