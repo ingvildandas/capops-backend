@@ -198,11 +198,11 @@ std::vector<Track> TrackConverter::fromProto
         TrackGlobalPosition globalPostion = 
             globalPositionFromProto(t.globalposition());
         TrackLocalPosition localPosition = 
-            localPositionFromProto(t.localPosition());
+            localPositionFromProto(t.localposition());
         TrackGlobalVelocity globalVelocity = 
-            globalVelocityFromProto(t.globalVelocity());
+            globalVelocityFromProto(t.globalvelocity());
         TrackLocalVelocity localVelocity = 
-            localVelocityFromProto(t.localVelocity());
+            localVelocityFromProto(t.localvelocity());
 
         double headingDegrees = t.headingdegrees();
 
