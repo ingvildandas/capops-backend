@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "Proto/FlightData.hpp"
+
 class Track;
 class QJsonArray;
 class QJsonObject;
@@ -24,10 +26,31 @@ private:
     static TrackLocalPosition localPositionFromJson(const QJsonObject& json);
     static TrackGlobalVelocity globalVelocityFromJson(const QJsonObject& json);
     static TrackLocalVelocity localVelocityFromJson(const QJsonObject& json);
-
     
     static QJsonObject globalPositionToJson(const TrackGlobalPosition& position);
     static QJsonObject localPositionToJson(const TrackLocalPosition& position);
     static QJsonObject globalVelocityToJson(const TrackGlobalVelocity& velocity);
     static QJsonObject localVelocityToJson(const TrackLocalVelocity& velocity);
+
+    static Track fromProto
+    (
+        const google::protobuf::RepeatedPtrField<TrackProto>& protoTracks
+    );
+
+    static TrackGlobalPosition globalPositionFromProto
+    (
+        const GlobalPositionProto& globalPosition
+    );
+    static TrackLocalPosition localPositionFromProto
+    (
+        const LocalPositionProto& localPosition
+    );
+    static TrackGlobalVelocity globalVelocityFromProto
+    (
+        const GlobalVelocityProto& localVelocity
+    );
+    static TrackLocalVelocity localVelocityFromProto
+    (
+        const LocalVelocityProto& localVelocity
+    ); 
 };
