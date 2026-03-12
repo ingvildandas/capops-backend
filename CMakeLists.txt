@@ -112,7 +112,6 @@ protobuf_generate(TARGET capops PROTOS ${PROTO_SRC_DIR}/flightdata.proto)
 target_include_directories(capops 
     PRIVATE 
         include
-        ${PROTO_GEN_DIR}
         ${Protobuf_INCLUDE_DIRS}
         ${CMAKE_BINARY_DIR}
 )
@@ -125,7 +124,7 @@ target_link_libraries(capops
         Qt6::WebSockets
         SQLite::SQLite3
         redis++::redis++
-        ${Protobuf_LIBRARIES}
+        protobuf::libprotobuf
 )
 
 # ---- Tests ----

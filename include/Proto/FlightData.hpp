@@ -1,3 +1,3 @@
 #pragma once
 
-#include "flightdata.pb.h"
+#include "proto/flightdata.pb.h"
