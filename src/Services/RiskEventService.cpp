@@ -1,4 +1,5 @@
 #include "Services/RiskEventService.hpp"
+#include "Managers/FlightDataStateManager.hpp"
 #include "Repositories/IRiskEventRepository.hpp"
 
 RiskEventService::RiskEventService(
