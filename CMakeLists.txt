@@ -1,10 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
-cmake_policy(SET CMP0071 NEW)
 
 project(capops
-  VERSION 0.1.0
-  LANGUAGES CXX
+    VERSION 0.1.0
+    LANGUAGES CXX
 )
 
 set(CMAKE_CXX_STANDARD 17)
@@ -21,6 +20,11 @@ find_package(Qt6 REQUIRED COMPONENTS
     HttpServer 
     WebSockets
 )
+
+# ---- Find Protobuf ----
+find_package(Protobuf REQUIRED)
+file(GLOB PROTO_FILES "${CMAKE_CURRENT_SOURCE_DIR}/proto/*.proto")
+protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_FILES})
 
 # ---- Fetch Catch2 ----
 include(FetchContent)
@@ -87,20 +91,6 @@ FetchContent_Declare(
 set(REDIS_PLUS_PLUS_BUILD_TEST OFF CACHE BOOL "Disable building redis-plus-plus tests" FORCE)
 FetchContent_MakeAvailable(redis-plus-plus)
 
-# ---- Fetch Protobuf ----
-FetchContent_Declare(protobuf
-  GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
-  GIT_TAG v6.31.1
-)
-set(protobuf_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(protobuf_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(protobuf)
-
-include(${protobuf_SOURCE_DIR}/cmake/protobuf-generate.cmake)
-
-SET(PROTO_DIR ${CMAKE_SOURCE_DIR}/proto)
-SET(PROTO_FILES ${PROTO_DIR}/flightdata.proto)
-
 # ---- Executables ----
 file(GLOB_RECURSE APP_SOURCES 
     app/main.cpp
@@ -110,17 +100,15 @@ file(GLOB_RECURSE APP_SOURCES
 )
 add_executable(capops 
     ${APP_SOURCES}
-)
-protobuf_generate(
-    TARGET capops
-    PROTOS ${PROTO_FILES}
+    ${PROTO_SRCS} 
+    ${PROTO_HDRS}
 )
 
 # ---- Library ----
 target_include_directories(capops 
     PRIVATE 
         include
-        ${CMAKE_BINARY_DIR}
+        ${Protobuf_INCLUDE_DIRS}
 )
 
 target_link_libraries(capops 
@@ -131,7 +119,7 @@ target_link_libraries(capops
         Qt6::WebSockets
         SQLite::SQLite3
         redis++::redis++
-        protobuf::libprotobuf
+        ${Protobuf_LIBRARIES}
 )
 
 # ---- Tests ----
