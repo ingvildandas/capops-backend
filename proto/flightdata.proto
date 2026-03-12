@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+message FlightData {
+    Metadata metadata = 1;
+    repeated Track tracks = 2;
+    repeated SectorSummary sector_summaries = 3;
+    repeated RiskEvent risk_events = 4;
+}
+
+message Metadata {
+    int32 totalAircraftsCount = 1;
+    int32 rowsCount = 2;
+    int32 columnsCount = 3;
+    double originLongitude = 4;
+    double originLatitude = 5;
+    int32 gridWidthMeters = 6;
+    int32 gridHeightMeters = 7;
+}
+
+message RiskEvent {
+    int32 riskEventId = 1;
+    int32 riskSeverity = 2;
+    string message = 3;
+    bool acknowledged = 4;
+}
+
+message SectorSummary {
+    int32 sectorId = 1;
+    int32 row = 2;
+    int32 column = 3;
+    int32 weatherSeverity = 4;
+    double weatherFactor = 5;
+    int32 localAircraftCount = 6;
+    int32 localAircraftBaseCapacity = 7;
+    int32 localAircraftEffectiveCapacity = 8;
+}
+
+message Track {
+    string icao24 = 1;
+    string timestamp = 2;
+    GlobalPosition globalPosition = 3;
+    LocalPosition localPosition = 4;
+    LocalVelocity localVelocity = 5;
+    GlobalVelocity globalVelocity = 6;
+    double headingDegrees = 7;
+}
+
+message GlobalPosition {
+    string frame = 1;
+    double latitudeDegrees = 2;
+    double longitudeDegrees = 3;
+    double altitudeMeters = 4;
+}
+
+message LocalPosition {
+    string frame = 1;
+    double xPosition = 2;
+    double yPosition = 3;
+    double zPosition = 4;
+}
+
+message GlobalVelocity {
+    double totalVelocityMetersPerSecond = 1;
+    double groundVelocityMetersPerSecond = 2;
+    double verticalVelocityMetersPerSecond = 3;
+}
+
+message LocalVelocity {
+    double xVelocityMetersPerSecond = 1;
+    double yVelocityMetersPerSecond = 2;
+    double zVelocityMetersPerSecond = 3;
+}
