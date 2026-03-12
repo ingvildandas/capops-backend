@@ -22,9 +22,12 @@ find_package(Qt6 REQUIRED COMPONENTS
 )
 
 # ---- Find Protobuf ----
-find_package(Protobuf REQUIRED)
-file(GLOB PROTO_FILES "${CMAKE_CURRENT_SOURCE_DIR}/proto/*.proto")
-protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_FILES})
+find_package(Protobuf REQUIRED CONFIG)
+
+set(PROTO_SRC_DIR ${CMAKE_SOURCE_DIR}/proto)
+set(PROTO_GEN_DIR ${CMAKE_BINARY_DIR}/proto)
+file(MAKE_DIRECTORY ${PROTO_GEN_DIR})
+find_package(Protobuf REQUIRED CONFIG)
 
 # ---- Fetch Catch2 ----
 include(FetchContent)
@@ -103,11 +106,13 @@ add_executable(capops
     ${PROTO_SRCS} 
     ${PROTO_HDRS}
 )
+protobuf_generate(TARGET capops PROTOS ${PROTO_SRC_DIR}/flightdata.proto)
 
 # ---- Library ----
 target_include_directories(capops 
     PRIVATE 
         include
+        ${PROTO_GEN_DIR}
         ${Protobuf_INCLUDE_DIRS}
 )
 
