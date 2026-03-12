@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "Proto/FlightData.hpp"
+
 class RiskEvent;
 class QJsonArray;
 class QJsonObject;
@@ -13,4 +15,8 @@ public:
     static std::vector<RiskEvent> fromJson(const QJsonArray& jsonArray);
     static QJsonObject toJson(const RiskEvent& riskEvent);
     static QJsonArray toJson(const std::vector<RiskEvent>& riskEvents);
+    static std::vector<RiskEvent> fromProto
+    (
+        const google::protobuf::RepeatedPtrField<RiskEventProto>& protoRiskEvents
+    );
 };
