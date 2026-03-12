@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+cmake_policy(SET CMP0071 NEW)
 
 project(capops
   VERSION 0.1.0
