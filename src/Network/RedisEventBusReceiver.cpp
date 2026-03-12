@@ -46,7 +46,7 @@ void RedisEventBusReceiver::start()
 {
     if (_running) return;
 
-    _redis = std::make_unique<sw::redis::Redis>(_redisUri);
+    _redis = std::make_unique<sw::redis::Redis>(_redisUri.toStdString());
     _running = true;
 
     _subscriberThread = std::thread([this]()

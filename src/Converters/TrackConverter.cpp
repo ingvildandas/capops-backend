@@ -193,7 +193,7 @@ std::vector<Track> TrackConverter::fromProto
     for (const auto& t : protoTracks)
     {
         QString icao24 = QString::fromStdString(t.icao24());
-        QString timestamp = QString::fromStdString(t.timestamp());
+        QDateTime timestamp = QDateTime::fromString(QString::fromStdString(t.timestamp()));
 
         TrackGlobalPosition globalPostion = 
             globalPositionFromProto(t.globalposition());
@@ -233,12 +233,12 @@ TrackGlobalPosition TrackConverter::globalPositionFromProto
     double altitudeMeters = globalPosition.altitudemeters();
 
     return TrackGlobalPosition
-    (
+    {
         frame, 
         latitudeDegrees, 
         longitudeDegrees, 
         altitudeMeters
-    );
+    };
 }
 
 TrackLocalPosition TrackConverter::localPositionFromProto
@@ -252,12 +252,12 @@ TrackLocalPosition TrackConverter::localPositionFromProto
     double zPosition = localPosition.zposition();
 
     return TrackLocalPosition
-    (
+    {
         frame,
         xPosition,
         yPosition,
         zPosition
-    );
+    };
 }
 
 TrackGlobalVelocity TrackConverter::globalVelocityFromProto
@@ -270,11 +270,11 @@ TrackGlobalVelocity TrackConverter::globalVelocityFromProto
     double verticalVelocityMetersPerSecond = globalVelocity.verticalvelocitymeterspersecond();
 
     return TrackGlobalVelocity
-    (
+    {
         totalVelocityMetersPerSecond,
         groundVelocityMetersPerSecond,
         verticalVelocityMetersPerSecond
-    );
+    };
 }
 
 TrackLocalVelocity TrackConverter::localVelocityFromProto
@@ -286,10 +286,10 @@ TrackLocalVelocity TrackConverter::localVelocityFromProto
     double yVelocityMetersPerSecond = localVelocity.yvelocitymeterspersecond();
     double zVelocityMetersPerSecond = localVelocity.zvelocitymeterspersecond();
 
-    return LocalVelocityProto
-    (
+    return TrackLocalVelocity
+    {
         xVelocityMetersPerSecond,
         yVelocityMetersPerSecond,
         zVelocityMetersPerSecond
-    );
+    };
 }
