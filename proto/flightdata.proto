@@ -1,13 +1,13 @@
 syntax = "proto3";
 
 message FlightData {
-    Metadata metadata = 1;
-    repeated Track tracks = 2;
-    repeated SectorSummary sector_summaries = 3;
-    repeated RiskEvent risk_events = 4;
+    MetadataProto metadata = 1;
+    repeated TrackProto tracks = 2;
+    repeated SectorSummaryProto sector_summaries = 3;
+    repeated RiskEventProto risk_events = 4;
 }
 
-message Metadata {
+message MetadataProto {
     int32 totalAircraftsCount = 1;
     int32 rowsCount = 2;
     int32 columnsCount = 3;
@@ -17,14 +17,14 @@ message Metadata {
     int32 gridHeightMeters = 7;
 }
 
-message RiskEvent {
+message RiskEventProto {
     int32 riskEventId = 1;
     int32 riskSeverity = 2;
     string message = 3;
     bool acknowledged = 4;
 }
 
-message SectorSummary {
+message SectorSummaryProto {
     int32 sectorId = 1;
     int32 row = 2;
     int32 column = 3;
@@ -35,37 +35,37 @@ message SectorSummary {
     int32 localAircraftEffectiveCapacity = 8;
 }
 
-message Track {
+message TrackProto {
     string icao24 = 1;
     string timestamp = 2;
-    GlobalPosition globalPosition = 3;
-    LocalPosition localPosition = 4;
-    LocalVelocity localVelocity = 5;
-    GlobalVelocity globalVelocity = 6;
+    GlobalPositionProto globalPosition = 3;
+    LocalPositionProto localPosition = 4;
+    LocalVelocityProto localVelocity = 5;
+    GlobalVelocityProto globalVelocity = 6;
     double headingDegrees = 7;
 }
 
-message GlobalPosition {
+message GlobalPositionProto {
     string frame = 1;
     double latitudeDegrees = 2;
     double longitudeDegrees = 3;
     double altitudeMeters = 4;
 }
 
-message LocalPosition {
+message LocalPositionProto {
     string frame = 1;
     double xPosition = 2;
     double yPosition = 3;
     double zPosition = 4;
 }
 
-message GlobalVelocity {
+message GlobalVelocityProto {
     double totalVelocityMetersPerSecond = 1;
     double groundVelocityMetersPerSecond = 2;
     double verticalVelocityMetersPerSecond = 3;
 }
 
-message LocalVelocity {
+message LocalVelocityProto {
     double xVelocityMetersPerSecond = 1;
     double yVelocityMetersPerSecond = 2;
     double zVelocityMetersPerSecond = 3;
