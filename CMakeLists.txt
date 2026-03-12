@@ -86,6 +86,20 @@ FetchContent_Declare(
 set(REDIS_PLUS_PLUS_BUILD_TEST OFF CACHE BOOL "Disable building redis-plus-plus tests" FORCE)
 FetchContent_MakeAvailable(redis-plus-plus)
 
+# ---- Fetch Protobuf ----
+FetchContent_Declare(protobuf
+  GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
+  GIT_TAG        v29.6
+  SOURCE_SUBDIR  cmake
+  FIND_PACKAGE_ARGS NAMES protobuf
+)
+FetchContent_MakeAvailable(protobuf)
+
+SET(PROTO_DIR ${CMAKE_CURRENT_SOURCE_DIR}/proto)
+SET (PROTO_FILES ${PROTO_DIR}/flightdata.proto)
+
+protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_FILES})
+
 # ---- Executables ----
 file(GLOB_RECURSE APP_SOURCES 
     app/main.cpp
@@ -93,12 +107,17 @@ file(GLOB_RECURSE APP_SOURCES
     include/*.hpp
     resources/*.qrc
 )
-add_executable(capops ${APP_SOURCES})
+add_executable(capops 
+    ${APP_SOURCES}
+    ${PROTO_SRCS}
+    ${PROTO_HDRS}
+)
 
 # ---- Library ----
 target_include_directories(capops 
     PRIVATE 
         include
+        ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 target_link_libraries(capops 
@@ -109,6 +128,7 @@ target_link_libraries(capops
         Qt6::WebSockets
         SQLite::SQLite3
         redis++::redis++
+        protobuf::libprotobuf
 )
 
 # ---- Tests ----
