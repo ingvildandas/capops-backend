@@ -39,12 +39,17 @@ jobs:
         if: matrix.os == 'windows-latest'
         uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Install vcpkg + Protoc (Windows)
+      - name: Install vcpkg (Windows)
         if: matrix.os == 'windows-latest'
         run: |
           git clone https://github.com/microsoft/vcpkg.git
           ./vcpkg/bootstrap-vcpkg.bat
-          ./vcpkg/vcpkg install protobuf:x64-windows
+        
+      - name: Install Protoc (Windows)
+        if: matrix.os == 'windows-latest'
+        run: ./vcpkg/vcpkg install protobuf:x64-windows
+        env:
+          VCPKG_BUILD_TYPE: release
         
       - name: Install Protoc (Linux)
         if: runner.os == 'Linux'
