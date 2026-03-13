@@ -29,9 +29,19 @@ bool Metadata::getIsInitialized()
     return true;
 }
 
+int Metadata::getVersion()
+{
+    if (!getIsInitialized())
+    {
+        throw new std::runtime_error("Version control not initialized");
+    }
+
+    return _version;
+}
+
 Metadata::Metadata(const QDateTime& timestamp) : _timestamp(timestamp)
 {
-    if (!_isInitialized || _version < 1)
+    if (!getIsInitialized())
     {
         throw new std::runtime_error("Version control not initialized");
     }

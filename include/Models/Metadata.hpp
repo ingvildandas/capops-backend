@@ -8,6 +8,7 @@ public:
     static void initializeVersionControl(const int version);
     static void cleanupVersionControl();
     static bool getIsInitialized();
+    static int getVersion();
 
     Metadata(const QDateTime& timestamp);
 
