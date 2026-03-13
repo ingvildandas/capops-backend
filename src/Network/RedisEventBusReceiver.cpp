@@ -141,5 +141,5 @@ FlightDataDto RedisEventBusReceiver::deserialize
     std::vector<RiskEvent> riskEvents = 
         RiskEventConverter::fromProto(proto.risk_events());
 
-    return FlightDataDto(0, riskEvents, sectorSummaries, tracks);
+    return FlightDataDto(metadata, riskEvents, sectorSummaries, tracks);
 }
