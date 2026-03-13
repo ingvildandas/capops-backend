@@ -76,6 +76,35 @@ QJsonArray SectorSummaryConverter::toJson(const std::vector<SectorSummary>& sect
     return sectorSummaryArray;
 }
 
+SectorSummary SectorSummaryConverter::fromProto
+(
+    const SectorSummaryProto& protoSectorSummary
+)
+{
+    int sectorId = protoSectorSummary.sectorid();
+    int row = protoSectorSummary.row();
+    int colunmn = protoSectorSummary.colunmn();
+    int weatherSeverity = protoSectorSummary.weatherseverity();
+    double weatherFactor = protoSectorSummary.weatherfactor();
+    int localAircraftCount = protoSectorSummary.localaircraftcount();
+    int localAircraftBaseCapacity = 
+        protoSectorSummary.localaircraftbasecapacity();
+    int localAircraftEffectiveCapacity = 
+        protoSectorSummary.localaircrafteffectivecapacity();
+
+    SectorSummary
+    (
+        sectorId,
+        row,
+        colunmn,
+        weatherSeverity,
+        weatherFactor,
+        localAircraftCount,
+        localAircraftBaseCapacity,
+        localAircraftEffectiveCapacity
+    );
+}
+
 std::vector<SectorSummary> SectorSummaryConverter::fromProto
 (
     const google::protobuf::RepeatedPtrField<SectorSummaryProto>& 
@@ -87,29 +116,7 @@ std::vector<SectorSummary> SectorSummaryConverter::fromProto
 
     for (const auto& t : protoSectorSummaries)
     {
-        int sectorId = t.sectorid();
-        int row = t.row();
-        int colunmn = t.colunmn();
-        int weatherSeverity = t.weatherseverity();
-        double weatherFactor = t.weatherfactor();
-        int localAircraftCount = t.localaircraftcount();
-        int localAircraftBaseCapacity = t.localaircraftbasecapacity();
-        int localAircraftEffectiveCapacity = t.localaircrafteffectivecapacity();
-
-        sectorSummaries.push_back
-        (
-            SectorSummary
-            (
-                sectorId,
-                row,
-                colunmn,
-                weatherSeverity,
-                weatherFactor,
-                localAircraftCount,
-                localAircraftBaseCapacity,
-                localAircraftEffectiveCapacity
-            )
-        );
+        sectorSummaries.push_back(fromProto(t));
     }
 
     return sectorSummaries;
