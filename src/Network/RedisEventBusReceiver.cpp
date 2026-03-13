@@ -28,6 +28,7 @@ RedisEventBusReceiver::RedisEventBusReceiver
 (
     const QString& redisUri,
     WebSocketSessionManager& sessionManager,
+    MetadataService& metadataService,
     RiskEventService& riskEventService,
     SectorSummaryService& sectorSummaryService,
     TrackService& trackService,
@@ -36,6 +37,7 @@ RedisEventBusReceiver::RedisEventBusReceiver
     :
     _redisUri(redisUri),
     _sessionManager(sessionManager),
+    _metadataService(metadataService),
     _sectorSummaryService(sectorSummaryService),
     _trackService(trackService),
     _riskEventService(riskEventService),
