@@ -38,14 +38,13 @@ jobs:
       - name: Set up MSVC
         if: matrix.os == 'windows-latest'
         uses: ilammy/msvc-dev-cmd@v1
-        
-      - name: Install vcpkg
-        if: matrix.os == 'windows-latest'
-        uses: lukka/run-vcpkg@v11
 
-      - name: Install Protobuf (Windows)
+      - name: Install vcpkg + Protoc (Windows)
         if: matrix.os == 'windows-latest'
-        run: vcpkg install protobuf:x64-windows
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          ./vcpkg/bootstrap-vcpkg.bat
+          ./vcpkg/vcpkg install protobuf:x64-windows
         
       - name: Install Protoc (Linux)
         if: runner.os == 'Linux'
@@ -61,7 +60,7 @@ jobs:
           -G Ninja
           -DCMAKE_BUILD_TYPE=Release
           -DBUILD_TESTING=ON
-          ${{ matrix.os == 'windows-latest' && '-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake' || '' }}
+          ${{ matrix.os == 'windows-latest' && '-DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake' || '' }}
 
       - name: Build
         run: cmake --build build --parallel
