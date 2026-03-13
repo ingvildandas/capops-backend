@@ -38,6 +38,19 @@ jobs:
       - name: Set up MSVC
         if: matrix.os == 'windows-latest'
         uses: ilammy/msvc-dev-cmd@v1
+      
+      - name: Install Protoc (Windows)
+        if: matrix.os == 'windows-latest'
+        with:
+          version: '25.x'
+        
+      - name: Install Protoc (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y protobuf-compiler libprotobuf-dev
+
+      - name: Install Protoc (macOS)
+        if: runner.os == 'macOS'
+        run: brew install protobuf
         
       - name: Configure CMake
         run: >
