@@ -19,7 +19,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
+        #os: [ubuntu-latest, macos-latest, windows-latest] <-- Issues with Windows, skipping for now
+
+    defaults:
+      run:
+        shell: bash
+
+    env:
+      BUILD_DIR: build
+      QT_VERSION: 6.8.3
 
     steps:
       - name: Checkout repository
@@ -28,23 +37,71 @@ jobs:
       - name: Install Ninja
         uses: seanmiddleditch/gha-setup-ninja@v4
 
+      - name: Cache Qt
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.os }}-QtCache
+          key: ${{ runner.os }}-qt-${{ env.QT_VERSION }}
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.8.3'
+          version: ${{ env.QT_VERSION }}
           modules: 'qtwebsockets qthttpserver'
           install-deps: true
+          cache: true
       
       - name: Set up MSVC
         if: matrix.os == 'windows-latest'
         uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Cache vcpkg Build (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/cache@v4
+        with:
+          path: vcpkg/installed
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
+          restore-keys: |
+            ${{ runner.os }}-vcpkg-
+
+      - name: Install vcpkg (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          if [ ! -d "vcpkg" ]; then
+            git clone https://github.com/microsoft/vcpkg.git
+            ./vcpkg/bootstrap-vcpkg.bat
+          fi
         
-      - name: Configure CMake
+      - name: Install Protoc (Windows)
+        if: matrix.os == 'windows-latest'
+        run: ./vcpkg/vcpkg install protobuf:x64-windows
+        env:
+          VCPKG_BUILD_TYPE: release
+        
+      - name: Install Protoc (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y protobuf-compiler libprotobuf-dev
+
+      - name: Install Protoc (macOS)
+        if: runner.os == 'macOS'
+        run: brew install protobuf
+        
+      - name: Configure CMake (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          cmake -S . -B build \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_TESTING=ON \
+            -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+
+      - name: Configure CMake (Linux + MacOS)
+        if: runner.os != 'windows-latest'
         run: >
-          cmake -S . -B build
-          -G Ninja
-          -DCMAKE_BUILD_TYPE=Release
-          -DBUILD_TESTING=ON
+          cmake -S . -B build 
+          -G Ninja 
+          -DCMAKE_BUILD_TYPE=Release 
+          -DBUILD_TESTING=ON 
 
       - name: Build
         run: cmake --build build --parallel

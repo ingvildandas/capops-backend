@@ -11,7 +11,7 @@ RiskEvent RiskEventConverter::fromJson(const QJsonObject& json)
 {
     int riskEventId = json["riskEventId"].toInt();
     int riskSeverity = json["riskSeverity"].toInt();
-    std::string message = json["message"].toString().toStdString();
+    QString message = json["message"].toString();
     bool acknowledged = json["acknowledged"].toBool();
 
     return RiskEvent(riskEventId, riskSeverity, message, acknowledged);
@@ -37,7 +37,7 @@ QJsonObject RiskEventConverter::toJson(const RiskEvent& riskEvent)
     {
         { "riskEventId", riskEvent.getRiskEventId() },
         { "riskSeverity", riskEvent.getRiskSeverity() },
-        { "message", QString::fromStdString(riskEvent.getMessage()) },
+        { "message", riskEvent.getMessage() },
         { "acknowledged", riskEvent.getAcknowledged() }
     };
 }
@@ -51,4 +51,35 @@ QJsonArray RiskEventConverter::toJson(const std::vector<RiskEvent>& riskEvents)
     }
 
     return riskEventArray;
+}
+
+RiskEvent RiskEventConverter::fromProto(const RiskEventProto& protoRiskEvent)
+{
+    int riskEventId = protoRiskEvent.riskeventid(); 
+    int riskSeverity = protoRiskEvent.riskseverity();
+    QString message = QString::fromStdString(protoRiskEvent.message());
+    bool acknowledged = protoRiskEvent.acknowledged();
+    
+    return RiskEvent(
+        riskEventId,
+        riskSeverity,
+        message,
+        acknowledged                
+    );
+}
+
+std::vector<RiskEvent> RiskEventConverter::fromProto
+(
+    const google::protobuf::RepeatedPtrField<RiskEventProto>& protoRiskEvents
+)
+{
+    std::vector<RiskEvent> riskEvents;
+    riskEvents.reserve(protoRiskEvents.size());
+
+    for (const auto& t : protoRiskEvents)
+    {
+        riskEvents.push_back(fromProto(t));
+    }
+
+    return riskEvents;
 }

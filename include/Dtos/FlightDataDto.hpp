@@ -21,4 +21,10 @@ public:
     std::vector<RiskEvent> getRiskEvents() const;
     std::vector<SectorSummary> getSectorSummaries() const;
     std::vector<Track> getTracks() const;
+
+private:
+    int _totalAircraftsCount;
+    std::vector<RiskEvent> _riskEvents;
+    std::vector<SectorSummary> _sectorSummaries;
+    std::vector<Track> _tracks;
 };

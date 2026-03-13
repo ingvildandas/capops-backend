@@ -1,10 +1,12 @@
+#include <QString>
+
 #include "Models/RiskEvent.hpp"
 
 RiskEvent::RiskEvent
 (
     const int riskEventId,
     const int riskSeverity,
-    const std::string& message,
+    const QString& message,
     const bool acknowledged
 )
     : 
@@ -24,7 +26,7 @@ const int RiskEvent::getRiskSeverity() const
     return _riskSeverity;
 }
 
-const std::string& RiskEvent::getMessage() const
+const QString& RiskEvent::getMessage() const
 {
     return _message;
 }

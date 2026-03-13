@@ -6,6 +6,7 @@
 
 #include "Converters/TrackConverter.hpp"
 #include "Models/Track.hpp"
+#include "Proto/FlightData.hpp"
 #include "Structs/TrackStructs.hpp"
 
 Track TrackConverter::fromJson(const QJsonObject& json)
@@ -178,5 +179,122 @@ QJsonObject TrackConverter::localVelocityToJson(const TrackLocalVelocity& veloci
         { "xVelocityMetersPerSecond", velocity.xVelocityMetersPerSecond },
         { "yVelocityMetersPerSecond", velocity.yVelocityMetersPerSecond },
         { "zVelocityMetersPerSecond", velocity.zVelocityMetersPerSecond }
+    };
+}
+
+Track TrackConverter::fromProto(const TrackProto& protoTrack)
+{
+    QString icao24 = QString::fromStdString(protoTrack.icao24());
+    QDateTime timestamp = 
+        QDateTime::fromString(QString::fromStdString(protoTrack.timestamp()));
+
+    TrackGlobalPosition globalPostion = 
+        globalPositionFromProto(protoTrack.globalposition());
+    TrackLocalPosition localPosition = 
+        localPositionFromProto(protoTrack.localposition());
+    TrackGlobalVelocity globalVelocity = 
+        globalVelocityFromProto(protoTrack.globalvelocity());
+    TrackLocalVelocity localVelocity = 
+        localVelocityFromProto(protoTrack.localvelocity());
+
+    double headingDegrees = protoTrack.headingdegrees();
+
+    return Track
+    (
+        icao24, 
+        timestamp, 
+        globalPostion, 
+        localPosition, 
+        globalVelocity, 
+        localVelocity, 
+        headingDegrees
+    );
+}
+
+std::vector<Track> TrackConverter::fromProto
+(
+    const google::protobuf::RepeatedPtrField<TrackProto>& protoTracks
+)
+{
+    std::vector<Track> tracks;
+    tracks.reserve(protoTracks.size());
+
+    for (const auto& t : protoTracks)
+    {
+        tracks.push_back(fromProto(t));
+    }
+
+    return tracks;
+}
+
+TrackGlobalPosition TrackConverter::globalPositionFromProto
+(
+    const GlobalPositionProto& globalPosition
+)
+{
+    QString frame = QString::fromStdString(globalPosition.frame());
+    double latitudeDegrees = globalPosition.latitudedegrees();
+    double longitudeDegrees = globalPosition.longitudedegrees();
+    double altitudeMeters = globalPosition.altitudemeters();
+
+    return TrackGlobalPosition
+    {
+        frame, 
+        latitudeDegrees, 
+        longitudeDegrees, 
+        altitudeMeters
+    };
+}
+
+TrackLocalPosition TrackConverter::localPositionFromProto
+(
+    const LocalPositionProto& localPosition
+)
+{
+    QString frame = QString::fromStdString(localPosition.frame());
+    double xPosition = localPosition.xposition();
+    double yPosition = localPosition.yposition();
+    double zPosition = localPosition.zposition();
+
+    return TrackLocalPosition
+    {
+        frame,
+        xPosition,
+        yPosition,
+        zPosition
+    };
+}
+
+TrackGlobalVelocity TrackConverter::globalVelocityFromProto
+(
+    const GlobalVelocityProto& globalVelocity
+)
+{
+    double totalVelocityMetersPerSecond = globalVelocity.totalvelocitymeterspersecond();
+    double groundVelocityMetersPerSecond = globalVelocity.groundvelocitymeterspersecond();
+    double verticalVelocityMetersPerSecond = globalVelocity.verticalvelocitymeterspersecond();
+
+    return TrackGlobalVelocity
+    {
+        totalVelocityMetersPerSecond,
+        groundVelocityMetersPerSecond,
+        verticalVelocityMetersPerSecond
+    };
+}
+
+TrackLocalVelocity TrackConverter::localVelocityFromProto
+(
+    const LocalVelocityProto& localVelocity
+)
+{
+    double xVelocityMetersPerSecond = localVelocity.xvelocitymeterspersecond();
+    double yVelocityMetersPerSecond = localVelocity.yvelocitymeterspersecond();
+    double zVelocityMetersPerSecond = localVelocity.zvelocitymeterspersecond();
+
+    return TrackLocalVelocity
+    {
+        xVelocityMetersPerSecond,
+        yVelocityMetersPerSecond,
+        zVelocityMetersPerSecond
     };
 }

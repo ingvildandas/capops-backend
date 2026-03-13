@@ -12,24 +12,29 @@ FlightDataDto::FlightDataDto
     std::vector<SectorSummary>& sectorSummaries,
     std::vector<Track>& tracks
 )
+    :
+    _totalAircraftsCount(totalAircraftsCount),
+    _riskEvents(riskEvents),
+    _sectorSummaries(sectorSummaries),
+    _tracks(tracks)
 {}
 
 int FlightDataDto::getTotalAircraftsCount() const
 {
-    return 0;
+    return _totalAircraftsCount;
 } 
 
 std::vector<RiskEvent> FlightDataDto::getRiskEvents() const
 {
-    return std::vector<RiskEvent>{};
+    return _riskEvents;
 }
 
 std::vector<SectorSummary> FlightDataDto::getSectorSummaries() const
 {
-    return std::vector<SectorSummary>{};
+    return _sectorSummaries;
 }
 
 std::vector<Track> FlightDataDto::getTracks() const
 {
-    return std::vector<Track>{};
+    return _tracks;
 }

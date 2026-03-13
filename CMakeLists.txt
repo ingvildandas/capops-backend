@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.5)
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
 project(capops
-  VERSION 0.1.0
-  LANGUAGES CXX
+    VERSION 0.1.0
+    LANGUAGES CXX
 )
 
 set(CMAKE_CXX_STANDARD 17)
@@ -20,6 +20,15 @@ find_package(Qt6 REQUIRED COMPONENTS
     HttpServer 
     WebSockets
 )
+
+# ---- Find Protobuf ----
+find_package(Protobuf REQUIRED)
+
+set(PROTO_SRC_DIR ${CMAKE_SOURCE_DIR}/proto)
+set(PROTO_GEN_DIR ${CMAKE_BINARY_DIR}/proto)
+file(MAKE_DIRECTORY ${PROTO_GEN_DIR})
+set_property(SOURCE ${PROTO_GEN_DIR}/flightdata.pb.h PROPERTY SKIP_AUTOGEN ON)
+set_property(SOURCE ${PROTO_GEN_DIR}/flightdata.pb.cc PROPERTY SKIP_AUTOGEN ON)
 
 # ---- Fetch Catch2 ----
 include(FetchContent)
@@ -93,12 +102,19 @@ file(GLOB_RECURSE APP_SOURCES
     include/*.hpp
     resources/*.qrc
 )
-add_executable(capops ${APP_SOURCES})
+add_executable(capops 
+    ${APP_SOURCES}
+    ${PROTO_SRCS} 
+    ${PROTO_HDRS}
+)
+protobuf_generate(TARGET capops PROTOS ${PROTO_SRC_DIR}/flightdata.proto)
 
 # ---- Library ----
 target_include_directories(capops 
     PRIVATE 
         include
+        ${Protobuf_INCLUDE_DIRS}
+        ${CMAKE_BINARY_DIR}
 )
 
 target_link_libraries(capops 
@@ -109,6 +125,7 @@ target_link_libraries(capops
         Qt6::WebSockets
         SQLite::SQLite3
         redis++::redis++
+        protobuf::libprotobuf
 )
 
 # ---- Tests ----
