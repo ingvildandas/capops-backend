@@ -85,16 +85,16 @@ std::vector<SectorSummary> SectorSummaryConverter::fromProto
     std::vector<SectorSummary> sectorSummaries;
     sectorSummaries.reserve(protoSectorSummaries.size());
 
-    for (const auto& t : sectorSummaries)
+    for (const auto& t : protoSectorSummaries)
     {
-        int sectorId = t.getSectorId();
-        int row = t.getRow();
-        int colunmn = t.getColunmn();
-        int weatherSeverity = t.getWeatherSeverity();
-        double weatherFactor = t.getWeatherFactor();
-        int localAircraftCount = t.getLocalAircraftCount();
-        int localAircraftBaseCapacity = t.getLocalAircraftBaseCapacity();
-        int localAircraftEffectiveCapacity = t.getLocalAircraftEffectiveCapacity();
+        int sectorId = t.sectorid();
+        int row = t.row();
+        int colunmn = t.colunmn();
+        int weatherSeverity = t.weatherseverity();
+        double weatherFactor = t.weatherfactor();
+        int localAircraftCount = t.localaircraftcount();
+        int localAircraftBaseCapacity = t.localaircraftbasecapacity();
+        int localAircraftEffectiveCapacity = t.localaircrafteffectivecapacity();
 
         sectorSummaries.push_back
         (
