@@ -22,12 +22,11 @@ find_package(Qt6 REQUIRED COMPONENTS
 )
 
 # ---- Find Protobuf ----
-find_package(Protobuf REQUIRED CONFIG)
+find_package(Protobuf REQUIRED)
 
 set(PROTO_SRC_DIR ${CMAKE_SOURCE_DIR}/proto)
 set(PROTO_GEN_DIR ${CMAKE_BINARY_DIR}/proto)
 file(MAKE_DIRECTORY ${PROTO_GEN_DIR})
-find_package(Protobuf REQUIRED CONFIG)
 set_property(SOURCE ${PROTO_GEN_DIR}/flightdata.pb.h PROPERTY SKIP_AUTOGEN ON)
 set_property(SOURCE ${PROTO_GEN_DIR}/flightdata.pb.cc PROPERTY SKIP_AUTOGEN ON)
 
