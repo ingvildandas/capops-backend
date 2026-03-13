@@ -7,6 +7,7 @@
 #include "Converters/SectorSummaryConverter.hpp"
 #include "Converters/TrackConverter.hpp"
 #include "Dtos/FlightDataDto.hpp"
+#include "Models/Metadata.hpp"
 #include "Models/RiskEvent.hpp"
 #include "Models/SectorSummary.hpp"
 #include "Models/Track.hpp"
