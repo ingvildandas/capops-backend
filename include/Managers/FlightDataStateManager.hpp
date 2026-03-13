@@ -17,9 +17,10 @@ public:
 
     FlightDataDto getState();
 
-    void setRiskEvents(std::vector<RiskEvent>& riskEvents);
-    void setSectorSummaries(std::vector<SectorSummary>& sectorSummaries);
-    void setTracks(std::vector<Track>& tracks);
+    void setMetadata(const Metadata& metadata);
+    void setRiskEvents(const std::vector<RiskEvent>& riskEvents);
+    void setSectorSummaries(const std::vector<SectorSummary>& sectorSummaries);
+    void setTracks(const std::vector<Track>& tracks);
 
 private:
     std::unique_ptr<FlightDataState> _state = nullptr;
