@@ -182,6 +182,35 @@ QJsonObject TrackConverter::localVelocityToJson(const TrackLocalVelocity& veloci
     };
 }
 
+Track TrackConverter::fromProto(const TrackProto& protoTrack)
+{
+    QString icao24 = QString::fromStdString(protoTrack.icao24());
+    QDateTime timestamp = 
+        QDateTime::fromString(QString::fromStdString(protoTrack.timestamp()));
+
+    TrackGlobalPosition globalPostion = 
+        globalPositionFromProto(protoTrack.globalposition());
+    TrackLocalPosition localPosition = 
+        localPositionFromProto(protoTrack.localposition());
+    TrackGlobalVelocity globalVelocity = 
+        globalVelocityFromProto(protoTrack.globalvelocity());
+    TrackLocalVelocity localVelocity = 
+        localVelocityFromProto(protoTrack.localvelocity());
+
+    double headingDegrees = protoTrack.headingdegrees();
+
+    return Track
+    (
+        icao24, 
+        timestamp, 
+        globalPostion, 
+        localPosition, 
+        globalVelocity, 
+        localVelocity, 
+        headingDegrees
+    );
+}
+
 std::vector<Track> TrackConverter::fromProto
 (
     const google::protobuf::RepeatedPtrField<TrackProto>& protoTracks
@@ -192,31 +221,7 @@ std::vector<Track> TrackConverter::fromProto
 
     for (const auto& t : protoTracks)
     {
-        QString icao24 = QString::fromStdString(t.icao24());
-        QDateTime timestamp = QDateTime::fromString(QString::fromStdString(t.timestamp()));
-
-        TrackGlobalPosition globalPostion = 
-            globalPositionFromProto(t.globalposition());
-        TrackLocalPosition localPosition = 
-            localPositionFromProto(t.localposition());
-        TrackGlobalVelocity globalVelocity = 
-            globalVelocityFromProto(t.globalvelocity());
-        TrackLocalVelocity localVelocity = 
-            localVelocityFromProto(t.localvelocity());
-
-        double headingDegrees = t.headingdegrees();
-
-        tracks.push_back(
-            Track(
-                icao24, 
-                timestamp, 
-                globalPostion, 
-                localPosition, 
-                globalVelocity, 
-                localVelocity, 
-                headingDegrees
-            )
-        );
+        tracks.push_back(fromJson(t));
     }
 
     return tracks;

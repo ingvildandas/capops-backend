@@ -16,10 +16,13 @@ struct TrackLocalVelocity;
 class TrackConverter
 {
 public:
+    TrackConverter() = delete;
+
     static Track fromJson(const QJsonObject& json);
     static std::vector<Track> fromJson(const QJsonArray& jsonArray);
     static QJsonObject toJson(const Track& track);
     static QJsonArray toJson(const std::vector<Track>& tracks);
+    static Track fromProto(const TrackProto& protoTrack);
     static std::vector<Track> fromProto
     (
         const google::protobuf::RepeatedPtrField<TrackProto>& protoTracks

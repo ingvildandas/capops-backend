@@ -11,6 +11,8 @@ class QJsonObject;
 class SectorSummaryConverter
 {
 public:
+    SectorSummaryConverter() = delete;
+    
     static SectorSummary fromJson(const QJsonObject& json);
     static std::vector<SectorSummary> fromJson(const QJsonArray& jsonArray);
     static QJsonObject toJson(const SectorSummary& sectorSummary);

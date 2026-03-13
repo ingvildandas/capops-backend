@@ -92,7 +92,7 @@ SectorSummary SectorSummaryConverter::fromProto
     int localAircraftEffectiveCapacity = 
         protoSectorSummary.localaircrafteffectivecapacity();
 
-    SectorSummary
+    return SectorSummary
     (
         sectorId,
         row,

@@ -55,10 +55,10 @@ QJsonArray RiskEventConverter::toJson(const std::vector<RiskEvent>& riskEvents)
 
 RiskEvent RiskEventConverter::fromProto(const RiskEventProto& protoRiskEvent)
 {
-    int riskEventId = t.riskeventid(); 
-    int riskSeverity = t.risseverity();
-    QString message = t.message();
-    bool acknowledged = t.acknowledged();
+    int riskEventId = protoRiskEvent.riskeventid(); 
+    int riskSeverity = protoRiskEvent.risseverity();
+    QString message = protoRiskEvent.message();
+    bool acknowledged = protoRiskEvent.acknowledged();
     
     return RiskEvent(
         riskEventId,
