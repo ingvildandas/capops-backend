@@ -74,8 +74,22 @@ jobs:
         if: runner.os == 'macOS'
         run: brew install protobuf
         
-      - name: Configure CMake
-        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      - name: Configure CMake (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          cmake -S . -B build `
+          -G Ninja `
+          -DCMAKE_BUILD_TYPE=Release `
+          -DBUILD_TESTING=ON `
+          -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake" 
+      
+      - name: Configure CMake (Linux + MacOS)
+        if: runner.os != 'windows-latest'
+        run: >
+          cmake -S . -B build 
+          -G Ninja 
+          -DCMAKE_BUILD_TYPE=Release 
+          -DBUILD_TESTING=ON 
 
       - name: Build
         run: cmake --build build --parallel
