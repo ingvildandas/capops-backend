@@ -83,7 +83,7 @@ SectorSummary SectorSummaryConverter::fromProto
 {
     int sectorId = protoSectorSummary.sectorid();
     int row = protoSectorSummary.row();
-    int colunmn = protoSectorSummary.colunmn();
+    int colunmn = protoSectorSummary.column();
     int weatherSeverity = protoSectorSummary.weatherseverity();
     double weatherFactor = protoSectorSummary.weatherfactor();
     int localAircraftCount = protoSectorSummary.localaircraftcount();

@@ -221,7 +221,7 @@ std::vector<Track> TrackConverter::fromProto
 
     for (const auto& t : protoTracks)
     {
-        tracks.push_back(fromJson(t));
+        tracks.push_back(fromProto(t));
     }
 
     return tracks;
