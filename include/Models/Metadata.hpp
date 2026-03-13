@@ -16,7 +16,7 @@ public:
 public:
 
 private:
-    static int _version;
-    static bool _isInitialized;
+    inline static int _version = 0;
+    inline static bool _isInitialized = false;
     QDateTime _timestamp;
 };
