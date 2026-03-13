@@ -75,3 +75,42 @@ QJsonArray SectorSummaryConverter::toJson(const std::vector<SectorSummary>& sect
 
     return sectorSummaryArray;
 }
+
+std::vector<SectorSummary> SectorSummaryConverter::fromProto
+(
+    const google::protobuf::RepeatedPtrField<SectorSummaryProto>& 
+        protoSectorSummaries
+)
+{
+    std::vector<SectorSummary> sectorSummaries;
+    sectorSummaries.reserve(protoSectorSummaries.size());
+
+    for (const auto& t : sectorSummaries)
+    {
+        int sectorId = t.getSectorId();
+        int row = t.getRow();
+        int colunmn = t.getColunmn();
+        int weatherSeverity = t.getWeatherSeverity();
+        double weatherFactor = t.getWeatherFactor();
+        int localAircraftCount = t.getLocalAircraftCount();
+        int localAircraftBaseCapacity = t.getLocalAircraftBaseCapacity();
+        int localAircraftEffectiveCapacity = t.getLocalAircraftEffectiveCapacity();
+
+        sectorSummaries.push_back
+        (
+            SectorSummary
+            (
+                sectorId,
+                row,
+                colunmn,
+                weatherSeverity,
+                weatherFactor,
+                localAircraftCount,
+                localAircraftBaseCapacity,
+                localAircraftEffectiveCapacity
+            )
+        );
+    }
+
+    return sectorSummaries;
+}
