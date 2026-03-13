@@ -76,11 +76,10 @@ jobs:
         
       - name: Configure CMake
         run: |
-          cmake -S . -B build `
-            -G Ninja `
+          cmake -S . -B build -G Ninja `
             -DCMAKE_BUILD_TYPE=Release `
             -DBUILD_TESTING=ON `
-            ${{ matrix.os == 'windows-latest' && '-DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake' || '' }}
+            -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake"
 
       - name: Build
         run: cmake --build build --parallel
