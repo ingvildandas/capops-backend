@@ -66,10 +66,10 @@ jobs:
       - name: Install vcpkg (Windows)
         if: matrix.os == 'windows-latest'
         run: |
-          if (-Not (Test-Path vcpkg)) {
-              git clone https://github.com/microsoft/vcpkg.git
-              .\vcpkg\bootstrap-vcpkg.bat
-          }
+          if [ ! -d "vcpkg" ]; then
+            git clone https://github.com/microsoft/vcpkg.git
+            ./vcpkg/bootstrap-vcpkg.bat
+          fi
         
       - name: Install Protoc (Windows)
         if: matrix.os == 'windows-latest'
