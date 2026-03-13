@@ -5,6 +5,13 @@
 #include "Models/Metadata.hpp"
 #include "Proto/FlightData.hpp"
 
+Metadata MetadataConverter::fromJson(const QJsonObject& json)
+{
+    QDateTime timestamp = QDateTime::fromString(json["timestamp"].toString());
+
+    return Metadata(timestamp);
+}
+
 QJsonObject MetadataConverter::toJson(const Metadata& metadata)
 {
     return 
