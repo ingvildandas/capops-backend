@@ -53,6 +53,21 @@ QJsonArray RiskEventConverter::toJson(const std::vector<RiskEvent>& riskEvents)
     return riskEventArray;
 }
 
+RiskEvent RiskEventConverter::fromProto(const RiskEventProto& protoRiskEvent)
+{
+    int riskEventId = t.riskeventid(); 
+    int riskSeverity = t.risseverity();
+    QString message = t.message();
+    bool acknowledged = t.acknowledged();
+    
+    return RiskEvent(
+        riskEventId,
+        riskSeverity,
+        message,
+        acknowledged                
+    )
+}
+
 std::vector<RiskEvent> RiskEventConverter::fromProto
 (
     const google::protobuf::RepeatedPtrField<RiskEventProto>& protoRiskEvents
@@ -63,19 +78,6 @@ std::vector<RiskEvent> RiskEventConverter::fromProto
 
     for (const auto& t : protoRiskEvent)
     {
-        int riskEventId = t.riskeventid(); 
-        int riskSeverity = t.risseverity();
-        QString message = t.message();
-        bool acknowledged = t.acknowledged();
-
-        riskEvents.push_back
-        (
-            RiskEvent(
-                riskEventId,
-                riskSeverity,
-                message,
-                acknowledged                
-            )
-        );
+        riskEvents.push_back(fromProto(t));
     }
 }
