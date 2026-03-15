@@ -50,7 +50,8 @@ namespace
             if (!httpServer.start()) throw HttpException("Failed to start HTTP server"); 
 
             wsServer.registerWebSocketController(webSocketController);
-            if (!wsServer.start()) throw WebSocketException("Failed to start WebSocket server");
+            wsServer.start();
+            qInfo() << "WebSocket server listening on port " << wsServer.getPort();
         }
     };
 }
