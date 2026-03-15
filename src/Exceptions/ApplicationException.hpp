@@ -10,9 +10,11 @@ public:
         : _message(std::move(message)) 
     {}
 
-    [[nodiscard]] const char* what() const noexcept override {
+    [[nodiscard]] const char* what() const noexcept override 
+    {
         return _message.c_str();
     }
+
 private:
     std::string _message;
 };
