@@ -47,7 +47,8 @@ namespace
             qInfo() << "Database connection successful";
             
             httpServer.registerRiskEventController(riskEventController);
-            if (!httpServer.start()) throw HttpException("Failed to start HTTP server"); 
+            httpServer.start();
+            qInfo() << "HTTP server listening on port " << httpServer.getPort();
 
             wsServer.registerWebSocketController(webSocketController);
             wsServer.start();
