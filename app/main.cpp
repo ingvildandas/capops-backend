@@ -19,27 +19,40 @@
 
 int main(int argc, char* argv[])
 {
-    QCoreApplication app(argc, argv);
+    try
+    {
+        QCoreApplication app(argc, argv);
 
-    auto conn = DatabaseConnection("capops.db");
-    qDebug() << "Database connection successful";
+        auto conn = DatabaseConnection("capops.db");
+        qDebug() << "Database connection successful";
+        
+        RiskEventRepository riskEventRepository(conn);
+        FlightDataStateManager flightDataStateManager;
+
+        RiskEventService riskEventService(riskEventRepository, flightDataStateManager);
+        RiskEventController riskEventController(riskEventService);
+
+        WebSocketSessionManager sessionManager;
+        WebSocketController webSocketController(sessionManager);
+        
+        HttpServer httpServer(8080);
+        httpServer.registerRiskEventController(riskEventController);
+        if (!httpServer.start()) return -1; 
+        
+        WebSocketServer wsServer(8081);
+        wsServer.registerWebSocketController(webSocketController);
+        if (!wsServer.start()) throw WebSocketException("Failed to start WebSocket server");
     
-    RiskEventRepository riskEventRepository(conn);
-    FlightDataStateManager flightDataStateManager;
-
-    RiskEventService riskEventService(riskEventRepository, flightDataStateManager);
-    RiskEventController riskEventController(riskEventService);
-
-    WebSocketSessionManager sessionManager;
-    WebSocketController webSocketController(sessionManager);
-    
-    HttpServer httpServer(8080);
-    httpServer.registerRiskEventController(riskEventController);
-    if (!httpServer.start()) return -1; 
-    
-    WebSocketServer wsServer(8081);
-    wsServer.registerWebSocketController(webSocketController);
-    if (!wsServer.start()) return -1;
-
-    return app.exec();
+        return app.exec();
+    }
+    catch(const ApplicationException& e)
+    {
+        qDebug() << "Application error: " << e.what();
+        return -1;
+    }
+    catch(const std::exception& e)
+    {
+        qDebug() << "Unexpected error: " << e.what();
+        return -1;
+    }
 }
