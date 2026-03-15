@@ -8,6 +8,7 @@
 #include "Database/DatabaseConnection.hpp"
 #include "Exceptions/ApplicationException.hpp"
 #include "Exceptions/DatabaseException.hpp"
+#include "Exceptions/HttpException.hpp"
 #include "Exceptions/RedisEventBusException.hpp"
 #include "Exceptions/WebSocketException.hpp"
 #include "Managers/FlightDataStateManager.hpp"
@@ -37,7 +38,7 @@ int main(int argc, char* argv[])
         
         HttpServer httpServer(8080);
         httpServer.registerRiskEventController(riskEventController);
-        if (!httpServer.start()) return -1; 
+        if (!httpServer.start()) throw HttpException("Failed to start HTTP server"); 
         
         WebSocketServer wsServer(8081);
         wsServer.registerWebSocketController(webSocketController);
