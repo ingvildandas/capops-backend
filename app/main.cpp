@@ -3,9 +3,13 @@
 #include <QObject>
 #include <QtGlobal>
 
-#include "Database/DatabaseConnection.hpp"
 #include "Controllers/RiskEventController.hpp"
 #include "Controllers/WebSocketController.hpp"
+#include "Database/DatabaseConnection.hpp"
+#include "Exceptions/ApplicationException.hpp"
+#include "Exceptions/DatabaseException.hpp"
+#include "Exceptions/RedisEventBusException.hpp"
+#include "Exceptions/WebSocketException.hpp"
 #include "Managers/FlightDataStateManager.hpp"
 #include "Managers/WebSocketSessionManager.hpp"
 #include "Network/HttpServer.hpp"
