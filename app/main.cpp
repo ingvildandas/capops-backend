@@ -68,10 +68,12 @@ int main(int argc, char* argv[])
     catch(const ApplicationException& e)
     {
         qCritical() << "Application error: " << e.what();
+        return -1;
     }
     catch(const std::exception& e)
     {
         qCritical() << "Unexpected error: " << e.what();
+        return -1;
     }
     
     return EXIT_FAILURE;
