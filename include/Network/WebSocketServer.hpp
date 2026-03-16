@@ -16,8 +16,9 @@ public:
         QObject* parent = nullptr
     );
 
-    bool start();
+    quint16 getPort() const;
 
+    void start();
     void registerWebSocketController(WebSocketController& webSocketController);
 
 private:

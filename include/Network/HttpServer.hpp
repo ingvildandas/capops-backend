@@ -14,8 +14,9 @@ class HttpServer : public QObject
 public:
     explicit HttpServer(quint16 port, QObject* parent = nullptr);
 
-    bool start();
-
+    quint16 getPort() const;
+    
+    void start();
     void registerRiskEventController(RiskEventController& riskEventController);
 
 private:

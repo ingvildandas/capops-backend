@@ -4,6 +4,7 @@
 
 #include "Network/WebSocketServer.hpp"
 #include "Controllers/WebSocketController.hpp"
+#include "Exceptions/WebSocketException.hpp"
 
 WebSocketServer::WebSocketServer
 (
@@ -14,12 +15,16 @@ WebSocketServer::WebSocketServer
         _server("CaoOps WebSocket Server", QWebSocketServer::NonSecureMode)
 {}
 
-bool WebSocketServer::start()
+quint16 WebSocketServer::getPort() const
+{
+    return _port;
+}
+
+void WebSocketServer::start()
 {
     if (!_server.listen(QHostAddress::Any, _port))
     {
-        qCritical() << "WebSocket server failed to start";
-        return false;
+        throw WebSocketException("Failed to start WebSocket server");
     }
 
     connect(
@@ -28,10 +33,6 @@ bool WebSocketServer::start()
         this,
         &WebSocketServer::onNewConnection
     );
-
-    qDebug() << "WebSocket server listening on port" << _port;
-
-    return true;
 }
 
 void WebSocketServer::onNewConnection()
