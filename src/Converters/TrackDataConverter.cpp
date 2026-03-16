@@ -1,5 +1,6 @@
 #include <vector>
 
+#include <QJsonArray>
 #include <QJsonObject>
 #include <QString>
 
@@ -30,7 +31,7 @@ QJsonObject TrackDataConverter::toJson(const TrackData& trackData)
 
 TrackData TrackDataConverter::fromProto(const TrackDataProto& protoTrackData)
 {
-    int totalAircraftCount = protoTrackData.totalaircraftcount();
+    int totalAircraftCount = protoTrackData.totalaircraftscount();
     QString coordinateSystem = QString::fromStdString(protoTrackData.coordinatesystem());
     std::vector<Track> tracks = TrackConverter::fromProto(protoTrackData.tracks());
 

@@ -76,7 +76,7 @@ RiskEvent RiskEventConverter::fromProto(const RiskEventProto& protoRiskEvent)
     int riskEventId = protoRiskEvent.riskeventid(); 
     int sectorId = protoRiskEvent.sectorid();
     bool acknowledged = protoRiskEvent.acknowledged();
-    QString riskSeverity = protoRiskEvent.riskseverity();
+    QString riskSeverity = QString::fromStdString(protoRiskEvent.riskseverity());
     QDateTime createdTimestamp = 
         QDateTime::fromString(QString::fromStdString(protoRiskEvent.createdtimestamp()), Qt::ISODate);
     QDateTime acknowledgedTimestamp = 

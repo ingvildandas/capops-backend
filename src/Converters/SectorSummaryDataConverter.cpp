@@ -1,5 +1,6 @@
 #include <vector>
 
+#include <QJsonArray>
 #include <QJsonObject>
 #include <QString>
 

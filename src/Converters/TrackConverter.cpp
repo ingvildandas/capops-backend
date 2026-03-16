@@ -154,13 +154,12 @@ std::vector<Track> TrackConverter::fromProto
 
 TrackPosition TrackConverter::positionFromProto
 (
-    const PositionProto& Position
+    const PositionProto& position
 )
 {
-    QString frame = QString::fromStdString(Position.frame());
-    double latitudeDegrees = Position.latitudedegrees();
-    double longitudeDegrees = Position.longitudedegrees();
-    double altitudeMeters = Position.altitudemeters();
+    double latitudeDegrees = position.latitudedegrees();
+    double longitudeDegrees = position.longitudedegrees();
+    double altitudeMeters = position.altitudemeters();
 
     return TrackPosition
     {
@@ -172,11 +171,11 @@ TrackPosition TrackConverter::positionFromProto
 
 TrackVelocity TrackConverter::velocityFromProto
 (
-    const VelocityProto& Velocity
+    const VelocityProto& velocity
 )
 {
-    double groundSpeedKnots = Velocity.groundSpeedKnots();
-    double verticalSpeedFeetPerMinute = Velocity.verticalSpeedFeetPerMinute();
+    double groundSpeedKnots = velocity.groundspeedknots();
+    double verticalSpeedFeetPerMinute = velocity.verticalspeedfeetperminute();
     
     return TrackVelocity
     {
