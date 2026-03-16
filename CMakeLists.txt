@@ -147,3 +147,13 @@ if(BUILD_TESTING)
     include(Catch)
     catch_discover_tests(tests)
 endif()
+
+# ---- Post-Build ----
+if(WIN32)
+    add_custom_command(TARGET capops POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_RUNTIME_DLLS:capops>
+            $<TARGET_FILE_DIR:capops>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
