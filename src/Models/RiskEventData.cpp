@@ -11,7 +11,9 @@ RiskEventData::RiskEventData
     const std::vector<RiskEvent>& riskEvents
 )
     : _riskEventCount(riskEventCount)
-{}
+{
+    mergeRiskEvents();
+}
 
 int RiskEventData::getRiskEventCount() const
 {
