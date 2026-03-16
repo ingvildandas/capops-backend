@@ -12,9 +12,9 @@ class QJsonObject;
 class SectorSummaryDataConverter
 {
 public:
-    static SectorSummary fromJson(const QJsonObject& json);
-    static QJsonObject toJson(const SectorSummaryData& sectorSummary);
-    static SectorSummary fromProto
+    static SectorSummaryData fromJson(const QJsonObject& json);
+    static QJsonObject toJson(const SectorSummaryData& sectorSummaryData);
+    static SectorSummaryData fromProto
     (
         const SectorSummaryDataProto& protoSectorSummary
     );

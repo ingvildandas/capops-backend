@@ -61,8 +61,8 @@ void MergedRiskEvent::addRiskEvent(const RiskEvent& riskEvent)
 
 void MergedRiskEvent::setSummaryInfo
 (
-    RiskEvent* lastRiskEvent,
-    RiskEvent* secondLastRiskEvent
+    const RiskEvent* lastRiskEvent,
+    const RiskEvent* secondLastRiskEvent
 )
 {
 

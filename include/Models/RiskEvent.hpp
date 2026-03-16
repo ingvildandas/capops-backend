@@ -28,9 +28,9 @@ private:
     int _riskEventId;
     int _sectorId;
     bool _acknowledged;
-    const QString _riskSeverity;
-    const QDateTime _createdTimestamp;
-    const QDateTime _acknowledgedTimestamp;
+    QString _riskSeverity;
+    QDateTime _createdTimestamp;
+    QDateTime _acknowledgedTimestamp;
     QString _message;
 };
 

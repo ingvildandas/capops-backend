@@ -1,9 +1,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Models/RiskEventData.hpp";
-#include "Models/RiskEvent.hpp";
-#include "Models/MergedRiskEvent.hpp";
+#include "Models/RiskEventData.hpp"
+#include "Models/RiskEvent.hpp"
+#include "Models/MergedRiskEvent.hpp"
 
 RiskEventData::RiskEventData
 (
@@ -40,12 +40,10 @@ void RiskEventData::mergeRiskEvents()
         riskEventsPerSectorMap[sectorId].push_back(riskEvent);
     }
 
-    std::vector<MergedRiskEvent> mergedRiskEvents;
-    mergedRiskEvents.reserve(riskEventsPerSectorMap.size());
+    _mergedRiskEvents.clear();
+    _mergedRiskEvents.reserve(riskEventsPerSectorMap.size());
     for (const auto& [sectorId, riskEvents] : riskEventsPerSectorMap)
     {
-        mergedRiskEvents.push_back(MergedRiskEvent(sectorId, riskEvents));
+        _mergedRiskEvents.push_back(MergedRiskEvent(sectorId, riskEvents));
     }
-
-    _mergedRiskEvents = mergedRiskEvents;
 }

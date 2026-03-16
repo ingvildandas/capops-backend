@@ -1,3 +1,7 @@
+#include <vector>
+
+#include <QDateTime>
+
 #include "Services/RiskEventService.hpp"
 #include "Managers/FlightDataStateManager.hpp"
 #include "Repositories/IRiskEventRepository.hpp"
@@ -11,7 +15,7 @@ RiskEventService::RiskEventService(
 
 RiskEvent RiskEventService::getRiskEvent(const int riskEventId)
 {
-    return RiskEvent(0, 0, "", false);
+    return RiskEvent(0, 0, false, "", QDateTime(), QDateTime(), "");
 }
 
 std::vector<RiskEvent> RiskEventService::getMultipleRiskEvents

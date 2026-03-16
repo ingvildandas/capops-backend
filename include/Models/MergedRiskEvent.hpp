@@ -36,7 +36,7 @@ private:
     void updateSummaryInfo();
     void setSummaryInfo
     (
-        RiskEvent* lastRiskEvent = nullptr, 
-        RiskEvent* secondLastRiskEvent = nullptr
+        const RiskEvent* lastRiskEvent = nullptr, 
+        const RiskEvent* secondLastRiskEvent = nullptr
     );
 };
