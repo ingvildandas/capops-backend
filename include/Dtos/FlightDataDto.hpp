@@ -3,9 +3,9 @@
 #include <vector>
 
 #include "Models/Metadata.hpp"
-#include "Models/RiskEventData.hpp";
-#include "Models/SectorSummaryData.hpp";
-#include "Models/TrackData.hpp";
+#include "Models/RiskEventData.hpp"
+#include "Models/SectorSummaryData.hpp"
+#include "Models/TrackData.hpp"
 
 class FlightDataDto
 {

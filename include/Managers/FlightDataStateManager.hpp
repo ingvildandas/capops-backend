@@ -6,9 +6,9 @@
 #include "Structs/FlightDataStructs.hpp"
 
 class FlightDataDto;
-class RiskEvent;
-class SectorSummary;
-class Track;
+class RiskEventData;
+class SectorSummaryData;
+class TrackData;
 
 class FlightDataStateManager
 {
@@ -18,9 +18,9 @@ public:
     FlightDataDto getState();
 
     void setMetadata(const Metadata& metadata);
-    void setRiskEvents(const std::vector<RiskEvent>& riskEvents);
-    void setSectorSummaries(const std::vector<SectorSummary>& sectorSummaries);
-    void setTracks(const std::vector<Track>& tracks);
+    void setRiskEventData(const RiskEventData& riskEventData);
+    void setSectorSummaryData(const SectorSummaryData& sectorSummaryData);
+    void setTrackData(const TrackData& trackData);
 
 private:
     std::unique_ptr<FlightDataState> _state = nullptr;
