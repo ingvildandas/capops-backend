@@ -9,11 +9,16 @@
 
 #include "Network/RedisEventBusReceiver.hpp"
 #include "Converters/FlightDataDtoConverter.hpp"
+#include "Converters/MetadataConverter.hpp"
 #include "Converters/RiskEventConverter.hpp"
 #include "Converters/SectorSummaryConverter.hpp"
 #include "Converters/TrackConverter.hpp"
 #include "Dtos/FlightDataDto.hpp"
 #include "Managers/WebSocketSessionManager.hpp"
+#include "Models/Metadata.hpp"
+#include "Models/RiskEvent.hpp"
+#include "Models/SectorSummary.hpp"
+#include "Models/Track.hpp"
 #include "Proto/FlightData.hpp"
 #include "Services/RiskEventService.hpp"
 #include "Services/SectorSummaryService.hpp"
@@ -23,6 +28,7 @@ RedisEventBusReceiver::RedisEventBusReceiver
 (
     const QString& redisUri,
     WebSocketSessionManager& sessionManager,
+    MetadataService& metadataService,
     RiskEventService& riskEventService,
     SectorSummaryService& sectorSummaryService,
     TrackService& trackService,
@@ -31,6 +37,7 @@ RedisEventBusReceiver::RedisEventBusReceiver
     :
     _redisUri(redisUri),
     _sessionManager(sessionManager),
+    _metadataService(metadataService),
     _sectorSummaryService(sectorSummaryService),
     _trackService(trackService),
     _riskEventService(riskEventService),
@@ -127,7 +134,7 @@ FlightDataDto RedisEventBusReceiver::deserialize
         throw std::runtime_error("Invalid FlightData protobuf");
     }
 
-    // Metadata metadata = MetadataConverter::fromProto(proto.tracks());
+    Metadata metadata = MetadataConverter::fromProto(proto.metadata());
 
     std::vector<Track> tracks = 
         TrackConverter::fromProto(proto.tracks());
@@ -136,5 +143,5 @@ FlightDataDto RedisEventBusReceiver::deserialize
     std::vector<RiskEvent> riskEvents = 
         RiskEventConverter::fromProto(proto.risk_events());
 
-    return FlightDataDto(0, riskEvents, sectorSummaries, tracks);
+    return FlightDataDto(metadata, riskEvents, sectorSummaries, tracks);
 }

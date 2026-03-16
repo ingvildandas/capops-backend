@@ -1,27 +1,28 @@
 #include <vector>
 
 #include "Dtos/FlightDataDto.hpp"
+#include "Models/Metadata.hpp"
 #include "Models/RiskEvent.hpp"
 #include "Models/SectorSummary.hpp"
 #include "Models/Track.hpp"
 
 FlightDataDto::FlightDataDto
 (
-    const int totalAircraftsCount,
-    std::vector<RiskEvent>& riskEvents,
-    std::vector<SectorSummary>& sectorSummaries,
-    std::vector<Track>& tracks
+    const Metadata& metadata,
+    const std::vector<RiskEvent>& riskEvents,
+    const std::vector<SectorSummary>& sectorSummaries,
+    const std::vector<Track>& tracks
 )
     :
-    _totalAircraftsCount(totalAircraftsCount),
+    _metadata(metadata),
     _riskEvents(riskEvents),
     _sectorSummaries(sectorSummaries),
     _tracks(tracks)
 {}
 
-int FlightDataDto::getTotalAircraftsCount() const
+Metadata FlightDataDto::getMetadata() const
 {
-    return _totalAircraftsCount;
+    return _metadata;
 } 
 
 std::vector<RiskEvent> FlightDataDto::getRiskEvents() const

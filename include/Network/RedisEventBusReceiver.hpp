@@ -9,6 +9,7 @@
 #include <sw/redis++/redis++.h>
 
 #include "Managers/WebSocketSessionManager.hpp"
+#include "Services/MetadataService.hpp"
 #include "Services/RiskEventService.hpp"
 #include "Services/SectorSummaryService.hpp"
 #include "Services/TrackService.hpp"
@@ -25,6 +26,7 @@ public:
     (
         const QString& redisUri,
         WebSocketSessionManager& sessionManager,
+        MetadataService& metadataService,
         RiskEventService& riskEventService,
         SectorSummaryService& sectorSummaryService,
         TrackService& trackService,
@@ -45,6 +47,7 @@ private:
     QString _redisUri;
 
     WebSocketSessionManager& _sessionManager;
+    MetadataService& _metadataService;
     SectorSummaryService& _sectorSummaryService;
     TrackService& _trackService;
     RiskEventService& _riskEventService;
