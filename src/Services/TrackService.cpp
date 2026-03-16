@@ -1,5 +1,6 @@
 #include "Services/TrackService.hpp"
 #include "Managers/FlightDataStateManager.hpp"
+#include "Models/TrackData.hpp"
 
 TrackService::TrackService(
     FlightDataStateManager& stateManager
@@ -9,6 +10,6 @@ TrackService::TrackService(
 
 void TrackService::updateState
 (
-    const std::vector<Track>& tracks
+    const TrackData& trackData
 )
 {}

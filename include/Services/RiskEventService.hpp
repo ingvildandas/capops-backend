@@ -6,6 +6,7 @@
 #include "Managers/FlightDataStateManager.hpp"
 
 class RiskEvent;
+class RiskEventData;
 class QDateTime;
 
 class RiskEventService 
@@ -31,7 +32,7 @@ public:
     void updateAcknowledged(const int riskEventId, const bool acknowledged);
     void deleteRiskEvent(const int riskEventId);
 
-    void updateState(const std::vector<RiskEvent>& riskEvents);
+    void updateState(const RiskEventData& riskEventData);
 private:
     IRiskEventRepository& _repository;
     FlightDataStateManager& _stateManager;

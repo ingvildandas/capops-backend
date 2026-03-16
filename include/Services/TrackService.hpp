@@ -2,7 +2,7 @@
 
 #include <vector>
 
-class Track;
+class TrackData;
 
 #include "Managers/FlightDataStateManager.hpp"
 
@@ -11,7 +11,7 @@ class TrackService
 public:
     TrackService(FlightDataStateManager& stateManager);
 
-    void updateState(const std::vector<Track>& tracks);
+    void updateState(const TrackData& trackData);
 
 private:
     FlightDataStateManager& _stateManager;

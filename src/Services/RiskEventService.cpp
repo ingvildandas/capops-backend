@@ -4,6 +4,8 @@
 
 #include "Services/RiskEventService.hpp"
 #include "Managers/FlightDataStateManager.hpp"
+#include "Models/RiskEvent.hpp"
+#include "Models/RiskEventData.hpp"
 #include "Repositories/IRiskEventRepository.hpp"
 
 RiskEventService::RiskEventService(
@@ -41,5 +43,5 @@ void RiskEventService::updateAcknowledged(const int riskEventId, const bool ackn
 void RiskEventService::deleteRiskEvent(const int riskEventId)
 {}
 
-void RiskEventService::updateState(const std::vector<RiskEvent>& riskEvents)
+void RiskEventService::updateState(const RiskEventData& riskEventData)
 {}
