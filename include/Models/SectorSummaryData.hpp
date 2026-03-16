@@ -2,7 +2,7 @@
 
 #include <vector>
 
-class SectorSummary;
+#include "Models/SectorSummary.hpp"
 
 class SectorSummaryData
 {

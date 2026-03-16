@@ -127,7 +127,7 @@ FlightDataDto RedisEventBusReceiver::deserialize
     const std::string& payload
 )
 {
-    FlightData proto;
+    FlightDataProto proto;
 
     if (!proto.ParseFromString(payload))
     {

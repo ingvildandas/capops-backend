@@ -4,7 +4,7 @@
 
 #include <QString>
 
-class Track;
+#include "Models/Track.hpp"
 
 class TrackData
 {

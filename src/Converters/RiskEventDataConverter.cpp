@@ -26,7 +26,7 @@ QJsonObject RiskEventDataConverter::toJson
 {
     return QJsonObject
     {
-        { "riskEventCount", riskEventData.getTotalRiskEventCount() },
+        { "riskEventCount", riskEventData.getRiskEventCount() },
         { 
             "riskEvents", 
             RiskEventConverter::toJson(riskEventData.getRiskEvents()) 

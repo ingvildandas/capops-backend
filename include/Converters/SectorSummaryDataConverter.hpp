@@ -5,6 +5,7 @@
 #include "Proto/FlightData.hpp"
 
 class SectorSummary;
+class SectorSummaryData;
 class SectorSummaryDataProto;
 class QJsonObject;
 

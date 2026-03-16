@@ -2,8 +2,8 @@
 
 #include <vector>
 
-class RiskEvent;
-class MergedRiskEvent;
+#include "Models/RiskEvent.hpp"
+#include "Models/MergedRiskEvent.hpp"
 
 class RiskEventData
 {
