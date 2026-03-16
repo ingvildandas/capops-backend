@@ -13,25 +13,19 @@ Track TrackConverter::fromJson(const QJsonObject& json)
 {
     QString icao24 = json["icao24"].toString();
     QDateTime timestamp = QDateTime::fromString(json["timestamp"].toString());
-    TrackGlobalPosition globalPosition = 
-        globalPositionFromJson(json["globalPosition"].toObject());
-    TrackLocalPosition localPosition = 
-        localPositionFromJson(json["localPosition"].toObject());
-    TrackGlobalVelocity globalVelocity = 
-        globalVelocityFromJson(json["globalVelocity"].toObject());
-    TrackLocalVelocity localVelocity = 
-        localVelocityFromJson(json["localVelocity"].toObject());
+    TrackPosition position = positionFromJson(json["position"].toObject());
+    TrackVelocity velocity = velocityFromJson(json["velocity"].toObject());
     double headingDegrees = json["headingDegrees"].toDouble(); 
+    double groundTrackDegrees = json["groundTrackDegrees"].toDouble();
 
     return Track
     (
         icao24,
         timestamp,
-        globalPosition,
-        localPosition,
-        globalVelocity,
-        localVelocity,
-        headingDegrees
+        position,
+        velocity,
+        headingDegrees,
+        groundTrackDegrees
     );
 }
 
@@ -55,11 +49,10 @@ QJsonObject TrackConverter::toJson(const Track& track)
     {
         { "icao24", track.getIcao24() },
         { "timestamp", track.getTimestamp().toString() },
-        { "globalPosition", globalPositionToJson(track.getGlobalPosition()) },
-        { "localPosition", localPositionToJson(track.getLocalPosition()) },
-        { "globalVelocity", globalVelocityToJson(track.getGlobalVelocity()) },
-        { "localVelocity", localVelocityToJson(track.getLocalVelocity()) },
-        { "headingDegrees", track.getHeadingDegrees() }
+        { "Position", positionToJson(track.getPosition()) },
+        { "Velocity", velocityToJson(track.getVelocity()) },
+        { "headingDegrees", track.getHeadingDegrees() },
+        { "groundTrackDegrees", track.getGroundTrackDegrees() }
     };
 }
 
@@ -74,111 +67,50 @@ QJsonArray TrackConverter::toJson(const std::vector<Track>& tracks)
     return trackArray;
 }
 
-TrackGlobalPosition TrackConverter::globalPositionFromJson(const QJsonObject& json)
+TrackPosition TrackConverter::positionFromJson(const QJsonObject& json)
 {
-    QString frame = json["frame"].toString();
     double latitudeDegrees = json["latitudeDegrees"].toDouble();
     double longitudeDegrees = json["longitudeDegrees"].toDouble();
     double altitudeMeters = json["altitudeMeters"].toDouble();
 
-    return TrackGlobalPosition
+    return TrackPosition
     {
-        frame, 
         latitudeDegrees, 
         longitudeDegrees, 
         altitudeMeters
     };
 }
 
-TrackLocalPosition TrackConverter::localPositionFromJson(const QJsonObject& json)
+TrackVelocity TrackConverter::velocityFromJson(const QJsonObject& json)
 {
-    QString frame = json["frame"].toString();
-    double xPosition = json["xPosition"].toDouble();
-    double yPosition = json["yPosition"].toDouble();
-    double zPosition = json["zPosition"].toDouble();
+    double groundSpeedKnots = 
+        json["groundSpeedKnots"].toDouble();
+    double verticalSpeedFeetPerMinute = 
+        json["verticalSpeedFeetPerMinute"].toDouble();
 
-    return TrackLocalPosition
+    return TrackVelocity
     {
-        frame, 
-        xPosition, 
-        yPosition, 
-        zPosition
+        groundSpeedKnots, 
+        verticalSpeedFeetPerMinute
     };
 }
 
-TrackGlobalVelocity TrackConverter::globalVelocityFromJson(const QJsonObject& json)
-{
-    double totalVelocityMetersPerSecond = 
-        json["totalVelocityMetersPerSecond"].toDouble();
-    double groundVelocityMetersPerSecond = 
-        json["groundVelocityMetersPerSecond"].toDouble();
-    double verticalVelocityMetersPerSecond = 
-        json["verticalVelocityMetersPerSecond"].toDouble();
-
-    return TrackGlobalVelocity
-    {
-        totalVelocityMetersPerSecond, 
-        groundVelocityMetersPerSecond, 
-        verticalVelocityMetersPerSecond
-    };
-}
-
-TrackLocalVelocity TrackConverter::localVelocityFromJson(const QJsonObject& json)
-{
-    double xVelocityMetersPerSecond = 
-        json["xVelocityMetersPerSecond"].toDouble();
-    double yVelocityMetersPerSecond = 
-        json["yVelocityMetersPerSecond"].toDouble();
-    double zVelocityMetersPerSecond = 
-        json["zVelocityMetersPerSecond"].toDouble();
-
-    return TrackLocalVelocity
-    {
-        xVelocityMetersPerSecond, 
-        yVelocityMetersPerSecond, 
-        zVelocityMetersPerSecond
-    };
-}
-
-QJsonObject TrackConverter::globalPositionToJson(const TrackGlobalPosition& position)
+QJsonObject TrackConverter::positionToJson(const TrackPosition& position)
 {
     return
     {
-        { "frame", position.frame },
         { "latitudeDegrees", position.latitudeDegrees },
         { "longitudeDegrees", position.longitudeDegrees },
         { "altitudeMeters", position.altitudeMeters }
     };
 }
 
-QJsonObject TrackConverter::localPositionToJson(const TrackLocalPosition& position)
+QJsonObject TrackConverter::velocityToJson(const TrackVelocity& velocity)
 {
     return
     {
-        { "frame", position.frame },
-        { "xPosition", position.xPosition },
-        { "yPosition", position.yPosition },
-        { "zPosition", position.zPosition }
-    };
-}
-
-QJsonObject TrackConverter::globalVelocityToJson(const TrackGlobalVelocity& velocity)
-{
-    return
-    {
-        { "totalVelocityMetersPerSecond", velocity.totalVelocityMetersPerSecond },
-        { "groundVelocityMetersPerSecond", velocity.groundVelocityMetersPerSecond },
-        { "verticalVelocityMetersPerSecond", velocity.verticalVelocityMetersPerSecond }
-    };
-}
-
-QJsonObject TrackConverter::localVelocityToJson(const TrackLocalVelocity& velocity)
-{
-    return
-    {
-        { "xVelocityMetersPerSecond", velocity.xVelocityMetersPerSecond },
-        { "yVelocityMetersPerSecond", velocity.yVelocityMetersPerSecond },
-        { "zVelocityMetersPerSecond", velocity.zVelocityMetersPerSecond }
+        { "groundSpeedKnots", velocity.groundSpeedKnots },
+        { "verticalSpeedFeetPerMinute", velocity.verticalSpeedFeetPerMinute }
     };
 }
 
@@ -188,26 +120,19 @@ Track TrackConverter::fromProto(const TrackProto& protoTrack)
     QDateTime timestamp = 
         QDateTime::fromString(QString::fromStdString(protoTrack.timestamp()));
 
-    TrackGlobalPosition globalPostion = 
-        globalPositionFromProto(protoTrack.globalposition());
-    TrackLocalPosition localPosition = 
-        localPositionFromProto(protoTrack.localposition());
-    TrackGlobalVelocity globalVelocity = 
-        globalVelocityFromProto(protoTrack.globalvelocity());
-    TrackLocalVelocity localVelocity = 
-        localVelocityFromProto(protoTrack.localvelocity());
-
+    TrackPosition position = positionFromProto(protoTrack.position());
+    TrackVelocity velocity = velocityFromProto(protoTrack.velocity());
     double headingDegrees = protoTrack.headingdegrees();
+    double groundTrackDegrees = protoTrack.groundtrackdegrees();
 
     return Track
     (
         icao24, 
         timestamp, 
-        globalPostion, 
-        localPosition, 
-        globalVelocity, 
-        localVelocity, 
-        headingDegrees
+        position, 
+        velocity, 
+        headingDegrees,
+        groundTrackDegrees
     );
 }
 
@@ -227,74 +152,35 @@ std::vector<Track> TrackConverter::fromProto
     return tracks;
 }
 
-TrackGlobalPosition TrackConverter::globalPositionFromProto
+TrackPosition TrackConverter::positionFromProto
 (
-    const GlobalPositionProto& globalPosition
+    const PositionProto& Position
 )
 {
-    QString frame = QString::fromStdString(globalPosition.frame());
-    double latitudeDegrees = globalPosition.latitudedegrees();
-    double longitudeDegrees = globalPosition.longitudedegrees();
-    double altitudeMeters = globalPosition.altitudemeters();
+    QString frame = QString::fromStdString(Position.frame());
+    double latitudeDegrees = Position.latitudedegrees();
+    double longitudeDegrees = Position.longitudedegrees();
+    double altitudeMeters = Position.altitudemeters();
 
-    return TrackGlobalPosition
+    return TrackPosition
     {
-        frame, 
         latitudeDegrees, 
         longitudeDegrees, 
         altitudeMeters
     };
 }
 
-TrackLocalPosition TrackConverter::localPositionFromProto
+TrackVelocity TrackConverter::velocityFromProto
 (
-    const LocalPositionProto& localPosition
+    const VelocityProto& Velocity
 )
 {
-    QString frame = QString::fromStdString(localPosition.frame());
-    double xPosition = localPosition.xposition();
-    double yPosition = localPosition.yposition();
-    double zPosition = localPosition.zposition();
-
-    return TrackLocalPosition
+    double groundSpeedKnots = Velocity.groundSpeedKnots();
+    double verticalSpeedFeetPerMinute = Velocity.verticalSpeedFeetPerMinute();
+    
+    return TrackVelocity
     {
-        frame,
-        xPosition,
-        yPosition,
-        zPosition
-    };
-}
-
-TrackGlobalVelocity TrackConverter::globalVelocityFromProto
-(
-    const GlobalVelocityProto& globalVelocity
-)
-{
-    double totalVelocityMetersPerSecond = globalVelocity.totalvelocitymeterspersecond();
-    double groundVelocityMetersPerSecond = globalVelocity.groundvelocitymeterspersecond();
-    double verticalVelocityMetersPerSecond = globalVelocity.verticalvelocitymeterspersecond();
-
-    return TrackGlobalVelocity
-    {
-        totalVelocityMetersPerSecond,
-        groundVelocityMetersPerSecond,
-        verticalVelocityMetersPerSecond
-    };
-}
-
-TrackLocalVelocity TrackConverter::localVelocityFromProto
-(
-    const LocalVelocityProto& localVelocity
-)
-{
-    double xVelocityMetersPerSecond = localVelocity.xvelocitymeterspersecond();
-    double yVelocityMetersPerSecond = localVelocity.yvelocitymeterspersecond();
-    double zVelocityMetersPerSecond = localVelocity.zvelocitymeterspersecond();
-
-    return TrackLocalVelocity
-    {
-        xVelocityMetersPerSecond,
-        yVelocityMetersPerSecond,
-        zVelocityMetersPerSecond
+        groundSpeedKnots,
+        verticalSpeedFeetPerMinute,
     };
 }
