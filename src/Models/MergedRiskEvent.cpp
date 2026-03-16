@@ -3,10 +3,10 @@
 
 #include <QString>
 
-#include "Models/RiskEventMerged.hpp"
+#include "Models/MergedRiskEvent.hpp"
 #include "Models/RiskEvent.hpp"
 
-RiskEventMerged::RiskEventMerged
+MergedRiskEvent::MergedRiskEvent
 (
     const int sectorId,
     const std::vector<RiskEvent>& riskEvents
@@ -16,23 +16,23 @@ RiskEventMerged::RiskEventMerged
     setSummaryMessage();
 }
 
-int RiskEventMerged::getSectorId() const
+int MergedRiskEvent::getSectorId() const
 {
     return _sectorId;
 }
 
-std::vector<RiskEvent> RiskEventMerged::getRiskEvents() const
+std::vector<RiskEvent> MergedRiskEvent::getRiskEvents() const
 {
     return _riskEvents;
 }
 
-void RiskEventMerged::setRiskEvents(const std::vector<RiskEvent>& riskEvents)
+void MergedRiskEvent::setRiskEvents(const std::vector<RiskEvent>& riskEvents)
 {
     _riskEvents = riskEvents;
     setLastMessage();
 }
 
-void RiskEventMerged::addRiskEvents(const std::vector<RiskEvent>& riskEvents)
+void MergedRiskEvent::addRiskEvents(const std::vector<RiskEvent>& riskEvents)
 {
     for (RiskEvent riskEvent : riskEvents)
     {
@@ -42,17 +42,17 @@ void RiskEventMerged::addRiskEvents(const std::vector<RiskEvent>& riskEvents)
     setLastMessage();
 }
 
-void RiskEventMerged::addRiskEvent(const RiskEvent& riskEvent)
+void MergedRiskEvent::addRiskEvent(const RiskEvent& riskEvent)
 {
     _riskEvents.push_back(riskEvent);
 }
 
-void RiskEventMerged::setSummaryMessage()
+void MergedRiskEvent::setSummaryMessage()
 {
     _summaryMessage = "Risk events for sector " + _sectorId;
 }
 
-void RiskEventMerged::setLastMessage()
+void MergedRiskEvent::setLastMessage()
 {
     RiskEvent* lastRiskEvent = nullptr;
     for (RiskEvent riskEvent : _riskEvents)

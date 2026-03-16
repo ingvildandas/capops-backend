@@ -6,10 +6,10 @@
 
 class RiskEvent;
 
-class RiskEventMerged
+class MergedRiskEvent
 {
 public:
-    RiskEventMerged
+    MergedRiskEvent
     (
         const int sectorId,
         const std::vector<RiskEvent>& riskEvents
@@ -19,7 +19,6 @@ public:
     std::vector<RiskEvent> getRiskEvents() const;
 
     void setRiskEvents(const std::vector<RiskEvent>& riskEvents);
-
     void addRiskEvents(const std::vector<RiskEvent>& riskEvents);
 
 private:
