@@ -17,6 +17,8 @@ public:
 
     int getSectorId() const;
     std::vector<RiskEvent> getRiskEvents() const;
+    QString getSummaryMessage() const;
+    QString getLastMessage() const;
 
     void setRiskEvents(const std::vector<RiskEvent>& riskEvents);
     void addRiskEvents(const std::vector<RiskEvent>& riskEvents);
@@ -26,9 +28,15 @@ private:
     std::vector<RiskEvent> _riskEvents;
     QString _summaryMessage;
     QString _lastMessage;
+    QString _previousSeverity;
+    QString _currentSeverity;
 
 private:
     void addRiskEvent(const RiskEvent& riskEvent);
-    void setSummaryMessage();
-    void setLastMessage();
+    void updateSummaryInfo();
+    void setSummaryInfo
+    (
+        RiskEvent* lastRiskEvent = nullptr, 
+        RiskEvent* secondLastRiskEvent = nullptr
+    );
 };
