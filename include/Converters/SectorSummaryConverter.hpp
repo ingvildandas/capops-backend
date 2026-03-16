@@ -10,9 +10,7 @@ class QJsonObject;
 
 class SectorSummaryConverter
 {
-public:
-    SectorSummaryConverter() = delete;
-    
+public:    
     static SectorSummary fromJson(const QJsonObject& json);
     static std::vector<SectorSummary> fromJson(const QJsonArray& jsonArray);
     static QJsonObject toJson(const SectorSummary& sectorSummary);
@@ -23,4 +21,6 @@ public:
         const google::protobuf::RepeatedPtrField<SectorSummaryProto>& 
             protoSectorSummaries
     );
+
+    SectorSummaryConverter() = delete;
 };

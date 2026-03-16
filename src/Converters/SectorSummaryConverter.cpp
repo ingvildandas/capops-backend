@@ -13,27 +13,30 @@ SectorSummary SectorSummaryConverter::fromJson(const QJsonObject& json)
     int sectorId = json["sectorId"].toInt();
     int row = json["row"].toInt();
     int colunmn = json["column"].toInt();
-    int weatherSeverity = json["weatherSeverity"].toInt();
-    double weatherFactor = json["double"].toDouble();
     int localAircraftCount = json["localAircraftCount"].toInt();
     int localAircraftBaseCapacity = json["localAircraftBaseCapacity"].toInt();
     int localAircraftEffectiveCapacity = 
         json["localAircraftEffectiveCapacity"].toInt();
+    QString weatherSeverity = json["weatherSeverity"].toString();
+    QString riskSeverity = json["riskSeverity"].toString();
     
     return SectorSummary
     (
         sectorId,
         row,
         colunmn,
-        weatherSeverity,
-        weatherFactor,
         localAircraftCount,
         localAircraftBaseCapacity,
-        localAircraftEffectiveCapacity
+        localAircraftEffectiveCapacity,
+        weatherSeverity,
+        riskSeverity
     );
 }
 
-std::vector<SectorSummary> SectorSummaryConverter::fromJson(const QJsonArray& jsonArray)
+std::vector<SectorSummary> SectorSummaryConverter::fromJson
+(
+    const QJsonArray& jsonArray
+)
 {
     std::vector<SectorSummary> sectorSummaries;
     sectorSummaries.reserve(jsonArray.size());
@@ -54,14 +57,14 @@ QJsonObject SectorSummaryConverter::toJson(const SectorSummary& sectorSummary)
         { "sectorId", sectorSummary.getSectorId() },
         { "row", sectorSummary.getRow() },
         { "colunmn", sectorSummary.getColunmn() },
-        { "weatherSeverity", sectorSummary.getWeatherSeverity() },
-        { "weatherFactor", sectorSummary.getWeatherFactor() },
         { "localAircraftCount", sectorSummary.getLocalAircraftCount() },
         { "localAircraftBaseCapacity", sectorSummary.getLocalAircraftBaseCapacity() },
         { 
             "localAircraftEffectiveCapacity", 
             sectorSummary.getLocalAircraftEffectiveCapacity() 
-        }
+        },
+        { "weatherSeverity", sectorSummary.getWeatherSeverity() },
+        { "riskSeverity", sectorSummary.getRiskSeverity() }
     };
 }
 
@@ -84,24 +87,26 @@ SectorSummary SectorSummaryConverter::fromProto
     int sectorId = protoSectorSummary.sectorid();
     int row = protoSectorSummary.row();
     int colunmn = protoSectorSummary.column();
-    int weatherSeverity = protoSectorSummary.weatherseverity();
-    double weatherFactor = protoSectorSummary.weatherfactor();
     int localAircraftCount = protoSectorSummary.localaircraftcount();
     int localAircraftBaseCapacity = 
         protoSectorSummary.localaircraftbasecapacity();
     int localAircraftEffectiveCapacity = 
         protoSectorSummary.localaircrafteffectivecapacity();
+    QString weatherSeverity = 
+        QString::fromStdString(protoSectorSummary.weatherseverity());
+    QString riskSeverity = 
+        QString::fromStdString(protoSectorSummary.riskseverity());
 
     return SectorSummary
     (
         sectorId,
         row,
         colunmn,
-        weatherSeverity,
-        weatherFactor,
         localAircraftCount,
         localAircraftBaseCapacity,
-        localAircraftEffectiveCapacity
+        localAircraftEffectiveCapacity,
+        weatherSeverity,
+        riskSeverity
     );
 }
 
