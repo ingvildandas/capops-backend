@@ -129,4 +129,6 @@ void MergedRiskEvent::updateSummaryInfo()
             lastRiskEvent = &riskEvent;
         }
     }
+
+    setSummaryInfo(lastRiskEvent, secondLastRiskEvent);
 }
