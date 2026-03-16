@@ -12,9 +12,9 @@ FlightDataDto FlightDataStateManager::getState()
     return FlightDataDto
     (
         _state->metadata, 
-        _state->riskEvents, 
-        _state->sectorSummaries, 
-        _state->tracks
+        _state->riskEventData, 
+        _state->sectorSummaryData, 
+        _state->trackData
     );
 }
 
