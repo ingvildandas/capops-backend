@@ -18,7 +18,10 @@ RiskEventData RiskEventDataConverter::fromJson(const QJsonObject& json)
     return RiskEventData(totalRiskEventCount, riskEvents);
 }
 
-QJsonObject RiskEventDataConverter::toJson(const RiskEventData& riskEventData)
+QJsonObject RiskEventDataConverter::toJson
+(
+    const RiskEventData& riskEventData
+)
 {
     return QJsonObject
     {
@@ -30,7 +33,10 @@ QJsonObject RiskEventDataConverter::toJson(const RiskEventData& riskEventData)
     };
 }
 
-RiskEventData RiskEventDataConverter::fromProto(const RiskEventDataProto& protoRiskEventData)
+RiskEventData RiskEventDataConverter::fromProto
+(
+    const RiskEventDataProto& protoRiskEventData
+)
 {
     int totalRiskEventCount = protoRiskEventData.riskeventcount();
     std::vector<RiskEvent> riskEvents = 
