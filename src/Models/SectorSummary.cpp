@@ -1,3 +1,5 @@
+#include <QString>
+
 #include "Models/SectorSummary.hpp"
 
 SectorSummary::SectorSummary
@@ -5,21 +7,21 @@ SectorSummary::SectorSummary
     const int sectorId,
     const int row,
     const int colunmn,
-    const int weatherSeverity,
-    const double weatherFactor,
     const int localAircraftCount,
     const int localAircraftBaseCapacity,
-    const int localAircraftEffectiveCapacity
+    const int localAircraftEffectiveCapacity,
+    const QString& weatherSeverity,
+    const QString& riskSeverity
 )   
     :
     _sectorId(sectorId),
     _row(row),
     _colunmn(colunmn),
-    _weatherSeverity(weatherSeverity),
-    _weatherFactor(weatherFactor),
     _localAircraftCount(localAircraftCount),
     _localAircraftBaseCapacity(localAircraftBaseCapacity),
-    _localAircraftEffectiveCapacity(localAircraftEffectiveCapacity)
+    _localAircraftEffectiveCapacity(localAircraftEffectiveCapacity),
+    _weatherSeverity(weatherSeverity),
+    _riskSeverity(riskSeverity)
 {}
 
 const int SectorSummary::getSectorId() const
@@ -37,16 +39,6 @@ const int SectorSummary::getColunmn() const
     return _colunmn;
 }
 
-const int SectorSummary::getWeatherSeverity() const
-{
-    return _weatherSeverity;
-}
-
-const double SectorSummary::getWeatherFactor() const
-{
-    return _weatherFactor;
-}
-
 const int SectorSummary::getLocalAircraftCount() const
 {
     return _localAircraftCount;
@@ -60,4 +52,13 @@ const int SectorSummary::getLocalAircraftBaseCapacity() const
 const int SectorSummary::getLocalAircraftEffectiveCapacity() const
 {
     return _localAircraftEffectiveCapacity;
+}
+
+const QString& SectorSummary::getWeatherSeverity() const
+{
+    return _weatherSeverity;
+}
+const QString& SectorSummary::getRiskSeverity() const
+{
+    return _riskSeverity;
 }
