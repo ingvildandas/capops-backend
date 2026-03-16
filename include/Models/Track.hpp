@@ -11,27 +11,24 @@ public:
     explicit Track(
         const QString& icao24,
         const QDateTime& timestamp,
-        const TrackGlobalPosition& globalPosition,
-        const TrackLocalPosition& localPosition,
-        const TrackGlobalVelocity& globalVelocity,
-        const TrackLocalVelocity& localVelocity, 
-        const double headingDegrees
+        const TrackPosition& position,
+        const TrackVelocity& velocity,
+        const double headingDegrees,
+        const double groundTrackDegrees
     );
 
     const QString& getIcao24() const;
     const QDateTime& getTimestamp() const;
-    const TrackGlobalPosition& getGlobalPosition() const;
-    const TrackLocalPosition& getLocalPosition() const;
-    const TrackGlobalVelocity& getGlobalVelocity() const;
-    const TrackLocalVelocity& getLocalVelocity() const;
+    const TrackPosition& getPosition() const;
+    const TrackVelocity& getVelocity() const;
     const double getHeadingDegrees() const;
+    const double getGroundTrackDegrees() const;
 
 private:
     QString _icao24;
     QDateTime _timestamp;
-    TrackGlobalPosition _globalPosition;
-    TrackLocalPosition _localPosition;
-    TrackGlobalVelocity _globalVelocity;
-    TrackLocalVelocity _localVelocity;
+    TrackPosition _position;
+    TrackVelocity _velocity;
     double _headingDegrees;
+    double _groundTrackDegrees;
 };

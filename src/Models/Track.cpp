@@ -6,20 +6,18 @@
 Track::Track(
     const QString& icao24,
     const QDateTime& timestamp,
-    const TrackGlobalPosition& globalPosition,
-    const TrackLocalPosition& localPosition,
-    const TrackGlobalVelocity& globalVelocity,
-    const TrackLocalVelocity& localVelocity, 
-    const double headingDegrees
+    const TrackPosition& position,
+    const TrackVelocity& velocity,
+    const double headingDegrees,
+    const double groundTrackDegrees
 )
     : 
     _icao24(icao24),
     _timestamp(timestamp),
-    _globalPosition(globalPosition),
-    _localPosition(localPosition),
-    _globalVelocity(globalVelocity),
-    _localVelocity(localVelocity),
-    _headingDegrees(headingDegrees)
+    _position(position),
+    _velocity(velocity),
+    _headingDegrees(headingDegrees),
+    _groundTrackDegrees(groundTrackDegrees)
 {}
 
 const QString& Track::getIcao24() const
@@ -32,27 +30,22 @@ const QDateTime& Track::getTimestamp() const
     return _timestamp;
 }
 
-const TrackGlobalPosition& Track::getGlobalPosition() const
+const TrackPosition& Track::getPosition() const
 {
-    return _globalPosition;
+    return _position;
 }
 
-const TrackLocalPosition& Track::getLocalPosition() const
+const TrackVelocity& Track::getVelocity() const
 {
-    return _localPosition;
-}
-
-const TrackGlobalVelocity& Track::getGlobalVelocity() const
-{
-    return _globalVelocity;
-}
-
-const TrackLocalVelocity& Track::getLocalVelocity() const
-{
-    return _localVelocity;
+    return _velocity;
 }
 
 const double Track::getHeadingDegrees() const
 {
     return _headingDegrees;
+}
+
+const double Track::getGroundTrackDegrees() const
+{
+    return _groundTrackDegrees;
 }
