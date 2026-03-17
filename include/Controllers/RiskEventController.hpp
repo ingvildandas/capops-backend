@@ -43,7 +43,7 @@ private:
     RiskEventService& _service;
 
 public:
-    static const int DEFAULT_COUNT = 10;
+    static const int DEFAULT_COUNT = 1000;
     static const bool DEFAULT_ACKNOWLEDGED = false;
     inline static const QString DEFAULT_FROM = "";
     inline static const QString DEFAULT_TO = "";
