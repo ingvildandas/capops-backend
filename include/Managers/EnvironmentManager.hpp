@@ -5,7 +5,7 @@
 class EnvironmentManager
 {
 public:
-    EnvironmentManager() = default;
+    EnvironmentManager(const QString& envFilePath);
 
     void loadEnvironmentVariables(const QString& envFilePath);
 

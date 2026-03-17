@@ -4,6 +4,11 @@
 #include "Managers/EnvironmentManager.hpp"
 #include "Exceptions/FileException.hpp"
 
+EnvironmentManager::EnvironmentManager(const QString& envFilePath)
+{
+    loadEnvironmentVariables(envFilePath);
+}
+
 void EnvironmentManager::loadEnvironmentVariables(const QString& envFilePath)
 {
     QSettings settings(envFilePath, QSettings::IniFormat);
