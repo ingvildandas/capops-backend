@@ -178,15 +178,31 @@ void RiskEventRepository::insert(const RiskEvent& riskEvent)
         + "     AcknowledgedTimestamp,"
         + "     Message"
         + ") "
-        + "VALUES (?, ?, ?, ?, ?, ?)";
+        + "VALUES (?, ?, ?, ?, ?, ?, ?);";
     
     sqlite3_stmt* stmt = _conn.prepareStatement(query);
     _conn.bindInt(stmt, 1, riskEvent.getRiskEventId());
     _conn.bindInt(stmt, 2, riskEvent.getSectorId());
     _conn.bindBool(stmt, 3, riskEvent.getAcknowledged());
     _conn.bindText(stmt, 4, riskEvent.getRiskSeverity().toStdString());
-    _conn.bindText(stmt, 5, riskEvent.getCreatedTimestamp().toString("yyyy-MM-dd HH:mm:ss.zzz").toStdString());
-    _conn.bindText(stmt, 6, riskEvent.getAcknowledgedTimestamp().toString("yyyy-MM-dd HH:mm:ss.zzz").toStdString());
+    _conn.bindText
+    (
+        stmt, 
+        5, 
+        riskEvent
+            .getCreatedTimestamp()
+            .toString("yyyy-MM-dd HH:mm:ss.zzz")
+            .toStdString()
+    );
+    _conn.bindText
+    (
+        stmt, 
+        6, 
+        riskEvent
+            .getAcknowledgedTimestamp()
+            .toString("yyyy-MM-dd HH:mm:ss.zzz")
+            .toStdString()
+        );
     _conn.bindText(stmt, 7, riskEvent.getMessage().toStdString());
 
     _conn.finalizeStatement(stmt);
@@ -196,7 +212,69 @@ void RiskEventRepository::insertMultiple
 (
     std::vector<RiskEvent>& riskEvents
 ) 
-{}
+{
+    std::string query = std::string("")
+        + "INSERT INTO RiskEvent ("
+        + "     RiskEventId,"
+        + "     SectorId,"
+        + "     Acknowledged,"
+        + "     RiskSeverity,"
+        + "     CreatedTimestamp,"
+        + "     AcknowledgedTimestamp,"
+        + "     Message"
+        + ") "
+        + "VALUES ";
+    
+    for (size_t i = 0; i < riskEvents.size(); ++i)
+    {
+        query += "(?, ?, ?, ?, ?, ?, ?)";
+        if (i < riskEvents.size() - 1)
+        {
+            query += ", ";
+        }
+    }
+    query += ";";
+    sqlite3_stmt* stmt = _conn.prepareStatement(query);
+
+    int paramIndex = 1;
+    for (const RiskEvent& riskEvent : riskEvents)
+    {
+        _conn.bindInt(stmt, paramIndex++, riskEvent.getRiskEventId());
+        _conn.bindInt(stmt, paramIndex++, riskEvent.getSectorId());
+        _conn.bindBool(stmt, paramIndex++, riskEvent.getAcknowledged());
+        _conn.bindText
+        (
+            stmt, 
+            paramIndex++, 
+            riskEvent.getRiskSeverity().toStdString()
+        );
+        _conn.bindText
+        (
+            stmt, 
+            paramIndex++, 
+            riskEvent
+                .getCreatedTimestamp()
+                .toString("yyyy-MM-dd HH:mm:ss.zzz")
+                .toStdString()
+        );
+        _conn.bindText
+        (
+            stmt, 
+            paramIndex++, 
+            riskEvent
+                .getAcknowledgedTimestamp()
+                .toString("yyyy-MM-dd HH:mm:ss.zzz")
+                .toStdString()
+        );
+        _conn.bindText
+        (
+            stmt, 
+            paramIndex++, 
+            riskEvent.getMessage().toStdString()
+        );
+    }
+    _conn.finalizeStatement(stmt);
+}
 
 void RiskEventRepository::updateAcknowledged
 (
