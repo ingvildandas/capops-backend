@@ -1,10 +1,11 @@
 #include <vector>
 
-#include "Models/FlightData.hpp"
 #include "Managers/FlightDataStateManager.hpp"
-#include "Models/RiskEvent.hpp"
-#include "Models/SectorSummary.hpp"
-#include "Models/Track.hpp"
+#include "Models/FlightData.hpp"
+#include "Models/Metadata.hpp"
+#include "Models/RiskEventData.hpp"
+#include "Models/SectorSummaryData.hpp"
+#include "Models/TrackData.hpp"
 #include "Structs/FlightDataStructs.hpp"
 
 FlightDataStateManager::FlightDataStateManager()
