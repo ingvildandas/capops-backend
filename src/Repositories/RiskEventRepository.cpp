@@ -281,8 +281,28 @@ void RiskEventRepository::updateAcknowledged
     const int riskEventId, 
     const bool acknowledged
 ) 
-{}
+{
+    std::string query = std::string("")
+        + "UPDATE RiskEvent "
+        + "SET Acknowledged = ? "
+        + "WHERE RiskEventId = ?;";
+    
+    sqlite3_stmt* stmt = _conn.prepareStatement(query);
+    _conn.bindBool(stmt, 1, acknowledged);
+    _conn.bindInt(stmt, 2, riskEventId);
+
+    _conn.finalizeStatement(stmt);
+}
 
 void RiskEventRepository::deleteById(const int riskEventId) 
-{}
+{
+    std::string query = std::string("")
+        + "DELETE FROM RiskEvent "
+        + "WHERE RiskEventId = ?;";
+    
+    sqlite3_stmt* stmt = _conn.prepareStatement(query);
+    _conn.bindInt(stmt, 1, riskEventId);
+
+    _conn.finalizeStatement(stmt);
+}
 
