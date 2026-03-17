@@ -18,6 +18,11 @@ public:
     (
         const int count
     ) override;
+    std::vector<RiskEvent> selectMultipleByAcknowledged
+    (
+        const int count, 
+        const bool acknowledged
+    ) override;
     std::vector<RiskEvent> selectMultipleByTimestamps
     (
         const int count,

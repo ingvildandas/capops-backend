@@ -12,6 +12,11 @@ public:
 
     virtual RiskEvent selectById(const int riskEventId) = 0;
     virtual std::vector<RiskEvent> selectMultipleByCount(const int count) = 0;
+    virtual std::vector<RiskEvent> selectMultipleByAcknowledged
+    (
+        const int count, 
+        const bool acknowledged
+    ) = 0;
     virtual std::vector<RiskEvent> selectMultipleByTimestamps
     (
         const int count,
