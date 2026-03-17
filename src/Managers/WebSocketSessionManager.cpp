@@ -9,8 +9,8 @@
 #include <QUuid>
 #include <QWebSocket>
 
-#include "Converters/FlightDataDtoConverter.hpp"
-#include "Dtos/FlightDataDto.hpp"
+#include "Converters/FlightDataConverter.hpp"
+#include "Models/FlightData.hpp"
 #include "Managers/WebSocketSessionManager.hpp"
 
 WebSocketSessionManager::WebSocketSessionManager(QObject* parent)
@@ -58,11 +58,11 @@ void WebSocketSessionManager::removeSession(const QString& sessionId)
     }
 }
 
-void WebSocketSessionManager::broadcast(const FlightDataDto& dto)
+void WebSocketSessionManager::broadcast(const FlightData& dto)
 {
     if (getActiveSessionCount() == 0) return;
     
-    QJsonObject json = FlightDataDtoConverter::toJson(dto);
+    QJsonObject json = FlightDataConverter::toJson(dto);
     QByteArray payload = QJsonDocument(json).toJson(QJsonDocument::Compact);
 
     for (auto [sessionId, socket] : _activeSessions.asKeyValueRange())

@@ -8,7 +8,7 @@
 #include <sw/redis++/redis++.h>
 
 #include "Network/RedisEventBusReceiver.hpp"
-#include "Converters/FlightDataDtoConverter.hpp"
+#include "Converters/FlightDataConverter.hpp"
 #include "Converters/MetadataConverter.hpp"
 #include "Converters/RiskEventConverter.hpp"
 #include "Converters/RiskEventDataConverter.hpp"
@@ -16,7 +16,7 @@
 #include "Converters/SectorSummaryDataConverter.hpp"
 #include "Converters/TrackConverter.hpp"
 #include "Converters/TrackDataConverter.hpp"
-#include "Dtos/FlightDataDto.hpp"
+#include "Models/FlightData.hpp"
 #include "Managers/WebSocketSessionManager.hpp"
 #include "Models/Metadata.hpp"
 #include "Models/RiskEvent.hpp"
@@ -122,7 +122,7 @@ void RedisEventBusReceiver::handleMessage(const std::string& channel, const std:
     }
 }
 
-FlightDataDto RedisEventBusReceiver::deserialize
+FlightData RedisEventBusReceiver::deserialize
 (
     const std::string& payload
 )
@@ -143,5 +143,5 @@ FlightDataDto RedisEventBusReceiver::deserialize
     RiskEventData riskEventData = 
         RiskEventDataConverter::fromProto(proto.riskeventdata());
 
-    return FlightDataDto(metadata, riskEventData, sectorSummaryData, trackData);
+    return FlightData(metadata, riskEventData, sectorSummaryData, trackData);
 }

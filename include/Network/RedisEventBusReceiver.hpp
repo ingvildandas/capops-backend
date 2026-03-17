@@ -14,7 +14,7 @@
 #include "Services/SectorSummaryService.hpp"
 #include "Services/TrackService.hpp"
 
-class FlightDataDto;
+class FlightData;
 class QString;
 
 class RedisEventBusReceiver : public QObject
@@ -41,7 +41,7 @@ private:
     void runSubscriber();
     void handleMessage(const std::string& channel, const std::string& payload);
 
-    FlightDataDto deserialize(const std::string& payload);
+    FlightData deserialize(const std::string& payload);
 
 private:
     QString _redisUri;

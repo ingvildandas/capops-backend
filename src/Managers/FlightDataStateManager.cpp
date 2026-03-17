@@ -1,15 +1,15 @@
 #include <vector>
 
-#include "Dtos/FlightDataDto.hpp"
+#include "Models/FlightData.hpp"
 #include "Managers/FlightDataStateManager.hpp"
 #include "Models/RiskEvent.hpp"
 #include "Models/SectorSummary.hpp"
 #include "Models/Track.hpp"
 #include "Structs/FlightDataStructs.hpp"
 
-FlightDataDto FlightDataStateManager::getState()
+FlightData FlightDataStateManager::getState()
 {
-    return FlightDataDto
+    return FlightData
     (
         _state->metadata, 
         _state->riskEventData, 

@@ -1,12 +1,12 @@
 #include <vector>
 
-#include "Dtos/FlightDataDto.hpp"
+#include "Models/FlightData.hpp"
 #include "Models/Metadata.hpp"
 #include "Models/RiskEventData.hpp"
 #include "Models/SectorSummaryData.hpp"
 #include "Models/TrackData.hpp"
 
-FlightDataDto::FlightDataDto
+FlightData::FlightData
 (
     const Metadata& metadata,
     const RiskEventData& riskEventData,
@@ -20,22 +20,22 @@ FlightDataDto::FlightDataDto
     _trackData(trackData)
 {}
 
-Metadata FlightDataDto::getMetadata() const
+Metadata FlightData::getMetadata() const
 {
     return _metadata;
 } 
 
-RiskEventData FlightDataDto::getRiskEventData() const
+RiskEventData FlightData::getRiskEventData() const
 {
     return _riskEventData;
 }
 
-SectorSummaryData FlightDataDto::getSectorSummaryData() const
+SectorSummaryData FlightData::getSectorSummaryData() const
 {
     return _sectorSummaryData;
 }
 
-TrackData FlightDataDto::getTrackData() const
+TrackData FlightData::getTrackData() const
 {
     return _trackData;
 }

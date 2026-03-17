@@ -1,7 +1,7 @@
 #include <vector>
 
 #include "Models/SectorSummaryData.hpp"
-#include "Models/SectorSummary.hpp";
+#include "Models/SectorSummary.hpp"
 
 SectorSummaryData::SectorSummaryData
 (

@@ -5,7 +5,7 @@
 
 #include "Structs/FlightDataStructs.hpp"
 
-class FlightDataDto;
+class FlightData;
 class RiskEventData;
 class SectorSummaryData;
 class TrackData;
@@ -15,7 +15,7 @@ class FlightDataStateManager
 public:
     FlightDataStateManager() = default;
 
-    FlightDataDto getState();
+    FlightData getState();
 
     void setMetadata(const Metadata& metadata);
     void setRiskEventData(const RiskEventData& riskEventData);
