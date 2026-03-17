@@ -10,15 +10,15 @@ public:
     void loadEnvironmentVariables(const QString& envFilePath);
 
     QString getDatabaseFilePath() const;
-    int getHttpPort() const;
-    int getWebSocketPort() const;
+    quint16 getHttpPort() const;
+    quint16 getWebSocketPort() const;
     int getProtoBufContractVersion() const;
     int getRestJsonContractVersion() const;
 
 private:
     QString _databaseFilePath;
-    int _httpPort;
-    int _webSocketPort;
+    quint16 _httpPort;
+    quint16 _webSocketPort;
     int _protoBufContractVersion;
     int _restJsonContractVersion;
 };

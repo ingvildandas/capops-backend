@@ -18,31 +18,44 @@ void EnvironmentManager::loadEnvironmentVariables(const QString& envFilePath)
     if (databaseFilePath.isEmpty()) {
         throw FileException("DATABASE_FILE_PATH is missing or empty.");
     }
+    _databaseFilePath = databaseFilePath;
 
     int httpPort = settings.value("HTTP_PORT").toInt(&ok);
     if (!ok || httpPort <= 0) {
         throw FileException("HTTP_PORT must be a positive integer.");
     }
-
+    try
+    {
+        _httpPort = static_cast<quint16>(httpPort);
+    }
+    catch(const std::exception&)
+    {
+        throw FileException("HTTP_PORT value is out of range for quint16.");
+    }
+    
     int webSocketPort = settings.value("WEBSOCKET_PORT").toInt(&ok);
     if (!ok || webSocketPort <= 0) {
         throw FileException("WEBSOCKET_PORT must be a positive integer.");
     }
-
+    try
+    {
+        _webSocketPort = static_cast<quint16>(webSocketPort);
+    }
+    catch(const std::exception&)
+    {
+        throw FileException("WEBSOCKET_PORT value is out of range for quint16.");
+    }
+    
     int protoBufContractVersion = settings.value("PROTOBUF_CONTRACT_VERSION").toInt(&ok);
     if (!ok || protoBufContractVersion <= 0) {
         throw FileException("PROTOBUF_CONTRACT_VERSION must be a positive integer.");
     }
+    _protoBufContractVersion = protoBufContractVersion;
 
     int restJsonContractVersion = settings.value("REST_JSON_CONTRACT_VERSION").toInt(&ok);
     if (!ok ||restJsonContractVersion <= 0) {
         throw FileException("REST_JSON_CONTRACT_VERSION must be a positive integer.");
     }
-
-    _databaseFilePath = databaseFilePath;
-    _httpPort = httpPort;
-    _webSocketPort = webSocketPort;
-    _protoBufContractVersion = protoBufContractVersion;
     _restJsonContractVersion = restJsonContractVersion;
 }
 
@@ -51,12 +64,12 @@ QString EnvironmentManager::getDatabaseFilePath() const
     return _databaseFilePath;
 }
 
-int EnvironmentManager::getHttpPort() const
+quint16 EnvironmentManager::getHttpPort() const
 {
     return _httpPort;
 }
 
-int EnvironmentManager::getWebSocketPort() const
+quint16 EnvironmentManager::getWebSocketPort() const
 {
     return _webSocketPort;
 }
