@@ -36,8 +36,11 @@ RiskEvent RiskEventRepository::selectById(const int riskEventId)
     {
         throw DatabaseException("RiskEvent instance not found in database");
     }
+    if (result.getInt(0) != riskEventId)
+    {
+        throw DatabaseException("Retrieved RiskEventId does not match requested id");
+    }
 
-    int riskEventId = result.getInt(0);
     int sectorId = result.getInt(1);
     bool acknowledged = result.getInt(2) != 0;
     QString riskSeverity = QString::fromStdString(result.getString(3));
