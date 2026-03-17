@@ -11,8 +11,8 @@ public:
     virtual ~IRiskEventRepository() = default;
 
     virtual RiskEvent selectById(const int riskEventId) = 0;
-    virtual std::vector<RiskEvent> selectOrderByTimestamp(const int count) = 0;
-    virtual std::vector<RiskEvent> selectByBetweenTimestamps
+    virtual std::vector<RiskEvent> selectMultipleByCount(const int count) = 0;
+    virtual std::vector<RiskEvent> selectMultipleByParameters
     (
         const int count,
         const bool acknowledged,
@@ -21,7 +21,11 @@ public:
     ) = 0;
 
     virtual void insert(const RiskEvent& riskEvent) = 0;
-    virtual void insertMultiple(std::vector<const RiskEvent*>& riskEvents) = 0;
-    virtual void updateAcknowledged(const int riskEventId, const bool acknowledged) = 0;
+    virtual void insertMultiple(std::vector<RiskEvent>& riskEvents) = 0;
+    virtual void updateAcknowledged
+    (
+        const int riskEventId, 
+        const bool acknowledged
+    ) = 0;
     virtual void deleteById(const int riskEventId) = 0;
 };

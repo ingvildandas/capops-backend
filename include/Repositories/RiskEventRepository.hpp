@@ -14,8 +14,11 @@ public:
     explicit RiskEventRepository(DatabaseConnection& conn);
     
     RiskEvent selectById(const int riskEventId) override;
-    std::vector<RiskEvent> selectOrderByTimestamp(const int count) override;
-    std::vector<RiskEvent> selectByBetweenTimestamps
+    std::vector<RiskEvent> selectMultipleByCount
+    (
+        const int count
+    ) override;
+    std::vector<RiskEvent> selectMultipleByParameters
     (
         const int count,
         const bool acknowledged,
@@ -24,8 +27,12 @@ public:
     ) override;
 
     void insert(const RiskEvent& riskEvent) override;
-    void insertMultiple(std::vector<const RiskEvent*>& riskEvents) override;
-    void updateAcknowledged(const int riskEventId, const bool acknowledged) override;
+    void insertMultiple(std::vector<RiskEvent>& riskEvents) override;
+    void updateAcknowledged
+    (
+        const int riskEventId, 
+        const bool acknowledged
+    ) override;
     void deleteById(const int riskEventId) override;
 
 private:
