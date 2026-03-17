@@ -11,14 +11,20 @@
 #include "Converters/FlightDataDtoConverter.hpp"
 #include "Converters/MetadataConverter.hpp"
 #include "Converters/RiskEventConverter.hpp"
+#include "Converters/RiskEventDataConverter.hpp"
 #include "Converters/SectorSummaryConverter.hpp"
+#include "Converters/SectorSummaryDataConverter.hpp"
 #include "Converters/TrackConverter.hpp"
+#include "Converters/TrackDataConverter.hpp"
 #include "Dtos/FlightDataDto.hpp"
 #include "Managers/WebSocketSessionManager.hpp"
 #include "Models/Metadata.hpp"
 #include "Models/RiskEvent.hpp"
+#include "Models/RiskEventData.hpp"
 #include "Models/SectorSummary.hpp"
+#include "Models/SectorSummaryData.hpp"
 #include "Models/Track.hpp"
+#include "Models/TrackData.hpp"
 #include "Proto/FlightData.hpp"
 #include "Services/RiskEventService.hpp"
 #include "Services/SectorSummaryService.hpp"
@@ -103,16 +109,10 @@ void RedisEventBusReceiver::handleMessage(const std::string& channel, const std:
     {
         auto dto = deserialize(payload);
 
-        if (!dto.getTracks().empty())
-        {
-            _trackService.updateState(dto.getTracks());
-        }
-
-        if (!dto.getSectorSummaries().empty())
-            _sectorSummaryService.updateState(dto.getSectorSummaries());
-
-        if (!dto.getSectorSummaries().empty())
-            _riskEventService.updateState(dto.getRiskEvents());
+        _metadataService.updateState(dto.getMetadata());
+        _trackService.updateState(dto.getTrackData());
+        _sectorSummaryService.updateState(dto.getSectorSummaryData());
+        _riskEventService.updateState(dto.getRiskEventData());
 
         _sessionManager.broadcast(dto);
     }
@@ -127,7 +127,7 @@ FlightDataDto RedisEventBusReceiver::deserialize
     const std::string& payload
 )
 {
-    FlightData proto;
+    FlightDataProto proto;
 
     if (!proto.ParseFromString(payload))
     {
@@ -136,12 +136,12 @@ FlightDataDto RedisEventBusReceiver::deserialize
 
     Metadata metadata = MetadataConverter::fromProto(proto.metadata());
 
-    std::vector<Track> tracks = 
-        TrackConverter::fromProto(proto.tracks());
-    std::vector<SectorSummary> sectorSummaries = 
-        SectorSummaryConverter::fromProto(proto.sector_summaries());
-    std::vector<RiskEvent> riskEvents = 
-        RiskEventConverter::fromProto(proto.risk_events());
+    TrackData trackData = 
+        TrackDataConverter::fromProto(proto.trackdata());
+    SectorSummaryData sectorSummaryData = 
+        SectorSummaryDataConverter::fromProto(proto.sectorsummarydata());
+    RiskEventData riskEventData = 
+        RiskEventDataConverter::fromProto(proto.riskeventdata());
 
-    return FlightDataDto(metadata, riskEvents, sectorSummaries, tracks);
+    return FlightDataDto(metadata, riskEventData, sectorSummaryData, trackData);
 }

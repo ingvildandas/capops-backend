@@ -1,5 +1,6 @@
-#include <chrono>
 #include <vector>
+
+#include <QDateTime>
 
 #include "Repositories/RiskEventRepository.hpp"
 #include "Database/DatabaseConnection.hpp"
@@ -11,7 +12,7 @@ RiskEventRepository::RiskEventRepository(DatabaseConnection& conn)
 
 RiskEvent RiskEventRepository::selectById(const int riskEventId)
 {
-    return RiskEvent(0, 0, "", 0);
+    return RiskEvent(0, 0, false, "", QDateTime(), QDateTime(), "");
 }
 
 std::vector<RiskEvent> RiskEventRepository::selectOrderByTimestamp

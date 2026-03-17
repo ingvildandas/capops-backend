@@ -12,20 +12,20 @@ FlightDataDto FlightDataStateManager::getState()
     return FlightDataDto
     (
         _state->metadata, 
-        _state->riskEvents, 
-        _state->sectorSummaries, 
-        _state->tracks
+        _state->riskEventData, 
+        _state->sectorSummaryData, 
+        _state->trackData
     );
 }
 
 void FlightDataStateManager::setMetadata(const Metadata& metadata)
 {}
 
-void FlightDataStateManager::setRiskEvents(const std::vector<RiskEvent>& riskEvents)
+void FlightDataStateManager::setRiskEventData(const RiskEventData& riskEventData)
 {}
 
-void FlightDataStateManager::setSectorSummaries(const std::vector<SectorSummary>& sectorSummaries)
+void FlightDataStateManager::setSectorSummaryData(const SectorSummaryData& sectorSummaryData)
 {}
 
-void FlightDataStateManager::setTracks(const std::vector<Track>& tracks)
+void FlightDataStateManager::setTrackData(const TrackData& trackData)
 {}

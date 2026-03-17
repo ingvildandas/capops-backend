@@ -8,16 +8,12 @@ class Track;
 class QJsonArray;
 class QJsonObject;
 
-struct TrackGlobalPosition;
-struct TrackLocalPosition;
-struct TrackGlobalVelocity;
-struct TrackLocalVelocity;
+struct TrackPosition;
+struct TrackVelocity;
 
 class TrackConverter
 {
 public:
-    TrackConverter() = delete;
-
     static Track fromJson(const QJsonObject& json);
     static std::vector<Track> fromJson(const QJsonArray& jsonArray);
     static QJsonObject toJson(const Track& track);
@@ -27,32 +23,22 @@ public:
     (
         const google::protobuf::RepeatedPtrField<TrackProto>& protoTracks
     );
+    
+    TrackConverter() = delete;
 
 private:
-    static TrackGlobalPosition globalPositionFromJson(const QJsonObject& json);
-    static TrackLocalPosition localPositionFromJson(const QJsonObject& json);
-    static TrackGlobalVelocity globalVelocityFromJson(const QJsonObject& json);
-    static TrackLocalVelocity localVelocityFromJson(const QJsonObject& json);
+    static TrackPosition positionFromJson(const QJsonObject& json);
+    static TrackVelocity velocityFromJson(const QJsonObject& json);
     
-    static QJsonObject globalPositionToJson(const TrackGlobalPosition& position);
-    static QJsonObject localPositionToJson(const TrackLocalPosition& position);
-    static QJsonObject globalVelocityToJson(const TrackGlobalVelocity& velocity);
-    static QJsonObject localVelocityToJson(const TrackLocalVelocity& velocity);
+    static QJsonObject positionToJson(const TrackPosition& position);
+    static QJsonObject velocityToJson(const TrackVelocity& velocity);
 
-    static TrackGlobalPosition globalPositionFromProto
+    static TrackPosition positionFromProto
     (
-        const GlobalPositionProto& globalPosition
+        const PositionProto& position
     );
-    static TrackLocalPosition localPositionFromProto
+    static TrackVelocity velocityFromProto
     (
-        const LocalPositionProto& localPosition
+        const VelocityProto& velocity
     );
-    static TrackGlobalVelocity globalVelocityFromProto
-    (
-        const GlobalVelocityProto& localVelocity
-    );
-    static TrackLocalVelocity localVelocityFromProto
-    (
-        const LocalVelocityProto& localVelocity
-    ); 
 };

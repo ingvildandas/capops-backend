@@ -3,30 +3,30 @@
 
 #include "Converters/FlightDataDtoConverter.hpp"
 #include "Converters/MetadataConverter.hpp"
-#include "Converters/RiskEventConverter.hpp"
-#include "Converters/SectorSummaryConverter.hpp"
-#include "Converters/TrackConverter.hpp"
+#include "Converters/RiskEventDataConverter.hpp"
+#include "Converters/SectorSummaryDataConverter.hpp"
+#include "Converters/TrackDataConverter.hpp"
 #include "Dtos/FlightDataDto.hpp"
 #include "Models/Metadata.hpp"
-#include "Models/RiskEvent.hpp"
-#include "Models/SectorSummary.hpp"
-#include "Models/Track.hpp"
+#include "Models/RiskEventData.hpp"
+#include "Models/SectorSummaryData.hpp"
+#include "Models/TrackData.hpp"
 
 FlightDataDto FlightDataDtoConverter::fromJson(const QJsonObject& json)
 {
     QJsonObject metadataObj = json["metadata"].toObject();
-    QJsonArray riskEventArray = json["riskEvents"].toArray();
-    QJsonArray sectorSummaryArray = json["sectorSummaries"].toArray();
-    QJsonArray trackArray = json["tracks"].toArray();
+    QJsonObject riskEventDataObj = json["riskEventData"].toObject();
+    QJsonObject sectorSummaryDataObj = json["sectorSummaryData"].toObject();
+    QJsonObject trackDataObj = json["trackData"].toObject();
 
     Metadata metadata = MetadataConverter::fromJson(metadataObj);
-    std::vector<RiskEvent> riskEvents = 
-        RiskEventConverter::fromJson(riskEventArray);
-    std::vector<SectorSummary> sectorSummaries = 
-        SectorSummaryConverter::fromJson(sectorSummaryArray);
-    std::vector<Track> tracks = TrackConverter::fromJson(trackArray);
+    RiskEventData riskEventData = 
+        RiskEventDataConverter::fromJson(riskEventDataObj);
+    SectorSummaryData sectorSummaryData = 
+        SectorSummaryDataConverter::fromJson(sectorSummaryDataObj);
+    TrackData trackData = TrackDataConverter::fromJson(trackDataObj);
 
-    return FlightDataDto(metadata, riskEvents, sectorSummaries, tracks);
+    return FlightDataDto(metadata, riskEventData, sectorSummaryData, trackData);
 }
 
 QJsonObject FlightDataDtoConverter::toJson(const FlightDataDto& dto)
@@ -34,8 +34,8 @@ QJsonObject FlightDataDtoConverter::toJson(const FlightDataDto& dto)
     return
     {
         { "metadata", MetadataConverter::toJson(dto.getMetadata()) },
-        { "riskEvents", RiskEventConverter::toJson(dto.getRiskEvents()) },
-        { "sectorSummaries", SectorSummaryConverter::toJson(dto.getSectorSummaries()) },
-        { "tracks", TrackConverter::toJson(dto.getTracks()) }
+        { "riskEventData", RiskEventDataConverter::toJson(dto.getRiskEventData()) },
+        { "sectorSummaryData", SectorSummaryDataConverter::toJson(dto.getSectorSummaryData()) },
+        { "trackData", TrackDataConverter::toJson(dto.getTrackData()) }
     };
 }

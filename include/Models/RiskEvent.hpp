@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QDateTime>
 #include <QString>
 
 class RiskEvent
@@ -7,20 +8,29 @@ class RiskEvent
 public:
     RiskEvent(
         const int riskEventId,
-        const int riskSeverity,
-        const QString& message,
-        const bool acknowledged
+        const int sectorId,
+        const bool acknowledged,
+        const QString& riskSeverity,
+        const QDateTime& createdTimestamp,
+        const QDateTime& acknowledgedTimestamp,
+        const QString& message
     );
 
     const int getRiskEventId() const;
-    const int getRiskSeverity() const;
-    const QString& getMessage() const;
+    const int getSectorId() const;
     const bool getAcknowledged() const;
+    const QString& getRiskSeverity() const;
+    const QDateTime& getCreatedTimestamp() const;
+    const QDateTime& getAcknowledgedTimestamp() const;
+    const QString& getMessage() const;
 
 private:
     int _riskEventId;
-    int _riskSeverity;
-    QString _message;
+    int _sectorId;
     bool _acknowledged;
+    QString _riskSeverity;
+    QDateTime _createdTimestamp;
+    QDateTime _acknowledgedTimestamp;
+    QString _message;
 };
 

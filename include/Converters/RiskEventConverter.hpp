@@ -11,8 +11,6 @@ class QJsonObject;
 class RiskEventConverter
 {
 public:
-    RiskEventConverter() = delete;
-
     static RiskEvent fromJson(const QJsonObject& json);
     static std::vector<RiskEvent> fromJson(const QJsonArray& jsonArray);
     static QJsonObject toJson(const RiskEvent& riskEvent);
@@ -22,4 +20,6 @@ public:
     (
         const google::protobuf::RepeatedPtrField<RiskEventProto>& protoRiskEvents
     );
+    
+    RiskEventConverter() = delete;
 };

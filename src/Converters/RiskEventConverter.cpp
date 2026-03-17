@@ -3,6 +3,7 @@
 
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QString>
 
 #include "Converters/RiskEventConverter.hpp"
 #include "Models/RiskEvent.hpp"
@@ -10,11 +11,25 @@
 RiskEvent RiskEventConverter::fromJson(const QJsonObject& json)
 {
     int riskEventId = json["riskEventId"].toInt();
-    int riskSeverity = json["riskSeverity"].toInt();
-    QString message = json["message"].toString();
+    int sectorId = json["sectorId"].toInt();
     bool acknowledged = json["acknowledged"].toBool();
+    QString riskSeverity = json["riskSeverity"].toString();
+    QDateTime createdTimestamp = 
+        QDateTime::fromString(json["createdTimestamp"].toString(), Qt::ISODate);
+    QDateTime acknowledgedTimestamp = 
+        QDateTime::fromString(json["acknowledgedTimestamp"].toString(), Qt::ISODate);
+    QString message = json["message"].toString();
 
-    return RiskEvent(riskEventId, riskSeverity, message, acknowledged);
+    return RiskEvent
+    (
+        riskEventId, 
+        sectorId, 
+        acknowledged, 
+        riskSeverity,
+        createdTimestamp, 
+        acknowledgedTimestamp, 
+        message
+    );
 }
 
 std::vector<RiskEvent> RiskEventConverter::fromJson(const QJsonArray& jsonArray)
@@ -36,9 +51,12 @@ QJsonObject RiskEventConverter::toJson(const RiskEvent& riskEvent)
     return 
     {
         { "riskEventId", riskEvent.getRiskEventId() },
+        { "sectorId", riskEvent.getSectorId() },
+        { "acknowledged", riskEvent.getAcknowledged() },
         { "riskSeverity", riskEvent.getRiskSeverity() },
-        { "message", riskEvent.getMessage() },
-        { "acknowledged", riskEvent.getAcknowledged() }
+        { "createdTimestamp", riskEvent.getCreatedTimestamp().toString(Qt::ISODate) },
+        { "acknowledgedTimestamp", riskEvent.getAcknowledgedTimestamp().toString(Qt::ISODate) },
+        { "message", riskEvent.getMessage() }
     };
 }
 
@@ -56,15 +74,23 @@ QJsonArray RiskEventConverter::toJson(const std::vector<RiskEvent>& riskEvents)
 RiskEvent RiskEventConverter::fromProto(const RiskEventProto& protoRiskEvent)
 {
     int riskEventId = protoRiskEvent.riskeventid(); 
-    int riskSeverity = protoRiskEvent.riskseverity();
-    QString message = QString::fromStdString(protoRiskEvent.message());
+    int sectorId = protoRiskEvent.sectorid();
     bool acknowledged = protoRiskEvent.acknowledged();
+    QString riskSeverity = QString::fromStdString(protoRiskEvent.riskseverity());
+    QDateTime createdTimestamp = 
+        QDateTime::fromString(QString::fromStdString(protoRiskEvent.createdtimestamp()), Qt::ISODate);
+    QDateTime acknowledgedTimestamp = 
+        QDateTime::fromString(QString::fromStdString(protoRiskEvent.acknowledgedtimestamp()), Qt::ISODate);
+    QString message = QString::fromStdString(protoRiskEvent.message());
     
     return RiskEvent(
         riskEventId,
+        sectorId,
+        acknowledged,
         riskSeverity,
-        message,
-        acknowledged                
+        createdTimestamp,
+        acknowledgedTimestamp,
+        message               
     );
 }
 

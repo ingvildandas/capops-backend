@@ -3,10 +3,9 @@
 #include <vector>
 
 #include "Models/Metadata.hpp"
-
-class RiskEvent;
-class SectorSummary;
-class Track;
+#include "Models/RiskEventData.hpp"
+#include "Models/SectorSummaryData.hpp"
+#include "Models/TrackData.hpp"
 
 class FlightDataDto
 {
@@ -14,19 +13,19 @@ public:
     FlightDataDto
     (
         const Metadata& metadata,
-        const std::vector<RiskEvent>& riskEvents,
-        const std::vector<SectorSummary>& sectorSummaries,
-        const std::vector<Track>& tracks
+        const RiskEventData& riskEventData,
+        const SectorSummaryData& sectorSummaryData,
+        const TrackData& trackData
     );
 
     Metadata getMetadata() const;
-    std::vector<RiskEvent> getRiskEvents() const;
-    std::vector<SectorSummary> getSectorSummaries() const;
-    std::vector<Track> getTracks() const;
+    RiskEventData getRiskEventData() const;
+    SectorSummaryData getSectorSummaryData() const;
+    TrackData getTrackData() const;
 
 private:
     Metadata _metadata;
-    std::vector<RiskEvent> _riskEvents;
-    std::vector<SectorSummary> _sectorSummaries;
-    std::vector<Track> _tracks;
+    RiskEventData _riskEventData;
+    SectorSummaryData _sectorSummaryData;
+    TrackData _trackData;
 };

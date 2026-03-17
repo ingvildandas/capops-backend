@@ -1,5 +1,6 @@
 #include "Services/SectorSummaryService.hpp"
 #include "Managers/FlightDataStateManager.hpp"
+#include "Models/SectorSummaryData.hpp"
 
 SectorSummaryService::SectorSummaryService(
     FlightDataStateManager& stateManager
@@ -9,6 +10,6 @@ SectorSummaryService::SectorSummaryService(
 
 void SectorSummaryService::updateState
 (
-    const std::vector<SectorSummary>& sectorSummaries
+    const SectorSummaryData& sectorSummaries
 )
 {}
