@@ -14,6 +14,7 @@
 #include "Exceptions/RedisEventBusException.hpp"
 #include "Exceptions/WebSocketException.hpp"
 
+#include "Managers/EnvironmentManager.hpp"
 #include "Managers/FlightDataStateManager.hpp"
 #include "Managers/WebSocketSessionManager.hpp"
 
@@ -28,19 +29,27 @@ namespace
 {
     struct ApplicationContext
     {
-        DatabaseConnection conn {"capops.db"};
+        EnvironmentManager envManager{".env"};
+        DatabaseConnection conn 
+        {
+            envManager.getDatabaseFilePath().toStdString()
+        };
         
         FlightDataStateManager flightDataStateManager;
         WebSocketSessionManager sessionManager;
 
         RiskEventRepository riskEventRepository {conn};
-        RiskEventService riskEventService {riskEventRepository, flightDataStateManager};
+        RiskEventService riskEventService 
+        {
+            riskEventRepository, 
+            flightDataStateManager
+        };
 
         RiskEventController riskEventController {riskEventService};
         WebSocketController webSocketController {sessionManager};
         
-        HttpServer httpServer {8080};
-        WebSocketServer wsServer {8081};
+        HttpServer httpServer {envManager.getHttpPort()};
+        WebSocketServer wsServer {envManager.getWebSocketPort()};
 
         void initialize()
         {  
@@ -48,11 +57,15 @@ namespace
             
             httpServer.registerRiskEventController(riskEventController);
             httpServer.start();
-            qInfo() << "HTTP server listening on port " << httpServer.getPort();
+            qInfo() 
+                << "HTTP server listening on port " 
+                << httpServer.getPort();
 
             wsServer.registerWebSocketController(webSocketController);
             wsServer.start();
-            qInfo() << "WebSocket server listening on port " << wsServer.getPort();
+            qInfo() 
+                << "WebSocket server listening on port " 
+                << wsServer.getPort();
         }
     };
 }
