@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 
 #include "Models/Metadata.hpp"
@@ -8,8 +9,8 @@
 #include "Models/TrackData.hpp"
 
 struct FlightDataState {
-    Metadata metadata;
-    RiskEventData riskEventData;
-    SectorSummaryData sectorSummaryData;
-    TrackData trackData;
+    std::unique_ptr<Metadata> metadata = nullptr;
+    std::unique_ptr<RiskEventData> riskEventData = nullptr;
+    std::unique_ptr<SectorSummaryData> sectorSummaryData = nullptr;
+    std::unique_ptr<TrackData> trackData = nullptr;
 };

@@ -13,7 +13,7 @@ class TrackData;
 class FlightDataStateManager
 {
 public:
-    FlightDataStateManager() = default;
+    FlightDataStateManager();
 
     FlightData getState();
 
@@ -21,6 +21,8 @@ public:
     void setRiskEventData(const RiskEventData& riskEventData);
     void setSectorSummaryData(const SectorSummaryData& sectorSummaryData);
     void setTrackData(const TrackData& trackData);
+
+    void resetState();
 
 private:
     std::unique_ptr<FlightDataState> _state = nullptr;
