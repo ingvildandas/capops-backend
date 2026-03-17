@@ -2,6 +2,7 @@
 #include <QJsonObject>
 
 #include "Converters/MetadataConverter.hpp"
+#include "Managers/EnvironmentManager.hpp"
 #include "Models/Metadata.hpp"
 #include "Proto/FlightData.hpp"
 
@@ -12,11 +13,15 @@ Metadata MetadataConverter::fromJson(const QJsonObject& json)
     return Metadata(timestamp);
 }
 
-QJsonObject MetadataConverter::toJson(const Metadata& metadata)
+QJsonObject MetadataConverter::toJson
+(
+    const Metadata& metadata,
+    const EnvironmentManager& envManager
+)
 {
     return 
     {
-        { "version", Metadata::getVersion() },
+        { "version", envManager.getRestJsonContractVersion() },
         { "timestamp", metadata.getTimestamp().toString() }
     };
 }
