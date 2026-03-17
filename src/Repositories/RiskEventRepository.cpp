@@ -108,6 +108,60 @@ std::vector<RiskEvent> RiskEventRepository::selectMultipleByCount
     return riskEvents;
 }
 
+std::vector<RiskEvent> RiskEventRepository::selectMultipleByTimestamps
+(
+    const int count,
+    const QDateTime& from,
+    const QDateTime& to
+)
+{
+    std::string query = std::string("")
+        + "SELECT "
+        + "     RiskEvent.RiskEventId,"
+        + "     RiskEvent.SectorId,"
+        + "     RiskEvent.Acknowledged,"
+        + "     RiskEvent.RiskSeverity,"
+        + "     RiskEvent.CreatedTimestamp,"
+        + "     RiskEvent.AcknowledgedTimestamp,"
+        + "     RiskEvent.Message"
+        + "FROM RiskEvent "
+        + "WHERE RiskEvent.CreatedTimestamp BETWEEN ? AND ? "
+        + "ORDER BY RiskEvent.CreatedTimestamp DESC "
+        + "LIMIT ?;";
+    
+    sqlite3_stmt* stmt = _conn.prepareStatement(query);
+    _conn.bindText(stmt, 1, from.toString("yyyy-MM-dd HH:mm:ss.zzz").toStdString());
+    _conn.bindText(stmt, 2, to.toString("yyyy-MM-dd HH:mm:ss.zzz").toStdString());
+    _conn.bindInt(stmt, 3, count);
+    ResultSet result = _conn.finalizeStatementWithResult(stmt);
+
+    std::vector<RiskEvent> riskEvents;
+    while (result.next())
+    {
+        int riskEventId = result.getInt(0);
+        int sectorId = result.getInt(1);
+        bool acknowledged = result.getInt(2) != 0;
+        QString riskSeverity = QString::fromStdString(result.getString(3));
+        QDateTime createdTimestamp = 
+            QDateTime::fromString(QString::fromStdString(result.getString(4)));
+        QDateTime acknowledgedTimestamp = 
+            QDateTime::fromString(QString::fromStdString(result.getString(5)));
+        QString message = QString::fromStdString(result.getString(6));
+
+        riskEvents.push_back(RiskEvent
+        (
+            riskEventId, 
+            sectorId, 
+            acknowledged, 
+            riskSeverity, 
+            createdTimestamp, 
+            acknowledgedTimestamp, 
+            message
+        ));
+    }
+    return riskEvents;
+}
+
 std::vector<RiskEvent> RiskEventRepository::selectMultipleByParameters
 (
     const int count,
@@ -132,7 +186,7 @@ std::vector<RiskEvent> RiskEventRepository::selectMultipleByParameters
         + "LIMIT ?;";
     
     sqlite3_stmt* stmt = _conn.prepareStatement(query);
-    _conn.bindInt(stmt, 1, acknowledged);
+    _conn.bindBool(stmt, 1, acknowledged);
     _conn.bindText(stmt, 2, from.toString("yyyy-MM-dd HH:mm:ss.zzz").toStdString());
     _conn.bindText(stmt, 3, to.toString("yyyy-MM-dd HH:mm:ss.zzz").toStdString());
     _conn.bindInt(stmt, 4, count);
