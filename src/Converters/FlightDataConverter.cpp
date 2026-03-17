@@ -1,18 +1,18 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
-#include "Converters/FlightDataDtoConverter.hpp"
+#include "Converters/FlightDataConverter.hpp"
 #include "Converters/MetadataConverter.hpp"
 #include "Converters/RiskEventDataConverter.hpp"
 #include "Converters/SectorSummaryDataConverter.hpp"
 #include "Converters/TrackDataConverter.hpp"
-#include "Dtos/FlightDataDto.hpp"
+#include "Models/FlightData.hpp"
 #include "Models/Metadata.hpp"
 #include "Models/RiskEventData.hpp"
 #include "Models/SectorSummaryData.hpp"
 #include "Models/TrackData.hpp"
 
-FlightDataDto FlightDataDtoConverter::fromJson(const QJsonObject& json)
+FlightData FlightDataConverter::fromJson(const QJsonObject& json)
 {
     QJsonObject metadataObj = json["metadata"].toObject();
     QJsonObject riskEventDataObj = json["riskEventData"].toObject();
@@ -26,10 +26,10 @@ FlightDataDto FlightDataDtoConverter::fromJson(const QJsonObject& json)
         SectorSummaryDataConverter::fromJson(sectorSummaryDataObj);
     TrackData trackData = TrackDataConverter::fromJson(trackDataObj);
 
-    return FlightDataDto(metadata, riskEventData, sectorSummaryData, trackData);
+    return FlightData(metadata, riskEventData, sectorSummaryData, trackData);
 }
 
-QJsonObject FlightDataDtoConverter::toJson(const FlightDataDto& dto)
+QJsonObject FlightDataConverter::toJson(const FlightData& dto)
 {
     return
     {

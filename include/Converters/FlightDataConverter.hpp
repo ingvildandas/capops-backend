@@ -1,11 +1,11 @@
 #pragma once
 
-class FlightDataDto;
+class FlightData;
 class QJsonObject;
 
-class FlightDataDtoConverter
+class FlightDataConverter
 {
 public:
-    static FlightDataDto fromJson(const QJsonObject& json);
-    static QJsonObject toJson(const FlightDataDto& dto);
+    static FlightData fromJson(const QJsonObject& json);
+    static QJsonObject toJson(const FlightData& dto);
 };

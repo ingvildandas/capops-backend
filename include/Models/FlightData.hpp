@@ -7,10 +7,10 @@
 #include "Models/SectorSummaryData.hpp"
 #include "Models/TrackData.hpp"
 
-class FlightDataDto
+class FlightData
 {
 public:
-    FlightDataDto
+    FlightData
     (
         const Metadata& metadata,
         const RiskEventData& riskEventData,
