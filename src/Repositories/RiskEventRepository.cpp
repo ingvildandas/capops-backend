@@ -37,7 +37,7 @@ RiskEvent RiskEventRepository::selectById(const int riskEventId)
         throw DatabaseException("RiskEvent instance not found in database");
     }
 
-    int id = result.getInt(0);
+    int riskEventId = result.getInt(0);
     int sectorId = result.getInt(1);
     bool acknowledged = result.getInt(2) != 0;
     QString riskSeverity = QString::fromStdString(result.getString(3));
@@ -49,7 +49,7 @@ RiskEvent RiskEventRepository::selectById(const int riskEventId)
 
     return RiskEvent
     (
-        id, 
+        riskEventId, 
         sectorId, 
         acknowledged, 
         riskSeverity, 
@@ -84,7 +84,7 @@ std::vector<RiskEvent> RiskEventRepository::selectMultipleByCount
     std::vector<RiskEvent> riskEvents;
     while (result.next())
     {
-        int id = result.getInt(0);
+        int riskEventId = result.getInt(0);
         int sectorId = result.getInt(1);
         bool acknowledged = result.getInt(2) != 0;
         QString riskSeverity = QString::fromStdString(result.getString(3));
@@ -96,7 +96,7 @@ std::vector<RiskEvent> RiskEventRepository::selectMultipleByCount
 
         riskEvents.push_back(RiskEvent
         (
-            id, 
+            riskEventId, 
             sectorId, 
             acknowledged, 
             riskSeverity, 
@@ -141,7 +141,7 @@ std::vector<RiskEvent> RiskEventRepository::selectMultipleByParameters
     std::vector<RiskEvent> riskEvents;
     while (result.next())
     {
-        int id = result.getInt(0);
+        int riskEventId = result.getInt(0);
         int sectorId = result.getInt(1);
         bool acknowledged = result.getInt(2) != 0;
         QString riskSeverity = QString::fromStdString(result.getString(3));
@@ -153,7 +153,7 @@ std::vector<RiskEvent> RiskEventRepository::selectMultipleByParameters
 
         riskEvents.push_back(RiskEvent
         (
-            id, 
+            riskEventId, 
             sectorId, 
             acknowledged, 
             riskSeverity, 
@@ -167,7 +167,30 @@ std::vector<RiskEvent> RiskEventRepository::selectMultipleByParameters
 }
 
 void RiskEventRepository::insert(const RiskEvent& riskEvent) 
-{}
+{
+    std::string query = std::string("")
+        + "INSERT INTO RiskEvent ("
+        + "     RiskEventId,"
+        + "     SectorId,"
+        + "     Acknowledged,"
+        + "     RiskSeverity,"
+        + "     CreatedTimestamp,"
+        + "     AcknowledgedTimestamp,"
+        + "     Message"
+        + ") "
+        + "VALUES (?, ?, ?, ?, ?, ?)";
+    
+    sqlite3_stmt* stmt = _conn.prepareStatement(query);
+    _conn.bindInt(stmt, 1, riskEvent.getRiskEventId());
+    _conn.bindInt(stmt, 2, riskEvent.getSectorId());
+    _conn.bindBool(stmt, 3, riskEvent.getAcknowledged());
+    _conn.bindText(stmt, 4, riskEvent.getRiskSeverity().toStdString());
+    _conn.bindText(stmt, 5, riskEvent.getCreatedTimestamp().toString("yyyy-MM-dd HH:mm:ss.zzz").toStdString());
+    _conn.bindText(stmt, 6, riskEvent.getAcknowledgedTimestamp().toString("yyyy-MM-dd HH:mm:ss.zzz").toStdString());
+    _conn.bindText(stmt, 7, riskEvent.getMessage().toStdString());
+
+    _conn.finalizeStatement(stmt);
+}
 
 void RiskEventRepository::insertMultiple
 (
