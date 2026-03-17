@@ -7,6 +7,11 @@
 #include "Models/Track.hpp"
 #include "Structs/FlightDataStructs.hpp"
 
+FlightDataStateManager::FlightDataStateManager()
+{
+    _state = std::make_unique<FlightDataState>();
+}
+
 FlightData FlightDataStateManager::getState()
 {
     return FlightData
@@ -19,13 +24,26 @@ FlightData FlightDataStateManager::getState()
 }
 
 void FlightDataStateManager::setMetadata(const Metadata& metadata)
-{}
+{
+    _state->metadata = metadata;
+}
 
 void FlightDataStateManager::setRiskEventData(const RiskEventData& riskEventData)
-{}
+{
+    _state->riskEventData = riskEventData;
+}
 
 void FlightDataStateManager::setSectorSummaryData(const SectorSummaryData& sectorSummaryData)
-{}
+{
+    _state->sectorSummaryData = sectorSummaryData;
+}
 
 void FlightDataStateManager::setTrackData(const TrackData& trackData)
-{}
+{
+    _state->trackData = trackData;
+}
+
+void FlightDataStateManager::resetState()
+{
+    _state = std::make_unique<FlightDataState>();
+}
