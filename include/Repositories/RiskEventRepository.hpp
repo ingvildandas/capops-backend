@@ -18,6 +18,12 @@ public:
     (
         const int count
     ) override;
+    std::vector<RiskEvent> selectMultipleByTimestamps
+    (
+        const int count,
+        const QDateTime& from,
+        const QDateTime& to
+    ) override;
     std::vector<RiskEvent> selectMultipleByParameters
     (
         const int count,
