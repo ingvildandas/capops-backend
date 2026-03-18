@@ -11,6 +11,8 @@
 
 #include "Controllers/RiskEventController.hpp"
 #include "Converters/RiskEventConverter.hpp"
+#include "Exceptions/DatabaseException.hpp"
+#include "Models/RiskEvent.hpp"
 #include "Services/RiskEventService.hpp"
 
 RiskEventController::RiskEventController
@@ -43,12 +45,18 @@ QHttpServerResponse RiskEventController::getRiskEvent
             QJsonDocument(json).toJson()
         );
     }
-    catch (const std::runtime_error&)
+    catch (const DatabaseException&)
     {
         return QHttpServerResponse(QHttpServerResponder::StatusCode::NotFound);
     }
+    catch (const std::exception& e)
+    {
+        qWarning() << "Unexpected error occurred: " << e.what();
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
+    }
     catch(...)
     {
+        qWarning() << "Unknown error occurred";
         return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
     }
     
@@ -93,8 +101,19 @@ QHttpServerResponse RiskEventController::getMultipleRiskEvents
             QJsonDocument(jsonArray).toJson()
         );
     }
+    catch (const DatabaseException& e)
+    {
+        qWarning() << e.what();
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
+    }
+    catch(std::exception& e)
+    {
+        qWarning() << "Unexpected error occurred: " << e.what();
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
+    }
     catch(...)
     {
+        qWarning() << "Unknown error occurred";
         return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
     }
 }
@@ -126,12 +145,18 @@ QHttpServerResponse RiskEventController::updateRiskEvent
         );
         return QHttpServerResponse(QHttpServerResponder::StatusCode::NoContent);
     }
-    catch (const std::runtime_error&)
+    catch (const DatabaseException&)
     {
         return QHttpServerResponse(QHttpServerResponder::StatusCode::NotFound);
     }
+    catch (const std::exception& e)
+    {
+        qWarning() << "Unexpected error occurred: " << e.what();
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
+    }
     catch (...)
     {
+        qWarning() << "Unknown error occurred";
         return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
     }
 }
@@ -152,12 +177,18 @@ QHttpServerResponse RiskEventController::deleteRiskEvent
         _service.deleteRiskEvent(riskEventId);
         return QHttpServerResponse(QHttpServerResponder::StatusCode::NoContent);
     }
-    catch (const std::runtime_error&)
+    catch (const DatabaseException& e)
     {
         return QHttpServerResponse(QHttpServerResponder::StatusCode::NotFound);
     }
+    catch (const std::exception& e)
+    {
+        qWarning() << "Unexpected error occurred: " << e.what();
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
+    }
     catch (...)
     {
+        qWarning() << "Unknown error occurred";
         return QHttpServerResponse(QHttpServerResponder::StatusCode::InternalServerError);
     }
 }
