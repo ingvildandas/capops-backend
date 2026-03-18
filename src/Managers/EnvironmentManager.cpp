@@ -45,7 +45,13 @@ void EnvironmentManager::loadEnvironmentVariables(const QString& envFilePath)
     {
         throw FileException("WEBSOCKET_PORT value is out of range for quint16.");
     }
-    
+
+    QString redisUri = settings.value("REDIS_URI").toString();
+    if (redisUri.isEmpty()) {
+        throw FileException("REDIS_URI is missing or empty.");
+    }
+    _redisUri = redisUri;
+
     int protoBufContractVersion = settings.value("PROTOBUF_CONTRACT_VERSION").toInt(&ok);
     if (!ok || protoBufContractVersion <= 0) {
         throw FileException("PROTOBUF_CONTRACT_VERSION must be a positive integer.");
