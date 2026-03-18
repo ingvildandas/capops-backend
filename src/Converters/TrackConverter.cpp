@@ -71,13 +71,13 @@ TrackPosition TrackConverter::positionFromJson(const QJsonObject& json)
 {
     double latitudeDegrees = json["latitudeDegrees"].toDouble();
     double longitudeDegrees = json["longitudeDegrees"].toDouble();
-    double altitudeMeters = json["altitudeMeters"].toDouble();
+    double altitudeFeet = json["altitudeFeet"].toDouble();
 
     return TrackPosition
     {
         latitudeDegrees, 
         longitudeDegrees, 
-        altitudeMeters
+        altitudeFeet
     };
 }
 
@@ -101,7 +101,7 @@ QJsonObject TrackConverter::positionToJson(const TrackPosition& position)
     {
         { "latitudeDegrees", position.latitudeDegrees },
         { "longitudeDegrees", position.longitudeDegrees },
-        { "altitudeMeters", position.altitudeMeters }
+        { "altitudeFeet", position.altitudeFeet }
     };
 }
 
@@ -159,13 +159,13 @@ TrackPosition TrackConverter::positionFromProto
 {
     double latitudeDegrees = position.latitudedegrees();
     double longitudeDegrees = position.longitudedegrees();
-    double altitudeMeters = position.altitudemeters();
+    double altitudeFeet = position.altitudefeet();
 
     return TrackPosition
     {
         latitudeDegrees, 
         longitudeDegrees, 
-        altitudeMeters
+        altitudeFeet
     };
 }
 

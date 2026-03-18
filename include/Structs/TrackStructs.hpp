@@ -6,7 +6,7 @@ struct TrackPosition
 {
     const double latitudeDegrees;
     const double longitudeDegrees;
-    const double altitudeMeters;
+    const double altitudeFeet;
 };
 
 struct TrackVelocity
