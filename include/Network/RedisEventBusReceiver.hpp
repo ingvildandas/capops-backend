@@ -37,7 +37,6 @@ public:
     ~RedisEventBusReceiver();
 
     void start();
-    void ping();
     void stop();
 
 private:

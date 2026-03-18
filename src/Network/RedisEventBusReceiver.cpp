@@ -57,29 +57,21 @@ void RedisEventBusReceiver::start()
 {
     if (_running) return;
 
-    ping();
-    _redis = std::make_unique<sw::redis::Redis>(_redisUri.toStdString());
-    _running = true;
+    try
+    {
+        _redis = std::make_unique<sw::redis::Redis>(_redisUri.toStdString());
+        _redis->ping();
+        _running = true;
+    }
+    catch (const sw::redis::Error &e)
+    {
+        throw RedisEventBusException(e.what());
+    }
 
     _subscriberThread = std::thread([this]()
     {
         runSubscriber();
     });
-}
-
-void RedisEventBusReceiver::ping()
-{
-    if (_redis)
-    {
-        try
-        {
-            _redis->ping();
-        }
-        catch (const sw::redis::Error &e)
-        {
-            throw RedisEventBusException(e.what());
-        }
-    }
 }
 
 void RedisEventBusReceiver::stop()
