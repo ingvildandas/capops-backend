@@ -9,10 +9,6 @@
 
 #include "Network/RedisEventBusReceiver.hpp"
 #include "Converters/FlightDataConverter.hpp"
-#include "Converters/MetadataConverter.hpp"
-#include "Converters/RiskEventDataConverter.hpp"
-#include "Converters/SectorSummaryDataConverter.hpp"
-#include "Converters/TrackDataConverter.hpp"
 #include "Exceptions/DatabaseException.hpp"
 #include "Exceptions/RedisEventBusException.hpp"
 #include "Models/FlightData.hpp"
