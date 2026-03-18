@@ -141,14 +141,5 @@ FlightData RedisEventBusReceiver::deserialize
         throw RedisEventBusException("Invalid FlightData protobuf");
     }
 
-    Metadata metadata = MetadataConverter::fromProto(proto.metadata());
-
-    TrackData trackData = 
-        TrackDataConverter::fromProto(proto.trackdata());
-    SectorSummaryData sectorSummaryData = 
-        SectorSummaryDataConverter::fromProto(proto.sectorsummarydata());
-    RiskEventData riskEventData = 
-        RiskEventDataConverter::fromProto(proto.riskeventdata());
-
-    return FlightData(metadata, riskEventData, sectorSummaryData, trackData);
+    return FlightDataConverter::fromProto(proto);
 }
