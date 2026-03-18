@@ -31,15 +31,38 @@ FlightData FlightDataConverter::fromJson(const QJsonObject& json)
 
 QJsonObject FlightDataConverter::toJson
 (
-    const FlightData& dto,
+    const FlightData& flightData,
     const EnvironmentManager& envManager
 )
 {
     return
     {
-        { "metadata", MetadataConverter::toJson(dto.getMetadata(), envManager) },
-        { "riskEventData", RiskEventDataConverter::toJson(dto.getRiskEventData()) },
-        { "sectorSummaryData", SectorSummaryDataConverter::toJson(dto.getSectorSummaryData()) },
-        { "trackData", TrackDataConverter::toJson(dto.getTrackData()) }
+        { 
+            "metadata", 
+            MetadataConverter::toJson(flightData.getMetadata(), envManager)
+        },
+        { 
+            "riskEventData", 
+            RiskEventDataConverter::toJson(flightData.getRiskEventData()) 
+        },
+        { 
+            "sectorSummaryData", 
+            SectorSummaryDataConverter::toJson(flightData.getSectorSummaryData()) 
+        },
+        { "trackData", TrackDataConverter::toJson(flightData.getTrackData()) }
     };
+}
+
+FlightData FlightDataConverter::fromProto(const FlightDataProto& proto)
+{
+    Metadata metadata = MetadataConverter::fromProto(proto.metadata());
+
+    TrackData trackData = 
+        TrackDataConverter::fromProto(proto.trackdata());
+    SectorSummaryData sectorSummaryData = 
+        SectorSummaryDataConverter::fromProto(proto.sectorsummarydata());
+    RiskEventData riskEventData = 
+        RiskEventDataConverter::fromProto(proto.riskeventdata());
+
+    return FlightData(metadata, riskEventData, sectorSummaryData, trackData);
 }

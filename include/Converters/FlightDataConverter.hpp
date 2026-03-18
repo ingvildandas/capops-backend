@@ -2,6 +2,7 @@
 
 class EnvironmentManager;
 class FlightData;
+class FlightDataProto;
 class QJsonObject;
 
 class FlightDataConverter
@@ -13,4 +14,5 @@ public:
         const FlightData& dto,
         const EnvironmentManager& envManager
     );
+    static FlightData fromProto(const FlightDataProto& proto);
 };

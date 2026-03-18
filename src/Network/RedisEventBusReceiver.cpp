@@ -9,10 +9,6 @@
 
 #include "Network/RedisEventBusReceiver.hpp"
 #include "Converters/FlightDataConverter.hpp"
-#include "Converters/MetadataConverter.hpp"
-#include "Converters/RiskEventDataConverter.hpp"
-#include "Converters/SectorSummaryDataConverter.hpp"
-#include "Converters/TrackDataConverter.hpp"
 #include "Exceptions/DatabaseException.hpp"
 #include "Exceptions/RedisEventBusException.hpp"
 #include "Models/FlightData.hpp"
@@ -102,18 +98,22 @@ void RedisEventBusReceiver::runSubscriber()
     }
 }
 
-void RedisEventBusReceiver::handleMessage(const std::string& channel, const std::string& payload)
+void RedisEventBusReceiver::handleMessage
+(
+    const std::string& channel, 
+    const std::string& payload
+)
 {
     try
     {
-        auto dto = deserialize(payload);
+        auto flightData = deserialize(payload);
 
-        _metadataService.updateState(dto.getMetadata());
-        _trackService.updateState(dto.getTrackData());
-        _sectorSummaryService.updateState(dto.getSectorSummaryData());
-        _riskEventService.updateState(dto.getRiskEventData());
+        _metadataService.updateState(flightData.getMetadata());
+        _trackService.updateState(flightData.getTrackData());
+        _sectorSummaryService.updateState(flightData.getSectorSummaryData());
+        _riskEventService.updateState(flightData.getRiskEventData());
 
-        _sessionManager.broadcast(dto);
+        _sessionManager.broadcast(flightData);
     }
     catch (const DatabaseException& e)
     {
@@ -141,14 +141,5 @@ FlightData RedisEventBusReceiver::deserialize
         throw RedisEventBusException("Invalid FlightData protobuf");
     }
 
-    Metadata metadata = MetadataConverter::fromProto(proto.metadata());
-
-    TrackData trackData = 
-        TrackDataConverter::fromProto(proto.trackdata());
-    SectorSummaryData sectorSummaryData = 
-        SectorSummaryDataConverter::fromProto(proto.sectorsummarydata());
-    RiskEventData riskEventData = 
-        RiskEventDataConverter::fromProto(proto.riskeventdata());
-
-    return FlightData(metadata, riskEventData, sectorSummaryData, trackData);
+    return FlightDataConverter::fromProto(proto);
 }
