@@ -98,7 +98,11 @@ void RedisEventBusReceiver::runSubscriber()
     }
 }
 
-void RedisEventBusReceiver::handleMessage(const std::string& channel, const std::string& payload)
+void RedisEventBusReceiver::handleMessage
+(
+    const std::string& channel, 
+    const std::string& payload
+)
 {
     try
     {
