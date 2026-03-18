@@ -12,4 +12,6 @@ void TrackService::updateState
 (
     const TrackData& trackData
 )
-{}
+{
+    _stateManager.setTrackData(trackData);
+}
