@@ -8,11 +8,8 @@
 #include "Models/RiskEventData.hpp"
 #include "Repositories/IRiskEventRepository.hpp"
 
-RiskEventService::RiskEventService(
-    IRiskEventRepository& repository, 
-    FlightDataStateManager& stateManager
-)
-    : _repository(repository), _stateManager(stateManager)
+RiskEventService::RiskEventService(IRiskEventRepository& repository)
+    : _repository(repository)
 {}
 
 RiskEvent RiskEventService::getRiskEvent(const int riskEventId)
@@ -88,7 +85,11 @@ void RiskEventService::deleteRiskEvent(const int riskEventId)
     _repository.deleteById(riskEventId);
 }
 
-void RiskEventService::updateState(const RiskEventData& riskEventData)
+void RiskEventService::updateState
+(
+    const RiskEventData& riskEventData, 
+    FlightDataStateManager& stateManager
+)
 {
-    _stateManager.setRiskEventData(riskEventData);
+    stateManager.setRiskEventData(riskEventData);
 }
