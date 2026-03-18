@@ -19,6 +19,18 @@ public:
     );
 
     RiskEvent getRiskEvent(const int riskEventId);
+    std::vector<RiskEvent> getMultipleRiskEvents(const int count);
+    std::vector<RiskEvent> getMultipleRiskEvents
+    (
+        const int count, 
+        const bool acknowledged
+    );
+    std::vector<RiskEvent> getMultipleRiskEvents
+    (
+        const int count,
+        const QDateTime& from,
+        const QDateTime& to
+    );
     std::vector<RiskEvent> getMultipleRiskEvents
     (
         const int count,
@@ -28,7 +40,7 @@ public:
     );
 
     void registerRiskEvent(const RiskEvent& riskEvent);
-    void registerMultipleRiskEvents(std::vector<const RiskEvent*>& riskEvents);
+    void registerMultipleRiskEvents(const std::vector<RiskEvent>& riskEvents);
     void updateAcknowledged(const int riskEventId, const bool acknowledged);
     void deleteRiskEvent(const int riskEventId);
 

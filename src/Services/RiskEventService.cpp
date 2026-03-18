@@ -17,7 +17,31 @@ RiskEventService::RiskEventService(
 
 RiskEvent RiskEventService::getRiskEvent(const int riskEventId)
 {
-    return RiskEvent(0, 0, false, "", QDateTime(), QDateTime(), "");
+    return _repository.selectById(riskEventId);
+}
+
+std::vector<RiskEvent> RiskEventService::getMultipleRiskEvents(const int count)
+{
+    return _repository.selectMultipleByCount(count);
+}
+
+std::vector<RiskEvent> RiskEventService::getMultipleRiskEvents
+(
+    const int count, 
+    const bool acknowledged
+)
+{
+    return _repository.selectMultipleByAcknowledged(count, acknowledged);
+}
+
+std::vector<RiskEvent> RiskEventService::getMultipleRiskEvents
+(
+    const int count,
+    const QDateTime& from,
+    const QDateTime& to
+)
+{
+    return _repository.selectMultipleByTimestamps(count, from, to);
 }
 
 std::vector<RiskEvent> RiskEventService::getMultipleRiskEvents
@@ -28,20 +52,43 @@ std::vector<RiskEvent> RiskEventService::getMultipleRiskEvents
     const QDateTime& to
 )
 {
-    return std::vector<RiskEvent>{};
+    return _repository.selectMultipleByParameters
+    (
+        count, 
+        acknowledged, 
+        from, 
+        to
+    );
 }
 
 void RiskEventService::registerRiskEvent(const RiskEvent& riskEvent)
-{}
+{
+    _repository.insert(riskEvent);
+}
 
-void RiskEventService::registerMultipleRiskEvents(std::vector<const RiskEvent*>& riskEvents)
-{}
+void RiskEventService::registerMultipleRiskEvents
+(
+    const std::vector<RiskEvent>& riskEvents
+)
+{
+    _repository.insertMultiple(riskEvents);
+}
 
-void RiskEventService::updateAcknowledged(const int riskEventId, const bool acknowledged)
-{}
+void RiskEventService::updateAcknowledged
+(
+    const int riskEventId, 
+    const bool acknowledged
+)
+{
+    _repository.updateAcknowledged(riskEventId, acknowledged);
+}
 
 void RiskEventService::deleteRiskEvent(const int riskEventId)
-{}
+{
+    _repository.deleteById(riskEventId);
+}
 
 void RiskEventService::updateState(const RiskEventData& riskEventData)
-{}
+{
+    _stateManager.setRiskEventData(riskEventData);
+}

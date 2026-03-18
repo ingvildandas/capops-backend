@@ -32,7 +32,7 @@ public:
     ) = 0;
 
     virtual void insert(const RiskEvent& riskEvent) = 0;
-    virtual void insertMultiple(std::vector<RiskEvent>& riskEvents) = 0;
+    virtual void insertMultiple(const std::vector<RiskEvent>& riskEvents) = 0;
     virtual void updateAcknowledged
     (
         const int riskEventId, 

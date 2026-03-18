@@ -319,7 +319,7 @@ void RiskEventRepository::insert(const RiskEvent& riskEvent)
 
 void RiskEventRepository::insertMultiple
 (
-    std::vector<RiskEvent>& riskEvents
+    const std::vector<RiskEvent>& riskEvents
 ) 
 {
     std::string query = std::string("")

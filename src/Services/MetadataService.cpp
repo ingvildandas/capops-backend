@@ -7,4 +7,6 @@ MetadataService::MetadataService(FlightDataStateManager& stateManager)
 {}
 
 void MetadataService::updateState(const Metadata& metadata)
-{}
+{
+    _stateManager.setMetadata(metadata);
+}
