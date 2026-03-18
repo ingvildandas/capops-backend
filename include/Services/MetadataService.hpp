@@ -7,10 +7,11 @@
 class MetadataService
 {
 public:
-    MetadataService(FlightDataStateManager& stateManager);
+    MetadataService() = default;
 
-    void updateState(const Metadata& metadata);
-
-private:
-    FlightDataStateManager& _stateManager;
+    void updateState
+    (
+        const Metadata& metadata,
+        FlightDataStateManager& stateManager
+    );
 };
