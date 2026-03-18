@@ -10,12 +10,11 @@
 #include "Network/RedisEventBusReceiver.hpp"
 #include "Converters/FlightDataConverter.hpp"
 #include "Converters/MetadataConverter.hpp"
-#include "Converters/RiskEventConverter.hpp"
 #include "Converters/RiskEventDataConverter.hpp"
-#include "Converters/SectorSummaryConverter.hpp"
 #include "Converters/SectorSummaryDataConverter.hpp"
-#include "Converters/TrackConverter.hpp"
 #include "Converters/TrackDataConverter.hpp"
+#include "Exceptions/DatabaseException.hpp"
+#include "Exceptions/RedisEventBusException.hpp"
 #include "Models/FlightData.hpp"
 #include "Managers/WebSocketSessionManager.hpp"
 #include "Models/Metadata.hpp"
@@ -116,9 +115,17 @@ void RedisEventBusReceiver::handleMessage(const std::string& channel, const std:
 
         _sessionManager.broadcast(dto);
     }
+    catch (const DatabaseException& e)
+    {
+        qWarning() << e.what();
+    }
+    catch (const RedisEventBusException& e)
+    {
+        qWarning() << e.what();
+    }
     catch (const std::exception& e)
     {
-        qWarning() << "Event bus error: " << e.what();
+        qWarning() << "Unexpected error occurred: " << e.what();
     }
 }
 
@@ -131,7 +138,7 @@ FlightData RedisEventBusReceiver::deserialize
 
     if (!proto.ParseFromString(payload))
     {
-        throw std::runtime_error("Invalid FlightData protobuf");
+        throw RedisEventBusException("Invalid FlightData protobuf");
     }
 
     Metadata metadata = MetadataConverter::fromProto(proto.metadata());
