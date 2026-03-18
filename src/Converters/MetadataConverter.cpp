@@ -27,6 +27,7 @@ QJsonObject MetadataConverter::toJson
 }
 Metadata MetadataConverter::fromProto(const MetadataProto& protoMetadata)
 {
-    QDateTime timestamp = QDateTime::fromString(protoMetadata.timestamp());
+    QDateTime timestamp = 
+        QDateTime::fromString(QString::fromStdString(protoMetadata.timestamp()));
     return Metadata(timestamp);
 }
