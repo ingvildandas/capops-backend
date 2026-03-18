@@ -2,16 +2,11 @@
 #include "Managers/FlightDataStateManager.hpp"
 #include "Models/SectorSummaryData.hpp"
 
-SectorSummaryService::SectorSummaryService(
-    FlightDataStateManager& stateManager
-)
-    : _stateManager(stateManager)
-{}
-
 void SectorSummaryService::updateState
 (
-    const SectorSummaryData& sectorSummaries
+    const SectorSummaryData& sectorSummaries,
+    FlightDataStateManager& stateManager
 )
 {
-    _stateManager.setSectorSummaryData(sectorSummaries);
+    stateManager.setSectorSummaryData(sectorSummaries);
 }

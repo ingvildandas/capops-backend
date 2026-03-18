@@ -12,11 +12,7 @@ class QDateTime;
 class RiskEventService 
 {
 public:
-    explicit RiskEventService
-    (
-        IRiskEventRepository& repository, 
-        FlightDataStateManager& stateManager
-    );
+    explicit RiskEventService(IRiskEventRepository& repository);
 
     RiskEvent getRiskEvent(const int riskEventId);
     std::vector<RiskEvent> getMultipleRiskEvents(const int count);
@@ -44,8 +40,12 @@ public:
     void updateAcknowledged(const int riskEventId, const bool acknowledged);
     void deleteRiskEvent(const int riskEventId);
 
-    void updateState(const RiskEventData& riskEventData);
+    void updateState
+    (
+        const RiskEventData& riskEventData,
+        FlightDataStateManager& stateManager
+    );
+
 private:
     IRiskEventRepository& _repository;
-    FlightDataStateManager& _stateManager;
 };

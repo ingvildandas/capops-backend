@@ -19,11 +19,15 @@
 #include "Managers/WebSocketSessionManager.hpp"
 
 #include "Network/HttpServer.hpp"
+#include "Network/RedisEventBusReceiver.hpp"
 #include "Network/WebSocketServer.hpp"
 
 #include "Repositories/RiskEventRepository.hpp"
 
+#include "Services/MetadataService.hpp"
 #include "Services/RiskEventService.hpp"
+#include "Services/SectorSummaryService.hpp"
+#include "Services/TrackService.hpp"
 
 namespace
 {
@@ -39,15 +43,26 @@ namespace
         WebSocketSessionManager sessionManager {envManager};
 
         RiskEventRepository riskEventRepository {conn};
-        RiskEventService riskEventService 
-        {
-            riskEventRepository, 
-            flightDataStateManager
-        };
+
+        MetadataService metadataService;
+        RiskEventService riskEventService {riskEventRepository};
+        SectorSummaryService sectorSummaryService;
+        TrackService trackService;
 
         RiskEventController riskEventController {riskEventService};
         WebSocketController webSocketController {sessionManager};
-        
+
+        RedisEventBusReceiver redisReceiver 
+        {
+            envManager.getRedisUri(), 
+            sessionManager, 
+            flightDataStateManager, 
+            metadataService, 
+            riskEventService, 
+            sectorSummaryService, 
+            trackService
+        };
+
         HttpServer httpServer {envManager.getHttpPort()};
         WebSocketServer wsServer {envManager.getWebSocketPort()};
 
@@ -66,6 +81,9 @@ namespace
             qInfo() 
                 << "WebSocket server listening on port " 
                 << wsServer.getPort();
+            
+            redisReceiver.start();
+            qInfo() << "Redis Event Bus Receiver started";
         }
     };
 }

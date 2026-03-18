@@ -2,11 +2,11 @@
 #include "Managers/FlightDataStateManager.hpp"
 #include "Models/Metadata.hpp"
 
-MetadataService::MetadataService(FlightDataStateManager& stateManager)
-    : _stateManager(stateManager)
-{}
-
-void MetadataService::updateState(const Metadata& metadata)
+void MetadataService::updateState
+(
+    const Metadata& metadata,
+    FlightDataStateManager& stateManager
+)
 {
-    _stateManager.setMetadata(metadata);
+    stateManager.setMetadata(metadata);
 }

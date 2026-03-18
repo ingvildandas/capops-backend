@@ -12,6 +12,7 @@
 #include "Exceptions/DatabaseException.hpp"
 #include "Exceptions/RedisEventBusException.hpp"
 #include "Models/FlightData.hpp"
+#include "Managers/FlightDataStateManager.hpp"
 #include "Managers/WebSocketSessionManager.hpp"
 #include "Models/Metadata.hpp"
 #include "Models/RiskEvent.hpp"
@@ -29,6 +30,7 @@ RedisEventBusReceiver::RedisEventBusReceiver
 (
     const QString& redisUri,
     WebSocketSessionManager& sessionManager,
+    FlightDataStateManager& flightDataStateManager,
     MetadataService& metadataService,
     RiskEventService& riskEventService,
     SectorSummaryService& sectorSummaryService,
@@ -38,6 +40,7 @@ RedisEventBusReceiver::RedisEventBusReceiver
     :
     _redisUri(redisUri),
     _sessionManager(sessionManager),
+    _flightDataStateManager(flightDataStateManager),
     _metadataService(metadataService),
     _sectorSummaryService(sectorSummaryService),
     _trackService(trackService),
@@ -54,8 +57,16 @@ void RedisEventBusReceiver::start()
 {
     if (_running) return;
 
-    _redis = std::make_unique<sw::redis::Redis>(_redisUri.toStdString());
-    _running = true;
+    try
+    {
+        _redis = std::make_unique<sw::redis::Redis>(_redisUri.toStdString());
+        _redis->ping();
+        _running = true;
+    }
+    catch (const sw::redis::Error &e)
+    {
+        throw RedisEventBusException(e.what());
+    }
 
     _subscriberThread = std::thread([this]()
     {
@@ -108,12 +119,30 @@ void RedisEventBusReceiver::handleMessage
     {
         auto flightData = deserialize(payload);
 
-        _metadataService.updateState(flightData.getMetadata());
-        _trackService.updateState(flightData.getTrackData());
-        _sectorSummaryService.updateState(flightData.getSectorSummaryData());
-        _riskEventService.updateState(flightData.getRiskEventData());
+        _metadataService.updateState
+        (
+            flightData.getMetadata(),
+            _flightDataStateManager
+        );
+        _trackService.updateState
+        (
+            flightData.getTrackData(),
+            _flightDataStateManager
+        );
+        _sectorSummaryService.updateState
+        (
+            flightData.getSectorSummaryData(),
+            _flightDataStateManager
+        );
+        _riskEventService.updateState
+        (
+            flightData.getRiskEventData(),
+            _flightDataStateManager
+        );
 
-        _sessionManager.broadcast(flightData);
+        auto updatedState = _flightDataStateManager.getState();
+
+        _sessionManager.broadcast(updatedState);
     }
     catch (const DatabaseException& e)
     {
