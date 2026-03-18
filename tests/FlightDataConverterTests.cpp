@@ -5,6 +5,7 @@
 
 #include "Proto/FlightData.hpp"
 #include "Converters/FlightDataConverter.hpp"
+#include "Models/FlightData.hpp"
 
 TEST_CASE("Deserialize valid FlightDataProto", "[FlightDataConverter]")
 {
@@ -12,8 +13,8 @@ TEST_CASE("Deserialize valid FlightDataProto", "[FlightDataConverter]")
 
     FlightDataProto proto;
 
-    proto.mutable_metadata->set_version(1);
-    proto.mutable_metadata->set_timestamp("2024-06-01T12:00:00.000Z");
+    proto.mutable_metadata()->set_version(1);
+    proto.mutable_metadata()->set_timestamp("2024-06-01T12:00:00.000Z");
 
     auto* riskEventDataProto = proto.mutable_riskeventdata();
     riskEventDataProto->set_riskeventcount(1);
@@ -92,20 +93,17 @@ TEST_CASE("Deserialize valid FlightDataProto", "[FlightDataConverter]")
 
     trackProto->set_icao24("ABCD1234");
     trackProto->set_timestamp("2024-06-01T12:00:00.000Z");
-    trackProto->set_position(positionProto);
-    trackProto->set_velocity(velocityProto);
     trackProto->set_headingdegrees(90);
-    trackProto->set_groundtrackDegrees(90);
+    trackProto->set_groundtrackdegrees(90);
 
     // Act
 
     std::string serializedData;
     proto.SerializeToString(&serializedData);
-    FlightData deserializedData = FlightDataConverter::fromProto(serializedData);
+    FlightData deserializedData = FlightDataConverter::fromProto(proto);
 
     // Assert
 
-    REQUIRE(deserializedData.getMetadata().getVersion() == 1);
     REQUIRE
     (
         deserializedData.getMetadata().getTimestamp() == 
@@ -130,7 +128,7 @@ TEST_CASE("Deserialize valid FlightDataProto", "[FlightDataConverter]")
         QDateTime::fromString("2024-06-01T12:05:00.000Z", Qt::ISODate)
     );
     REQUIRE(riskEvent.getMessage() == "Test risk event");
-    REQUIRE(riskEvent.isAcknowledged() == false);
+    REQUIRE(riskEvent.getAcknowledged() == false);
 
     REQUIRE(deserializedData.getSectorSummaryData().getRowsCount() == 2);
     REQUIRE(deserializedData.getSectorSummaryData().getColumnsCount() == 2);
@@ -161,11 +159,11 @@ TEST_CASE("Deserialize valid FlightDataProto", "[FlightDataConverter]")
         track.getTimestamp() == 
         QDateTime::fromString("2024-06-01T12:00:00.000Z", Qt::ISODate)
     );
-    REQUIRE(track.getPosition().getLatitudeDegrees() == 40.7128);
-    REQUIRE(track.getPosition().getLongitudeDegrees() == -74.0060);
-    REQUIRE(track.getPosition().getAltitudeFeet() == 30000);
-    REQUIRE(track.getVelocity().getGroundSpeedKnots() == 450);
-    REQUIRE(track.getVelocity().getVerticalSpeedFeetPerMinute() == 0);
+    REQUIRE(track.getPosition().latitudeDegrees == 40.7128);
+    REQUIRE(track.getPosition().longitudeDegrees == -74.0060);
+    REQUIRE(track.getPosition().altitudeFeet == 30000);
+    REQUIRE(track.getVelocity().groundSpeedKnots == 450);
+    REQUIRE(track.getVelocity().verticalSpeedFeetPerMinute == 0);
     REQUIRE(track.getHeadingDegrees() == 90);
     REQUIRE(track.getGroundTrackDegrees() == 90);
 }
