@@ -5,7 +5,8 @@
 #include <QVector>
 
 #include "Converters/MergedRiskEventConverter.hpp"
-#include "MergedRiskEvent.hpp"
+#include "Models/MergedRiskEvent.hpp"
+#include "Models/RiskEvent.hpp"
 
 QJsonObject MergedRiskEventConverter::toJson
 (
@@ -13,17 +14,19 @@ QJsonObject MergedRiskEventConverter::toJson
 )
 {
     std::vector<RiskEvent> riskEvents = mergedRiskEvent.getRiskEvents();
-    QVector<int> riskEventIds;
-    for (const auto& riskEvent : riskEvents)    {
-        riskEventIds.append(riskEvent.getId());
+    QJsonArray riskEventIds;
+    for (const auto& riskEvent : riskEvents)
+    {
+        riskEventIds.append(riskEvent.getRiskEventId());
     }
 
-    QJsonObject json;
-    json["id"] = QString::fromStdString(mergedRiskEvent.id);
-    json["description"] = QString::fromStdString(mergedRiskEvent.description);
-    json["severity"] = mergedRiskEvent.severity;
-    json["riskEventIds"] = QJsonArray::fromVector(riskEventIds);
-    return json;
+    return QJsonObject
+    {
+        { "sectorId", mergedRiskEvent.getSectorId() },
+        { "summaryMessage", mergedRiskEvent.getSummaryMessage() },
+        { "lastMessage", mergedRiskEvent.getLastMessage() },
+        { "riskEventIds", riskEventIds }
+    };
 }
 
 QJsonArray MergedRiskEventConverter::toJson
