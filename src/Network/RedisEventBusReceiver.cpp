@@ -12,6 +12,7 @@
 #include "Exceptions/DatabaseException.hpp"
 #include "Exceptions/RedisEventBusException.hpp"
 #include "Models/FlightData.hpp"
+#include "Managers/FlightDataStateManager.hpp"
 #include "Managers/WebSocketSessionManager.hpp"
 #include "Models/Metadata.hpp"
 #include "Models/RiskEvent.hpp"
@@ -29,6 +30,7 @@ RedisEventBusReceiver::RedisEventBusReceiver
 (
     const QString& redisUri,
     WebSocketSessionManager& sessionManager,
+    FlightDataStateManager& flightDataStateManager,
     MetadataService& metadataService,
     RiskEventService& riskEventService,
     SectorSummaryService& sectorSummaryService,
@@ -38,6 +40,7 @@ RedisEventBusReceiver::RedisEventBusReceiver
     :
     _redisUri(redisUri),
     _sessionManager(sessionManager),
+    _flightDataStateManager(flightDataStateManager),
     _metadataService(metadataService),
     _sectorSummaryService(sectorSummaryService),
     _trackService(trackService),

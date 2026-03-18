@@ -8,6 +8,7 @@
 
 #include <sw/redis++/redis++.h>
 
+#include "Managers/FlightDataStateManager.hpp"
 #include "Managers/WebSocketSessionManager.hpp"
 #include "Services/MetadataService.hpp"
 #include "Services/RiskEventService.hpp"
@@ -26,6 +27,7 @@ public:
     (
         const QString& redisUri,
         WebSocketSessionManager& sessionManager,
+        FlightDataStateManager& flightDataStateManager,
         MetadataService& metadataService,
         RiskEventService& riskEventService,
         SectorSummaryService& sectorSummaryService,
@@ -47,6 +49,7 @@ private:
     QString _redisUri;
 
     WebSocketSessionManager& _sessionManager;
+    FlightDataStateManager& _flightDataStateManager;
     MetadataService& _metadataService;
     SectorSummaryService& _sectorSummaryService;
     TrackService& _trackService;
