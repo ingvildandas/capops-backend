@@ -111,12 +111,30 @@ void RedisEventBusReceiver::handleMessage
     {
         auto flightData = deserialize(payload);
 
-        _metadataService.updateState(flightData.getMetadata());
-        _trackService.updateState(flightData.getTrackData());
-        _sectorSummaryService.updateState(flightData.getSectorSummaryData());
-        _riskEventService.updateState(flightData.getRiskEventData());
+        _metadataService.updateState
+        (
+            flightData.getMetadata(),
+            _flightDataStateManager
+        );
+        _trackService.updateState
+        (
+            flightData.getTrackData(),
+            _flightDataStateManager
+        );
+        _sectorSummaryService.updateState
+        (
+            flightData.getSectorSummaryData(),
+            _flightDataStateManager
+        );
+        _riskEventService.updateState
+        (
+            flightData.getRiskEventData(),
+            _flightDataStateManager
+        );
 
-        _sessionManager.broadcast(flightData);
+        auto updatedState = _flightDataStateManager.getState();
+
+        _sessionManager.broadcast(updatedState);
     }
     catch (const DatabaseException& e)
     {
