@@ -5,7 +5,9 @@
 #include <QString>
 
 #include "Converters/RiskEventDataConverter.hpp"
+#include "Converters/MergedRiskEventConverter.hpp"
 #include "Converters/RiskEventConverter.hpp"
+#include "Models/MergedRiskEvent.hpp"
 #include "Models/RiskEvent.hpp"
 #include "Models/RiskEventData.hpp"
 #include "Proto/FlightData.hpp"
@@ -30,6 +32,10 @@ QJsonObject RiskEventDataConverter::toJson
         { 
             "riskEvents", 
             RiskEventConverter::toJson(riskEventData.getRiskEvents()) 
+        },
+        {
+            "mergedRiskEvents",
+            MergedRiskEventConverter::toJson(riskEventData.getMergedRiskEvents())
         }
     };
 }
