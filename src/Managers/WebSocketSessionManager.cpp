@@ -12,11 +12,12 @@
 #include "Converters/FlightDataConverter.hpp"
 #include "Models/FlightData.hpp"
 #include "Managers/WebSocketSessionManager.hpp"
+#include "Managers/EnvironmentManager.hpp"
 
 WebSocketSessionManager::WebSocketSessionManager
 (
     EnvironmentManager& envManager,
-    QObject* parent = nullptr
+    QObject* parent
 )
     : _envManager(envManager), QObject(parent)
 {}

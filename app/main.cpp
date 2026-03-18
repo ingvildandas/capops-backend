@@ -29,14 +29,14 @@ namespace
 {
     struct ApplicationContext
     {
-        EnvironmentManager envManager{".env"};
+        EnvironmentManager envManager {".env"};
         DatabaseConnection conn 
         {
             envManager.getDatabaseFilePath().toStdString()
         };
         
         FlightDataStateManager flightDataStateManager;
-        WebSocketSessionManager sessionManager;
+        WebSocketSessionManager sessionManager {envManager};
 
         RiskEventRepository riskEventRepository {conn};
         RiskEventService riskEventService 
