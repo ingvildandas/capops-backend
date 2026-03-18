@@ -102,14 +102,14 @@ void RedisEventBusReceiver::handleMessage(const std::string& channel, const std:
 {
     try
     {
-        auto dto = deserialize(payload);
+        auto flightData = deserialize(payload);
 
-        _metadataService.updateState(dto.getMetadata());
-        _trackService.updateState(dto.getTrackData());
-        _sectorSummaryService.updateState(dto.getSectorSummaryData());
-        _riskEventService.updateState(dto.getRiskEventData());
+        _metadataService.updateState(flightData.getMetadata());
+        _trackService.updateState(flightData.getTrackData());
+        _sectorSummaryService.updateState(flightData.getSectorSummaryData());
+        _riskEventService.updateState(flightData.getRiskEventData());
 
-        _sessionManager.broadcast(dto);
+        _sessionManager.broadcast(flightData);
     }
     catch (const DatabaseException& e)
     {
