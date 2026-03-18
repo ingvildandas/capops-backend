@@ -10,10 +10,11 @@ class SectorSummaryData;
 class SectorSummaryService
 {
 public:
-    SectorSummaryService(FlightDataStateManager& stateManager);
+    SectorSummaryService() = default;
 
-    void updateState(const SectorSummaryData& sectorSummaryData);
-
-private:
-    FlightDataStateManager& _stateManager;
+    void updateState
+    (
+        const SectorSummaryData& sectorSummaryData,
+        FlightDataStateManager& stateManager
+    );
 };
