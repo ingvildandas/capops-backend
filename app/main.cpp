@@ -81,6 +81,9 @@ namespace
             qInfo() 
                 << "WebSocket server listening on port " 
                 << wsServer.getPort();
+            
+            redisReceiver.start();
+            qInfo() << "Redis Event Bus Receiver started";
         }
     };
 }
