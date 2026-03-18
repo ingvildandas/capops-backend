@@ -12,4 +12,6 @@ void SectorSummaryService::updateState
 (
     const SectorSummaryData& sectorSummaries
 )
-{}
+{
+    _stateManager.setSectorSummaryData(sectorSummaries);
+}
