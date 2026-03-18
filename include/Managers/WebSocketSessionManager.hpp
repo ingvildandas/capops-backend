@@ -5,6 +5,7 @@
 #include <QHash>
 #include <QStringList>
 
+class EnvironmentManager;
 class FlightData;
 class QString;
 class QWebSocket;
@@ -14,7 +15,11 @@ class WebSocketSessionManager : public QObject
     Q_OBJECT
 
 public:
-    explicit WebSocketSessionManager(QObject* parent = nullptr);
+    explicit WebSocketSessionManager
+    (
+        EnvironmentManager& envManager,
+        QObject* parent = nullptr
+    );
 
     QString getSessionId(QWebSocket* socket) const;
     QStringList getActiveSessionIds() const;
@@ -27,6 +32,7 @@ public:
     void sendToClient(const QString& sessionId, const QString& msg);
     
 private:
+    EnvironmentManager& _envManager;
     QHash<QString, QPointer<QWebSocket>> _activeSessions; 
 };
 
