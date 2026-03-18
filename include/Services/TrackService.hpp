@@ -9,10 +9,11 @@ class TrackData;
 class TrackService
 {
 public:
-    TrackService(FlightDataStateManager& stateManager);
+    TrackService() = default;
 
-    void updateState(const TrackData& trackData);
-
-private:
-    FlightDataStateManager& _stateManager;
+    void updateState
+    (
+        const TrackData& trackData,
+        FlightDataStateManager& stateManager
+    );
 };

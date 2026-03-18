@@ -2,16 +2,11 @@
 #include "Managers/FlightDataStateManager.hpp"
 #include "Models/TrackData.hpp"
 
-TrackService::TrackService(
-    FlightDataStateManager& stateManager
-)
-    : _stateManager(stateManager)
-{}
-
 void TrackService::updateState
 (
-    const TrackData& trackData
+    const TrackData& trackData,
+    FlightDataStateManager& stateManager
 )
 {
-    _stateManager.setTrackData(trackData);
+    stateManager.setTrackData(trackData);
 }
