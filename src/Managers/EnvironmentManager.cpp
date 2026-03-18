@@ -74,6 +74,11 @@ quint16 EnvironmentManager::getWebSocketPort() const
     return _webSocketPort;
 }
 
+QString EnvironmentManager::getRedisUri() const
+{
+    return _redisUri;
+}
+
 int EnvironmentManager::getProtoBufContractVersion() const
 {
     return _protoBufContractVersion;
