@@ -31,7 +31,7 @@ FlightData FlightDataConverter::fromJson(const QJsonObject& json)
 
 QJsonObject FlightDataConverter::toJson
 (
-    const FlightData& dto,
+    const FlightData& flightData,
     const EnvironmentManager& envManager
 )
 {
@@ -39,17 +39,17 @@ QJsonObject FlightDataConverter::toJson
     {
         { 
             "metadata", 
-            MetadataConverter::toJson(dto.getMetadata(), envManager)
+            MetadataConverter::toJson(flightData.getMetadata(), envManager)
         },
         { 
             "riskEventData", 
-            RiskEventDataConverter::toJson(dto.getRiskEventData()) 
+            RiskEventDataConverter::toJson(flightData.getRiskEventData()) 
         },
         { 
             "sectorSummaryData", 
-            SectorSummaryDataConverter::toJson(dto.getSectorSummaryData()) 
+            SectorSummaryDataConverter::toJson(flightData.getSectorSummaryData()) 
         },
-        { "trackData", TrackDataConverter::toJson(dto.getTrackData()) }
+        { "trackData", TrackDataConverter::toJson(flightData.getTrackData()) }
     };
 }
 
