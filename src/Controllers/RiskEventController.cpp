@@ -11,8 +11,10 @@
 
 #include "Controllers/RiskEventController.hpp"
 #include "Converters/RiskEventConverter.hpp"
+#include "Converters/MergedRiskEventConverter.hpp"
 #include "Exceptions/DatabaseException.hpp"
 #include "Models/RiskEvent.hpp"
+#include "Models/MergedRiskEvent.hpp"
 #include "Services/RiskEventService.hpp"
 
 RiskEventController::RiskEventController
@@ -122,17 +124,11 @@ QHttpServerResponse RiskEventController::getMultipleRiskEvents
     }
 }
 
-QHttpServerResponse RiskEventController::updateRiskEvent
+QHttpServerResponse RiskEventController::acknowledgeRiskEvents
 (
-    const int riskEventId, 
     const QHttpServerRequest& request
 )
 {
-    if (riskEventId <= 0)
-    {
-        return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
-    }
-
     const QJsonDocument document = QJsonDocument::fromJson(request.body());
     if (!document.isObject())
     {
@@ -141,11 +137,10 @@ QHttpServerResponse RiskEventController::updateRiskEvent
 
     try
     {
-        RiskEvent riskEvent = RiskEventConverter::fromJson(document.object());
-        _service.updateAcknowledged
+        MergedRiskEvent mergedRiskEvent = MergedRiskEventConverter::fromJson(document.object());
+        _service.acknowledgeRiskEvents
         (
-            riskEvent.getRiskEventId(), 
-            riskEvent.getAcknowledged(),
+            mergedRiskEvent.getRiskEvents(),
             _stateManager
         );
         return QHttpServerResponse(QHttpServerResponder::StatusCode::NoContent);

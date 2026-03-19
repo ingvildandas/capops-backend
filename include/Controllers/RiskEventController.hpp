@@ -30,9 +30,8 @@ public:
         const QString& from = DEFAULT_FROM,
         const QString& to = DEFAULT_TO
     );
-    QHttpServerResponse updateRiskEvent
+    QHttpServerResponse acknowledgeRiskEvents
     (
-        const int riskEventId, 
         const QHttpServerRequest& request
     );
     QHttpServerResponse deleteRiskEvent
