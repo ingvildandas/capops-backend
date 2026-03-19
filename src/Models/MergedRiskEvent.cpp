@@ -70,6 +70,7 @@ void MergedRiskEvent::setSummaryInfo
     {
         _currentSeverity = "";
         _previousSeverity = "";
+        _lastMessage = "";
         _summaryMessage = 
             "Risk severity in sector " + 
             QString::number(_sectorId) + 
@@ -86,7 +87,9 @@ void MergedRiskEvent::setSummaryInfo
     }
     else if (lastRiskEvent != nullptr && secondLastRiskEvent != nullptr)
     {
+        _currentSeverity = lastRiskEvent->getRiskSeverity();
         _previousSeverity = secondLastRiskEvent->getRiskSeverity();
+        _lastMessage = lastRiskEvent->getMessage();
         _summaryMessage = 
             "Risk severity in sector " + 
             QString::number(_sectorId) + 
@@ -99,9 +102,14 @@ void MergedRiskEvent::setSummaryInfo
     {
         _currentSeverity = "";
         _previousSeverity = "";
+        _lastMessage = "";
+        _summaryMessage = 
+            "Risk severity in sector " + 
+            QString::number(_sectorId) + 
+            " unknown";
         throw EntityModelException
         (
-            "Unexpected bahavior while determining last and " \
+            "Unexpected behavior while determining last and " \
             "second-last risk event for MergedRiskEvent"
         );
     }
@@ -111,22 +119,18 @@ void MergedRiskEvent::updateSummaryInfo()
 {
     RiskEvent* lastRiskEvent = nullptr;
     RiskEvent* secondLastRiskEvent = nullptr;
-    for (RiskEvent riskEvent : _riskEvents)
+    for (RiskEvent& riskEvent : _riskEvents)
     {
-        if (!lastRiskEvent)
-        {
-            lastRiskEvent = &riskEvent;
-            continue;
-        }
-
-        if 
-        (
-            riskEvent.getCreatedTimestamp() > 
-            lastRiskEvent->getCreatedTimestamp()
-        )
+        if (!lastRiskEvent ||
+            riskEvent.getCreatedTimestamp() > lastRiskEvent->getCreatedTimestamp())
         {
             secondLastRiskEvent = lastRiskEvent;
             lastRiskEvent = &riskEvent;
+        }
+        else if (!secondLastRiskEvent ||
+                riskEvent.getCreatedTimestamp() > secondLastRiskEvent->getCreatedTimestamp())
+        {
+            secondLastRiskEvent = &riskEvent;
         }
     }
 
