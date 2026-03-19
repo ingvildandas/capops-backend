@@ -9,8 +9,6 @@ class IEnvironmentManager
 public:
     virtual ~IEnvironmentManager() = default;
 
-    virtual void loadEnvironmentVariables(const QString& envFilePath) = 0;
-
     virtual QString getDatabaseFilePath() const = 0;
     virtual quint16 getHttpPort() const = 0;
     virtual quint16 getWebSocketPort() const = 0;

@@ -5,12 +5,12 @@
 
 #include "IEnvironmentManager.hpp"
 
-class EnvironmentManager : public IEnvironmentManager
+class EnvironmentManagerAppContext : public IEnvironmentManager
 {
 public:
-    EnvironmentManager(const QString& envFilePath);
+    EnvironmentManagerAppContext() = default;
 
-    void loadEnvironmentVariables(const QString& envFilePath);
+    void loadEnvironmentVariables();
 
     QString getDatabaseFilePath() const override;
     quint16 getHttpPort() const override;
