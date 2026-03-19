@@ -11,6 +11,7 @@
 #include "Converters/FlightDataConverter.hpp"
 #include "Managers/EnvironmentManager.hpp"
 #include "Models/FlightData.hpp"
+#include "Models/Metadata.hpp"
 
 TEST_CASE("Deserialize valid FlightDataProto", "[FlightDataConverter]")
 {
@@ -185,7 +186,7 @@ TEST_CASE("Serialize valid FlightData to JSON", "[FlightDataConverter]")
     RiskEvent riskEvent1
     (
         123,
-        5,
+        2,
         false,
         "NORMAL",
         QDateTime::fromString("2024-06-01T12:00:00.000Z", Qt::ISODate),
@@ -196,7 +197,7 @@ TEST_CASE("Serialize valid FlightData to JSON", "[FlightDataConverter]")
     RiskEvent riskEvent2
     (
         124,
-        5,
+        2,
         false,
         "AT_RISK",
         QDateTime::fromString("2024-06-01T12:10:00.000Z", Qt::ISODate),
@@ -207,7 +208,7 @@ TEST_CASE("Serialize valid FlightData to JSON", "[FlightDataConverter]")
     RiskEvent riskEvent3
     (
         125,
-        5,
+        2,
         false,
         "CONGESTED",
         QDateTime::fromString("2024-06-01T12:20:00.000Z", Qt::ISODate),
@@ -269,16 +270,17 @@ TEST_CASE("Serialize valid FlightData to JSON", "[FlightDataConverter]")
 
     const auto riskEventJson1 = riskEventDataJson["riskEvents"].toArray()[0].toObject();
     REQUIRE(riskEventJson1["riskEventId"].toInt() == 123);
-    REQUIRE(riskEventJson1["sectorId"].toInt() == 5);
+    REQUIRE(riskEventJson1["sectorId"].toInt() == 2);
     REQUIRE(riskEventJson1["acknowledged"].toBool() == false);
     REQUIRE(riskEventJson1["riskSeverity"].toString() == "NORMAL");
     REQUIRE(riskEventJson1["createdTimestamp"].toString() == "2024-06-01T12:00:00.000Z");
     REQUIRE(riskEventJson1["acknowledgedTimestamp"].toString() == "2024-06-01T12:05:00.000Z");
     REQUIRE(riskEventJson1["message"].toString() == "Test risk event");
 
-    const auto mergedRiskEventJson = riskEventDataJson["mergedRiskEvents"].toArray()[1].toObject();
-    REQUIRE(mergedRiskEventJson["sectorId"].toInt() == 5);
-    REQUIRE(mergedRiskEventJson["summaryMessage"].toString() == "Risk severity in sector 5 changed from AT_RISK to CONGESTED");
+    const auto mergedRiskEventJson = riskEventDataJson["mergedRiskEvents"].toArray()[0].toObject();
+    REQUIRE(mergedRiskEventJson["sectorId"].toInt() == 2);
+    qDebug() << mergedRiskEventJson["summaryMessage"].toString();
+    REQUIRE(mergedRiskEventJson["summaryMessage"].toString() == "Risk severity in sector 2 changed from AT_RISK to CONGESTED");
     REQUIRE(mergedRiskEventJson["lastMessage"].toString() == "Test risk event 3");
 
     const auto sectorSummaryDataJson = json["sectorSummaryData"].toObject();

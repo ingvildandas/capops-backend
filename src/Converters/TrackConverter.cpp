@@ -48,9 +48,9 @@ QJsonObject TrackConverter::toJson(const Track& track)
     return
     {
         { "icao24", track.getIcao24() },
-        { "timestamp", track.getTimestamp().toString() },
-        { "Position", positionToJson(track.getPosition()) },
-        { "Velocity", velocityToJson(track.getVelocity()) },
+        { "timestamp", track.getTimestamp().toString(Qt::ISODateWithMs) },
+        { "position", positionToJson(track.getPosition()) },
+        { "velocity", velocityToJson(track.getVelocity()) },
         { "headingDegrees", track.getHeadingDegrees() },
         { "groundTrackDegrees", track.getGroundTrackDegrees() }
     };
