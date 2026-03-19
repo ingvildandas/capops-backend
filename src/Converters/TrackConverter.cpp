@@ -118,8 +118,10 @@ Track TrackConverter::fromProto(const TrackProto& protoTrack)
 {
     QString icao24 = QString::fromStdString(protoTrack.icao24());
     QDateTime timestamp = 
-        QDateTime::fromString(QString::fromStdString(protoTrack.timestamp()));
-
+        QDateTime::fromString(
+            QString::fromStdString(protoTrack.timestamp()),
+            Qt::ISODate
+        );
     TrackPosition position = positionFromProto(protoTrack.position());
     TrackVelocity velocity = velocityFromProto(protoTrack.velocity());
     double headingDegrees = protoTrack.headingdegrees();
