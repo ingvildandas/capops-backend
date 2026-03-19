@@ -29,13 +29,6 @@ jobs:
     env:
       BUILD_DIR: build
       QT_VERSION: 6.8.3
-      DATABASE_FILE_PATH: ${{ github.workspace }}/capops.db
-      HTTP_PORT: 8080
-      WEBSOCKET_PORT: 8081
-      REDIS_URI: redis://localhost:6379
-      PROTOBUF_CONTRACT_VERSION: 1
-      REST_JSON_CONTRACT_VERSION: 1
-
 
     steps:
       - name: Checkout repository
@@ -116,3 +109,10 @@ jobs:
       - name: Run tests
         working-directory: build
         run: ctest --output-on-failure
+        env:     
+          DATABASE_FILE_PATH: ${{ github.workspace }}/capops.db
+          HTTP_PORT: 8080
+          WEBSOCKET_PORT: 8081
+          REDIS_URI: redis://localhost:6379
+          PROTOBUF_CONTRACT_VERSION: 1
+          REST_JSON_CONTRACT_VERSION: 1
