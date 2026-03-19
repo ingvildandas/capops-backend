@@ -7,6 +7,7 @@
 #include "Models/RiskEvent.hpp"
 #include "Models/RiskEventData.hpp"
 #include "Repositories/IRiskEventRepository.hpp"
+#include "Structs/FlightDataStructs.hpp"
 
 RiskEventService::RiskEventService(IRiskEventRepository& repository)
     : _repository(repository)
@@ -91,5 +92,28 @@ void RiskEventService::updateState
     FlightDataStateManager& stateManager
 )
 {
-    stateManager.setRiskEventData(riskEventData);
+    if 
+    (
+        riskEventData.getMergedRiskEvents().empty() || 
+        stateManager.getState().riskEventData.getMergedRiskEvents().empty()
+    )
+    {
+        stateManager.setRiskEventData(riskEventData);
+        return;
+    }
+    
+    const auto newMergedRiskEvents = riskEventData.getMergedRiskEvents();
+    const auto stateMergedRiskEvents = stateManager.getState().riskEventData.getMergedRiskEvents();
+    
+    stateMergedRiskEvents.reserve(stateMergedRiskEvents.size() + newMergedRiskEvents.size());
+    stateMergedRiskEvents.insert
+    (
+        stateMergedRiskEvents.end(), 
+        newMergedRiskEvents.begin(), 
+        newMergedRiskEvents.end()
+    );
+
+    RiskEventData updatedRiskEventData(stateMergedRiskEvents.size(), stateMergedRiskEvents);
+
+    stateManager.setRiskEventData(updatedRiskEventData);
 }
