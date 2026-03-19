@@ -32,7 +32,7 @@ FlightData FlightDataConverter::fromJson(const QJsonObject& json)
 QJsonObject FlightDataConverter::toJson
 (
     const FlightData& flightData,
-    const EnvironmentManager& envManager
+    const IEnvironmentManager& envManager
 )
 {
     return

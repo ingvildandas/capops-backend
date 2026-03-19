@@ -16,7 +16,7 @@ Metadata MetadataConverter::fromJson(const QJsonObject& json)
 QJsonObject MetadataConverter::toJson
 (
     const Metadata& metadata,
-    const EnvironmentManager& envManager
+    const IEnvironmentManager& envManager
 )
 {
     return 

@@ -16,7 +16,7 @@
 
 WebSocketSessionManager::WebSocketSessionManager
 (
-    EnvironmentManager& envManager,
+    IEnvironmentManager& envManager,
     QObject* parent
 )
     : _envManager(envManager), QObject(parent)

@@ -1,6 +1,6 @@
 #pragma once
 
-class EnvironmentManager;
+class IEnvironmentManager;
 class Metadata;
 class MetadataProto;
 class QJsonObject;
@@ -12,7 +12,7 @@ public:
     static QJsonObject toJson
     (
         const Metadata& metadata,
-        const EnvironmentManager& envManager
+        const IEnvironmentManager& envManager
     );
     static Metadata fromProto(const MetadataProto& protoMetadata);
 

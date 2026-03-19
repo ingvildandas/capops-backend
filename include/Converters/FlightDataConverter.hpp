@@ -1,6 +1,6 @@
 #pragma once
 
-class EnvironmentManager;
+class IEnvironmentManager;
 class FlightData;
 class FlightDataProto;
 class QJsonObject;
@@ -12,7 +12,7 @@ public:
     static QJsonObject toJson
     (
         const FlightData& dto,
-        const EnvironmentManager& envManager
+        const IEnvironmentManager& envManager
     );
     static FlightData fromProto(const FlightDataProto& proto);
 };
