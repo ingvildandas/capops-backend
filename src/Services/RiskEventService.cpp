@@ -81,12 +81,27 @@ void RiskEventService::updateAcknowledged
 )
 {
     _repository.updateAcknowledged(riskEventId, acknowledged);
+
+    if (acknowledged == false)
+    {
+        return;
+    }
+
     const auto updatedRiskEvent = _repository.selectById(riskEventId);
     const auto currentRiskEventData = stateManager.getState().getRiskEventData();
-    const auto updatedRiskEventData = RiskEventData
+
+    std::vector<RiskEvent> updatedRiskEvents;
+    for (const auto& riskEvent : currentRiskEventData.getRiskEvents())
+    {
+        if (riskEvent.getRiskEventId() != riskEventId)
+        {
+            updatedRiskEvents.push_back(riskEvent);
+        }
+    }
+    RiskEventData updatedRiskEventData
     (
-        currentRiskEventData.getRiskEventCount(), 
-        std::vector<RiskEvent>{updatedRiskEvent}
+        updatedRiskEvents.size(), 
+        updatedRiskEvents
     );
     updateState(updatedRiskEventData, stateManager);
 }
