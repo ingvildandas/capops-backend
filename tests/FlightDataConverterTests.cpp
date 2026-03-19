@@ -113,7 +113,7 @@ TEST_CASE("Deserialize valid FlightDataProto", "[FlightDataConverter]")
     REQUIRE(deserializedData.getRiskEventData().getRiskEventCount() == 1);
     REQUIRE(deserializedData.getRiskEventData().getRiskEvents().size() == 1);
 
-    const auto& riskEvent = deserializedData.getRiskEventData().getRiskEvents()[0];
+    const auto riskEvent = deserializedData.getRiskEventData().getRiskEvents()[0];
     REQUIRE(riskEvent.getRiskEventId() == 123);
     REQUIRE(riskEvent.getRiskSeverity() == "NORMAL");
     REQUIRE(riskEvent.getSectorId() == 5);
@@ -138,7 +138,7 @@ TEST_CASE("Deserialize valid FlightDataProto", "[FlightDataConverter]")
     REQUIRE(deserializedData.getSectorSummaryData().getMaxLatitude() == 90.0);
     REQUIRE(deserializedData.getSectorSummaryData().getSectorSummaries().size() == 4);
 
-    const auto& sectorSummary1 = deserializedData.getSectorSummaryData().getSectorSummaries()[0];
+    const auto sectorSummary1 = deserializedData.getSectorSummaryData().getSectorSummaries()[0];
     REQUIRE(sectorSummary1.getSectorId() == 0);
     REQUIRE(sectorSummary1.getRow() == 0);
     REQUIRE(sectorSummary1.getColumn() == 0);
@@ -152,7 +152,7 @@ TEST_CASE("Deserialize valid FlightDataProto", "[FlightDataConverter]")
     REQUIRE(deserializedData.getTrackData().getCoordinateSystem() == "WGS84");
     REQUIRE(deserializedData.getTrackData().getTracks().size() == 1);
 
-    const auto& track = deserializedData.getTrackData().getTracks()[0];
+    const auto track = deserializedData.getTrackData().getTracks()[0];
     REQUIRE(track.getIcao24() == "ABCD1234");
     REQUIRE
     (
