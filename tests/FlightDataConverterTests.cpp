@@ -107,7 +107,8 @@ TEST_CASE("Deserialize valid FlightDataProto", "[FlightDataConverter]")
     // Act
 
     std::string serializedData;
-    proto.SerializeToString(&serializedData);
+    const bool ok = proto.SerializeToString(&serializedData);
+    REQUIRE(ok);
     FlightData deserializedData = FlightDataConverter::fromProto(proto);
 
     // Assert
