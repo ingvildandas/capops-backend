@@ -1,20 +1,23 @@
 #pragma once
 
 #include <QString>
+#include <QtGlobal>
 
-class EnvironmentManager
+#include "IEnvironmentManager.hpp"
+
+class EnvironmentManager : public IEnvironmentManager
 {
 public:
     EnvironmentManager(const QString& envFilePath);
 
-    void loadEnvironmentVariables(const QString& envFilePath);
+    void loadEnvironmentVariables(const QString& envFilePath) override;
 
-    QString getDatabaseFilePath() const;
-    quint16 getHttpPort() const;
-    quint16 getWebSocketPort() const;
-    QString getRedisUri() const;
-    int getProtoBufContractVersion() const;
-    int getRestJsonContractVersion() const;
+    QString getDatabaseFilePath() const override;
+    quint16 getHttpPort() const override;
+    quint16 getWebSocketPort() const override;
+    QString getRedisUri() const override;
+    int getProtoBufContractVersion() const override;
+    int getRestJsonContractVersion() const override;
 
 private:
     QString _databaseFilePath;
