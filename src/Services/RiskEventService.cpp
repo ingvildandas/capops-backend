@@ -73,36 +73,40 @@ void RiskEventService::registerMultipleRiskEvents
     _repository.insertMultiple(riskEvents);
 }
 
-void RiskEventService::updateAcknowledged
+void RiskEventService::acknowledgeRiskEvents
 (
-    const int riskEventId, 
-    const bool acknowledged,
+    const std::vector<int>& riskEventIds,
     FlightDataStateManager& stateManager
 )
 {
-    _repository.updateAcknowledged(riskEventId, acknowledged);
+    _repository.updateMultipleAcknowledged(riskEventIds);
 
-    if (acknowledged == false)
-    {
-        return;
-    }
-
-    const auto updatedRiskEvent = _repository.selectById(riskEventId);
     const auto currentRiskEventData = stateManager.getState().getRiskEventData();
 
-    std::vector<RiskEvent> updatedRiskEvents;
-    for (const auto& riskEvent : currentRiskEventData.getRiskEvents())
+    std::vector<RiskEvent> updatedRiskEvents = currentRiskEventData.getRiskEvents();
+    for (const int riskEventId : riskEventIds)
     {
-        if (riskEvent.getRiskEventId() != riskEventId)
+        auto it = std::remove_if
+        (
+            updatedRiskEvents.begin(), 
+            updatedRiskEvents.end(), 
+            [&riskEventId](const RiskEvent& currentRiskEvent)
+            {
+                return currentRiskEvent.getRiskEventId() == riskEventId;
+            }
+        );
+        if (it != updatedRiskEvents.end())
         {
-            updatedRiskEvents.push_back(riskEvent);
+            updatedRiskEvents.erase(it, updatedRiskEvents.end());
         }
     }
+
     RiskEventData updatedRiskEventData
     (
         updatedRiskEvents.size(), 
         updatedRiskEvents
     );
+
     updateState(updatedRiskEventData, stateManager);
 }
 
