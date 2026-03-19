@@ -3,12 +3,14 @@
 #include <vector>
 
 #include <QDateTime>
+#include <QFile>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QString>
 
 #include "Proto/FlightData.hpp"
 #include "Converters/FlightDataConverter.hpp"
+#include "Managers/EnvironmentManager.hpp"
 #include "Managers/EnvironmentManagerAppContext.hpp"
 #include "Models/FlightData.hpp"
 #include "Models/Metadata.hpp"
@@ -254,8 +256,17 @@ TEST_CASE("Serialize valid FlightData to JSON", "[FlightDataConverter]")
 
     // Act
 
-    EnvironmentManagerAppContext envManager;
-    QJsonObject json = FlightDataConverter::toJson(flightData, envManager);
+    QJsonObject json;
+    if (!QFile::exists(".env"))
+    {
+        EnvironmentManagerAppContext envManager;
+        json = FlightDataConverter::toJson(flightData, envManager);
+    }
+    else
+    {
+        EnvironmentManager envManager {".env"};
+        json = FlightDataConverter::toJson(flightData, envManager);
+    }
 
     // Assert
 
@@ -279,7 +290,6 @@ TEST_CASE("Serialize valid FlightData to JSON", "[FlightDataConverter]")
 
     const auto mergedRiskEventJson = riskEventDataJson["mergedRiskEvents"].toArray()[0].toObject();
     REQUIRE(mergedRiskEventJson["sectorId"].toInt() == 2);
-    qDebug() << mergedRiskEventJson["summaryMessage"].toString();
     REQUIRE(mergedRiskEventJson["summaryMessage"].toString() == "Risk severity in sector 2 changed from AT_RISK to CONGESTED");
     REQUIRE(mergedRiskEventJson["lastMessage"].toString() == "Test risk event 3");
 
