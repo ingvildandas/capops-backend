@@ -1,6 +1,6 @@
 #include <QString>
 
-#include "EnvironmentManagerAppContext.hpp"
+#include "Managers/EnvironmentManagerAppContext.hpp"
 
 void EnvironmentManagerAppContext::loadEnvironmentVariables()
 {
