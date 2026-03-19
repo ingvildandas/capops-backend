@@ -8,7 +8,7 @@ Metadata::Metadata(const QDateTime& timestamp)
     : _timestamp(timestamp)
 {}
 
-const QDateTime& Metadata::getTimestamp() const
+QDateTime Metadata::getTimestamp() const
 {
     return _timestamp;
 }
