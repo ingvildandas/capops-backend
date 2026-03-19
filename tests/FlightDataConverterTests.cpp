@@ -1,10 +1,15 @@
 #include <catch2/catch_test_macros.hpp>
 
+#include <vector>
+
 #include <QDateTime>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QString>
 
 #include "Proto/FlightData.hpp"
 #include "Converters/FlightDataConverter.hpp"
+#include "Managers/EnvironmentManager.hpp"
 #include "Models/FlightData.hpp"
 
 TEST_CASE("Deserialize valid FlightDataProto", "[FlightDataConverter]")
@@ -166,4 +171,148 @@ TEST_CASE("Deserialize valid FlightDataProto", "[FlightDataConverter]")
     REQUIRE(track.getVelocity().verticalSpeedFeetPerMinute == 0);
     REQUIRE(track.getHeadingDegrees() == 90);
     REQUIRE(track.getGroundTrackDegrees() == 90);
+}
+
+TEST_CASE("Serialize valid FlightData to JSON", "[FlightDataConverter]")
+{
+    // Arrange
+
+    Metadata metadata
+    (
+        QDateTime::fromString("2024-06-01T12:00:00.000Z", Qt::ISODate)
+    );
+
+    RiskEvent riskEvent1
+    (
+        123,
+        5,
+        false,
+        "NORMAL",
+        QDateTime::fromString("2024-06-01T12:00:00.000Z", Qt::ISODate),
+        QDateTime::fromString("2024-06-01T12:05:00.000Z", Qt::ISODate),
+        "Test risk event"
+    );
+
+    RiskEvent riskEvent2
+    (
+        124,
+        5,
+        false,
+        "AT_RISK",
+        QDateTime::fromString("2024-06-01T12:10:00.000Z", Qt::ISODate),
+        QDateTime::fromString("2024-06-01T12:15:00.000Z", Qt::ISODate),
+        "Test risk event 2"
+    );
+
+    RiskEvent riskEvent3
+    (
+        125,
+        5,
+        false,
+        "CONGESTED",
+        QDateTime::fromString("2024-06-01T12:20:00.000Z", Qt::ISODate),
+        QDateTime::fromString("2024-06-01T12:25:00.000Z", Qt::ISODate),
+        "Test risk event 3"
+    );
+
+    std::vector<RiskEvent> riskEvents = { riskEvent1, riskEvent2, riskEvent3 };
+
+    RiskEventData riskEventData(1, riskEvents);
+
+    SectorSummary sectorSummary1(0, 0, 0, 0, 10, 8, "NORMAL", "NORMAL");
+    SectorSummary sectorSummary2(1, 0, 1, 1, 5, 4, "NORMAL", "NORMAL");
+    SectorSummary sectorSummary3(2, 1, 0, 0, 4, 3, "NORMAL", "NORMAL");
+    SectorSummary sectorSummary4(3, 1, 1, 0, 2, 1, "NORMAL", "NORMAL");
+
+    std::vector<SectorSummary> sectorSummaries = 
+    {
+        sectorSummary1,
+        sectorSummary2,
+        sectorSummary3,
+        sectorSummary4
+    };
+
+    SectorSummaryData sectorSummaryData(2, 2, -180.0, 180.0, -90.0, 90.0, sectorSummaries);
+
+    TrackPosition trackPosition{40.7128, -74.0060, 30000};
+    TrackVelocity trackVelocity{450, 0};
+
+    Track track
+    (
+        "ABCD1234",
+        QDateTime::fromString("2024-06-01T12:00:00.000Z", Qt::ISODate),
+        trackPosition,
+        trackVelocity,
+        90,
+        90
+    );
+
+    TrackData trackData(1, "WGS84", { track });
+
+    FlightData flightData(metadata, riskEventData, sectorSummaryData, trackData);
+
+    // Act
+
+    EnvironmentManager envManager(".env");
+    QJsonObject json = FlightDataConverter::toJson(flightData, envManager);
+
+    // Assert
+
+    const auto metadataJson = json["metadata"].toObject();
+    REQUIRE(metadataJson["timestamp"].toString() == "2024-06-01T12:00:00.000Z");
+    REQUIRE(metadataJson["version"].toInt() == 1);
+
+    const auto riskEventDataJson = json["riskEventData"].toObject();
+    REQUIRE(riskEventDataJson["riskEventCount"].toInt() == 1);
+    REQUIRE(riskEventDataJson["riskEvents"].toArray().size() == 3);
+    REQUIRE(riskEventDataJson["mergedRiskEvents"].toArray().size() == 1);
+
+    const auto riskEventJson1 = riskEventDataJson["riskEvents"].toArray()[0].toObject();
+    REQUIRE(riskEventJson1["riskEventId"].toInt() == 123);
+    REQUIRE(riskEventJson1["sectorId"].toInt() == 5);
+    REQUIRE(riskEventJson1["acknowledged"].toBool() == false);
+    REQUIRE(riskEventJson1["riskSeverity"].toString() == "NORMAL");
+    REQUIRE(riskEventJson1["createdTimestamp"].toString() == "2024-06-01T12:00:00.000Z");
+    REQUIRE(riskEventJson1["acknowledgedTimestamp"].toString() == "2024-06-01T12:05:00.000Z");
+    REQUIRE(riskEventJson1["message"].toString() == "Test risk event");
+
+    const auto mergedRiskEventJson = riskEventDataJson["mergedRiskEvents"].toArray()[1].toObject();
+    REQUIRE(mergedRiskEventJson["sectorId"].toInt() == 5);
+    REQUIRE(mergedRiskEventJson["summaryMessage"].toString() == "Risk severity in sector 5 changed from AT_RISK to CONGESTED");
+    REQUIRE(mergedRiskEventJson["lastMessage"].toString() == "Test risk event 3");
+
+    const auto sectorSummaryDataJson = json["sectorSummaryData"].toObject();
+    REQUIRE(sectorSummaryDataJson["rowsCount"].toInt() == 2);
+    REQUIRE(sectorSummaryDataJson["columnsCount"].toInt() == 2);
+    REQUIRE(sectorSummaryDataJson["minLongitude"].toDouble() == -180.0);
+    REQUIRE(sectorSummaryDataJson["maxLongitude"].toDouble() == 180.0);
+    REQUIRE(sectorSummaryDataJson["minLatitude"].toDouble() == -90.0);
+    REQUIRE(sectorSummaryDataJson["maxLatitude"].toDouble() == 90.0);
+    REQUIRE(sectorSummaryDataJson["sectorSummaries"].toArray().size() == 4);
+
+    const auto sectorSummaryJson1 = sectorSummaryDataJson["sectorSummaries"].toArray()[0].toObject();
+    REQUIRE(sectorSummaryJson1["sectorId"].toInt() == 0);
+    REQUIRE(sectorSummaryJson1["row"].toInt() == 0);
+    REQUIRE(sectorSummaryJson1["column"].toInt() == 0);
+    REQUIRE(sectorSummaryJson1["localAircraftCount"].toInt() == 0);
+    REQUIRE(sectorSummaryJson1["localAircraftBaseCapacity"].toInt() == 10);
+    REQUIRE(sectorSummaryJson1["localAircraftEffectiveCapacity"].toInt() == 8);
+    REQUIRE(sectorSummaryJson1["weatherSeverity"].toString() == "NORMAL");
+    REQUIRE(sectorSummaryJson1["riskSeverity"].toString() == "NORMAL");
+
+    const auto trackDataJson = json["trackData"].toObject();
+    REQUIRE(trackDataJson["totalAircraftCount"].toInt() == 1);
+    REQUIRE(trackDataJson["coordinateSystem"].toString() == "WGS84");
+    REQUIRE(trackDataJson["tracks"].toArray().size() == 1);
+
+    const auto trackJson = trackDataJson["tracks"].toArray()[0].toObject();
+    REQUIRE(trackJson["icao24"].toString() == "ABCD1234");
+    REQUIRE(trackJson["timestamp"].toString() == "2024-06-01T12:00:00.000Z");
+    REQUIRE(trackJson["position"].toObject()["latitudeDegrees"].toDouble() == 40.7128);
+    REQUIRE(trackJson["position"].toObject()["longitudeDegrees"].toDouble() == -74.0060);
+    REQUIRE(trackJson["position"].toObject()["altitudeFeet"].toInt() == 30000);
+    REQUIRE(trackJson["velocity"].toObject()["groundSpeedKnots"].toInt() == 450);
+    REQUIRE(trackJson["velocity"].toObject()["verticalSpeedFeetPerMinute"].toInt()  == 0);
+    REQUIRE(trackJson["headingDegrees"].toInt() == 90);
+    REQUIRE(trackJson["groundTrackDegrees"].toInt() == 90);
 }
