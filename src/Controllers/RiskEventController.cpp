@@ -138,9 +138,14 @@ QHttpServerResponse RiskEventController::acknowledgeRiskEvents
     try
     {
         MergedRiskEvent mergedRiskEvent = MergedRiskEventConverter::fromJson(document.object());
+        std::vector<int> riskEventIds;
+        for (const RiskEvent& riskEvent : mergedRiskEvent.getRiskEvents())
+        {
+            riskEventIds.push_back(riskEvent.getRiskEventId());
+        }
         _service.acknowledgeRiskEvents
         (
-            mergedRiskEvent.getRiskEvents(),
+            riskEventIds,
             _stateManager
         );
         return QHttpServerResponse(QHttpServerResponder::StatusCode::NoContent);
