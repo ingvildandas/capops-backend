@@ -22,7 +22,7 @@ QJsonObject MetadataConverter::toJson
     return 
     {
         { "version", envManager.getRestJsonContractVersion() },
-        { "timestamp", metadata.getTimestamp().toString() }
+        { "timestamp", metadata.getTimestamp().toString(Qt::ISODateWithMs) }
     };
 }
 Metadata MetadataConverter::fromProto(const MetadataProto& protoMetadata)
