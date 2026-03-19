@@ -148,6 +148,15 @@ option(BUILD_TESTING "Build tests" ON)
 if(BUILD_TESTING)
     include(CTest) 
     enable_testing()
+
+    set_env(TEST_ENV_VARS
+        DATABASE_FILE_PATH=${CMAKE_SOURCE_DIR}/capops_test.db
+        HTTP_PORT=8080
+        WEBSOCKET_PORT=8081
+        REDIS_URI=redis://localhost:6379
+        PROTOBUF_CONTRACT_VERSION=1
+        REST_JSON_CONTRACT_VERSION=1
+    )
     
     add_executable(tests
         ${APP_SOURCES}
