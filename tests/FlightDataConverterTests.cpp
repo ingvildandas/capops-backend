@@ -256,17 +256,8 @@ TEST_CASE("Serialize valid FlightData to JSON", "[FlightDataConverter]")
 
     // Act
 
-    QJsonObject json;
-    if (!QFile::exists(".env"))
-    {
-        EnvironmentManagerAppContext envManager;
-        json = FlightDataConverter::toJson(flightData, envManager);
-    }
-    else
-    {
-        EnvironmentManager envManager {".env"};
-        json = FlightDataConverter::toJson(flightData, envManager);
-    }
+    EnvironmentManagerAppContext envManager;
+    QJsonObject json = FlightDataConverter::toJson(flightData, envManager);
 
     // Assert
 

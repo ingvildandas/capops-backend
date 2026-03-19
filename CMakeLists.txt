@@ -149,13 +149,6 @@ if(BUILD_TESTING)
     include(CTest) 
     enable_testing()
 
-    set(ENV{DATABASE_FILE_PATH} "${CMAKE_SOURCE_DIR}/capops_test.db")
-    set(ENV{HTTP_PORT} "8080")
-    set(ENV{WEBSOCKET_PORT} "8081")
-    set(ENV{REDIS_URI} "redis://localhost:6379")
-    set(ENV{PROTOBUF_CONTRACT_VERSION} "1")
-    set(ENV{REST_JSON_CONTRACT_VERSION} "1")
-
     add_executable(tests
         ${APP_SOURCES}
         tests/test.cpp
