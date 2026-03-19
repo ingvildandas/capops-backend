@@ -9,6 +9,7 @@ class QJsonObject;
 class MergedRiskEventConverter
 {
 public:
+    static MergedRiskEvent fromJson(const QJsonObject& json);
     static QJsonObject toJson(const MergedRiskEvent& mergedRiskEvent);
     static QJsonArray toJson
     (
