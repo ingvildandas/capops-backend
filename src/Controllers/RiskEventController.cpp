@@ -18,9 +18,13 @@
 RiskEventController::RiskEventController
 (
     RiskEventService& service,
+    FlightDataStateManager& stateManager,
     QObject* parent
 )
-    : _service(service), QObject(parent)
+    : 
+    _service(service), 
+    _stateManager(stateManager), 
+    QObject(parent)
 {}
 
 QHttpServerResponse RiskEventController::getRiskEvent
@@ -141,7 +145,8 @@ QHttpServerResponse RiskEventController::updateRiskEvent
         _service.updateAcknowledged
         (
             riskEvent.getRiskEventId(), 
-            riskEvent.getAcknowledged()
+            riskEvent.getAcknowledged(),
+            _stateManager
         );
         return QHttpServerResponse(QHttpServerResponder::StatusCode::NoContent);
     }
