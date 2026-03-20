@@ -7,7 +7,7 @@ class Metadata
 public:
     Metadata(const QDateTime& timestamp);
 
-    const QDateTime& getTimestamp() const;
+    QDateTime getTimestamp() const;
 public:
 
 private:

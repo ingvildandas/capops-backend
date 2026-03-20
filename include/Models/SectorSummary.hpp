@@ -18,7 +18,7 @@ public:
 
     const int getSectorId() const;
     const int getRow() const;
-    const int getColunmn() const;
+    const int getColumn() const;
     const int getLocalAircraftCount() const;
     const int getLocalAircraftBaseCapacity() const;
     const int getLocalAircraftEffectiveCapacity() const;

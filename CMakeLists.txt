@@ -30,6 +30,8 @@ file(MAKE_DIRECTORY ${PROTO_GEN_DIR})
 set_property(SOURCE ${PROTO_GEN_DIR}/flightdata.pb.h PROPERTY SKIP_AUTOGEN ON)
 set_property(SOURCE ${PROTO_GEN_DIR}/flightdata.pb.cc PROPERTY SKIP_AUTOGEN ON)
 
+add_library(proto_generated)
+
 # ---- Fetch Catch2 ----
 include(FetchContent)
 FetchContent_Declare(
@@ -97,24 +99,36 @@ FetchContent_MakeAvailable(redis-plus-plus)
 
 # ---- Executables ----
 file(GLOB_RECURSE APP_SOURCES 
-    app/main.cpp
     src/*.cpp
     include/*.hpp
-    resources/*.qrc
 )
 add_executable(capops 
+    app/main.cpp
     ${APP_SOURCES}
     ${PROTO_SRCS} 
     ${PROTO_HDRS}
 )
-protobuf_generate(TARGET capops PROTOS ${PROTO_SRC_DIR}/flightdata.proto)
+protobuf_generate(
+    TARGET proto_generated
+    PROTOS ${PROTO_SRC_DIR}/flightdata.proto
+)
 
 # ---- Library ----
+target_include_directories(proto_generated
+    PUBLIC 
+        ${CMAKE_BINARY_DIR}
+)
+
 target_include_directories(capops 
     PRIVATE 
         include
         ${Protobuf_INCLUDE_DIRS}
         ${CMAKE_BINARY_DIR}
+)
+
+target_link_libraries(proto_generated
+    PUBLIC 
+        protobuf::libprotobuf
 )
 
 target_link_libraries(capops 
@@ -125,7 +139,7 @@ target_link_libraries(capops
         Qt6::WebSockets
         SQLite::SQLite3
         redis++::redis++
-        protobuf::libprotobuf
+        proto_generated
 )
 
 # ---- Tests ----
@@ -134,14 +148,30 @@ option(BUILD_TESTING "Build tests" ON)
 if(BUILD_TESTING)
     include(CTest) 
     enable_testing()
-    
+
     add_executable(tests
+        ${APP_SOURCES}
         tests/test.cpp
+        tests/FlightDataConverterTests.cpp
+    )
+
+    target_include_directories(tests
+        PRIVATE
+            include
+            ${Protobuf_INCLUDE_DIRS}
+            ${CMAKE_BINARY_DIR}
     )
 
     target_link_libraries(tests 
         PRIVATE 
             Catch2::Catch2WithMain 
+            Qt6::Core
+            Qt6::Network
+            Qt6::HttpServer
+            Qt6::WebSockets
+            SQLite::SQLite3
+            redis++::redis++
+            proto_generated
     )
 
     include(Catch)
@@ -149,11 +179,16 @@ if(BUILD_TESTING)
 endif()
 
 # ---- Post-Build ----
-if(WIN32)
-    add_custom_command(TARGET capops POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_RUNTIME_DLLS:capops>
-            $<TARGET_FILE_DIR:capops>
-        COMMAND_EXPAND_LISTS
-    )
-endif()
+function(copy_runtime_deps target)
+    if(WIN32)
+        add_custom_command(TARGET ${target} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                $<TARGET_RUNTIME_DLLS:${target}>
+                $<TARGET_FILE_DIR:${target}>
+            COMMAND_EXPAND_LISTS
+        )
+    endif()
+endfunction()
+
+copy_runtime_deps(capops)
+copy_runtime_deps(tests)

@@ -32,7 +32,7 @@ FlightData FlightDataConverter::fromJson(const QJsonObject& json)
 QJsonObject FlightDataConverter::toJson
 (
     const FlightData& flightData,
-    const EnvironmentManager& envManager
+    const IEnvironmentManager& envManager
 )
 {
     return
@@ -57,12 +57,12 @@ FlightData FlightDataConverter::fromProto(const FlightDataProto& proto)
 {
     Metadata metadata = MetadataConverter::fromProto(proto.metadata());
 
-    TrackData trackData = 
-        TrackDataConverter::fromProto(proto.trackdata());
-    SectorSummaryData sectorSummaryData = 
-        SectorSummaryDataConverter::fromProto(proto.sectorsummarydata());
     RiskEventData riskEventData = 
         RiskEventDataConverter::fromProto(proto.riskeventdata());
+    SectorSummaryData sectorSummaryData = 
+        SectorSummaryDataConverter::fromProto(proto.sectorsummarydata());
+    TrackData trackData = 
+        TrackDataConverter::fromProto(proto.trackdata());
 
     return FlightData(metadata, riskEventData, sectorSummaryData, trackData);
 }

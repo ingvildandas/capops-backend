@@ -56,7 +56,7 @@ QJsonObject SectorSummaryConverter::toJson(const SectorSummary& sectorSummary)
     {
         { "sectorId", sectorSummary.getSectorId() },
         { "row", sectorSummary.getRow() },
-        { "colunmn", sectorSummary.getColunmn() },
+        { "column", sectorSummary.getColumn() },
         { "localAircraftCount", sectorSummary.getLocalAircraftCount() },
         { "localAircraftBaseCapacity", sectorSummary.getLocalAircraftBaseCapacity() },
         { 

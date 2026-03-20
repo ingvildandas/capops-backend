@@ -54,8 +54,8 @@ QJsonObject RiskEventConverter::toJson(const RiskEvent& riskEvent)
         { "sectorId", riskEvent.getSectorId() },
         { "acknowledged", riskEvent.getAcknowledged() },
         { "riskSeverity", riskEvent.getRiskSeverity() },
-        { "createdTimestamp", riskEvent.getCreatedTimestamp().toString(Qt::ISODate) },
-        { "acknowledgedTimestamp", riskEvent.getAcknowledgedTimestamp().toString(Qt::ISODate) },
+        { "createdTimestamp", riskEvent.getCreatedTimestamp().toString(Qt::ISODateWithMs) },
+        { "acknowledgedTimestamp", riskEvent.getAcknowledgedTimestamp().toString(Qt::ISODateWithMs) },
         { "message", riskEvent.getMessage() }
     };
 }

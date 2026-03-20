@@ -16,18 +16,22 @@ Metadata MetadataConverter::fromJson(const QJsonObject& json)
 QJsonObject MetadataConverter::toJson
 (
     const Metadata& metadata,
-    const EnvironmentManager& envManager
+    const IEnvironmentManager& envManager
 )
 {
     return 
     {
         { "version", envManager.getRestJsonContractVersion() },
-        { "timestamp", metadata.getTimestamp().toString() }
+        { "timestamp", metadata.getTimestamp().toString(Qt::ISODateWithMs) }
     };
 }
 Metadata MetadataConverter::fromProto(const MetadataProto& protoMetadata)
 {
     QDateTime timestamp = 
-        QDateTime::fromString(QString::fromStdString(protoMetadata.timestamp()));
+        QDateTime::fromString
+        (
+            QString::fromStdString(protoMetadata.timestamp()), 
+            Qt::ISODate
+        );
     return Metadata(timestamp);
 }

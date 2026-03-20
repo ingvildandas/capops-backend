@@ -31,7 +31,7 @@ QJsonObject TrackDataConverter::toJson(const TrackData& trackData)
 
 TrackData TrackDataConverter::fromProto(const TrackDataProto& protoTrackData)
 {
-    int totalAircraftCount = protoTrackData.totalaircraftscount();
+    int totalAircraftCount = protoTrackData.totalaircraftcount();
     QString coordinateSystem = QString::fromStdString(protoTrackData.coordinatesystem());
     std::vector<Track> tracks = TrackConverter::fromProto(protoTrackData.tracks());
 
