@@ -91,7 +91,7 @@ QString EnvironmentManager::getRedisHost() const
     return _redisHost;
 }
 
-QString EnvironmentManager::getRedisHost() const
+QString EnvironmentManager::getRedisPort() const
 {
     return _redisPort;
 }
