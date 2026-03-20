@@ -42,7 +42,7 @@ jobs:
                 -e DATABASE_FILE_PATH=./capops.db \
                 -e HTTP_PORT=8080 \
                 -e WEBSOCKET_PORT=8081 \
-                -e REDIS_HOST=redis \
+                -e REDIS_HOST=redis-server \
                 -e REDIS_PORT=6379 \
                 -e PROTOBUF_CONTRACT_VERSION=1 \
                 -e REST_JSON_CONTRACT_VERSION=1 \
