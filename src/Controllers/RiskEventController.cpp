@@ -11,16 +11,22 @@
 
 #include "Controllers/RiskEventController.hpp"
 #include "Converters/RiskEventConverter.hpp"
+#include "Converters/MergedRiskEventConverter.hpp"
 #include "Exceptions/DatabaseException.hpp"
 #include "Models/RiskEvent.hpp"
+#include "Models/MergedRiskEvent.hpp"
 #include "Services/RiskEventService.hpp"
 
 RiskEventController::RiskEventController
 (
     RiskEventService& service,
+    FlightDataStateManager& stateManager,
     QObject* parent
 )
-    : _service(service), QObject(parent)
+    : 
+    _service(service), 
+    _stateManager(stateManager), 
+    QObject(parent)
 {}
 
 QHttpServerResponse RiskEventController::getRiskEvent
@@ -118,17 +124,11 @@ QHttpServerResponse RiskEventController::getMultipleRiskEvents
     }
 }
 
-QHttpServerResponse RiskEventController::updateRiskEvent
+QHttpServerResponse RiskEventController::acknowledgeRiskEvents
 (
-    const int riskEventId, 
     const QHttpServerRequest& request
 )
 {
-    if (riskEventId <= 0)
-    {
-        return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
-    }
-
     const QJsonDocument document = QJsonDocument::fromJson(request.body());
     if (!document.isObject())
     {
@@ -137,11 +137,16 @@ QHttpServerResponse RiskEventController::updateRiskEvent
 
     try
     {
-        RiskEvent riskEvent = RiskEventConverter::fromJson(document.object());
-        _service.updateAcknowledged
+        MergedRiskEvent mergedRiskEvent = MergedRiskEventConverter::fromJson(document.object());
+        std::vector<int> riskEventIds;
+        for (const RiskEvent& riskEvent : mergedRiskEvent.getRiskEvents())
+        {
+            riskEventIds.push_back(riskEvent.getRiskEventId());
+        }
+        _service.acknowledgeRiskEvents
         (
-            riskEvent.getRiskEventId(), 
-            riskEvent.getAcknowledged()
+            riskEventIds,
+            _stateManager
         );
         return QHttpServerResponse(QHttpServerResponder::StatusCode::NoContent);
     }

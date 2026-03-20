@@ -403,6 +403,32 @@ void RiskEventRepository::updateAcknowledged
     _conn.finalizeStatement(stmt);
 }
 
+void RiskEventRepository::updateMultipleAcknowledged(const std::vector<int>& riskEventIds) 
+{
+    std::string query = std::string("")
+        + "UPDATE RiskEvent "
+        + "SET Acknowledged = 1 "
+        + "WHERE RiskEventId IN (";
+    
+    for (size_t i = 0; i < riskEventIds.size(); ++i)
+    {
+        query += "?";
+        if (i < riskEventIds.size() - 1)
+        {
+            query += ", ";
+        }
+    }
+    query += ");";
+
+    sqlite3_stmt* stmt = _conn.prepareStatement(query);
+    for (size_t i = 0; i < riskEventIds.size(); ++i)
+    {
+        _conn.bindInt(stmt, i + 1, riskEventIds[i]);
+    }
+
+    _conn.finalizeStatement(stmt);
+}
+
 void RiskEventRepository::deleteById(const int riskEventId) 
 {
     std::string query = std::string("")

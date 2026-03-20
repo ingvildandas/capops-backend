@@ -4,9 +4,11 @@
 
 #include "Services/RiskEventService.hpp"
 #include "Managers/FlightDataStateManager.hpp"
+#include "Models/FlightData.hpp"
 #include "Models/RiskEvent.hpp"
 #include "Models/RiskEventData.hpp"
 #include "Repositories/IRiskEventRepository.hpp"
+#include "Structs/FlightDataStructs.hpp"
 
 RiskEventService::RiskEventService(IRiskEventRepository& repository)
     : _repository(repository)
@@ -71,13 +73,41 @@ void RiskEventService::registerMultipleRiskEvents
     _repository.insertMultiple(riskEvents);
 }
 
-void RiskEventService::updateAcknowledged
+void RiskEventService::acknowledgeRiskEvents
 (
-    const int riskEventId, 
-    const bool acknowledged
+    const std::vector<int>& riskEventIds,
+    FlightDataStateManager& stateManager
 )
 {
-    _repository.updateAcknowledged(riskEventId, acknowledged);
+    _repository.updateMultipleAcknowledged(riskEventIds);
+
+    const auto currentRiskEventData = stateManager.getState().getRiskEventData();
+
+    std::vector<RiskEvent> updatedRiskEvents = currentRiskEventData.getRiskEvents();
+    for (const int riskEventId : riskEventIds)
+    {
+        auto it = std::remove_if
+        (
+            updatedRiskEvents.begin(), 
+            updatedRiskEvents.end(), 
+            [&riskEventId](const RiskEvent& currentRiskEvent)
+            {
+                return currentRiskEvent.getRiskEventId() == riskEventId;
+            }
+        );
+        if (it != updatedRiskEvents.end())
+        {
+            updatedRiskEvents.erase(it, updatedRiskEvents.end());
+        }
+    }
+
+    RiskEventData updatedRiskEventData
+    (
+        updatedRiskEvents.size(), 
+        updatedRiskEvents
+    );
+
+    updateState(updatedRiskEventData, stateManager);
 }
 
 void RiskEventService::deleteRiskEvent(const int riskEventId)
@@ -91,5 +121,40 @@ void RiskEventService::updateState
     FlightDataStateManager& stateManager
 )
 {
-    stateManager.setRiskEventData(riskEventData);
+    auto newMergedRiskEvents = riskEventData.getMergedRiskEvents();
+    auto stateMergedRiskEvents = 
+        stateManager.getState().getRiskEventData().getMergedRiskEvents();
+
+    if 
+    (
+        newMergedRiskEvents.empty() || 
+        stateMergedRiskEvents.empty()
+    )
+    {
+        stateManager.setRiskEventData(riskEventData);
+        return;
+    }
+    
+    auto newRiskEvents = riskEventData.getRiskEvents();
+    auto stateRiskEvents = 
+        stateManager.getState().getRiskEventData().getRiskEvents();
+
+    stateRiskEvents.reserve
+    (
+        stateRiskEvents.size() + newRiskEvents.size()
+    );
+    stateRiskEvents.insert
+    (
+        stateRiskEvents.end(), 
+        newRiskEvents.begin(), 
+        newRiskEvents.end()
+    );
+    int updatedRiskEventCount = static_cast<int>(stateRiskEvents.size());
+    RiskEventData updatedRiskEventData
+    (
+        updatedRiskEventCount, 
+        stateRiskEvents
+    );
+
+    stateManager.setRiskEventData(updatedRiskEventData);
 }

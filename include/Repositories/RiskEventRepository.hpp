@@ -44,6 +44,7 @@ public:
         const int riskEventId, 
         const bool acknowledged
     ) override;
+    void updateMultipleAcknowledged(const std::vector<int>& riskEventIds) override;
     void deleteById(const int riskEventId) override;
 
 private:

@@ -4,6 +4,7 @@
 #include <QHttpServerRequest>
 #include <QHttpServerResponse>
 
+class FlightDataStateManager;
 class RiskEventService;
 
 class RiskEventController : public QObject
@@ -13,6 +14,7 @@ class RiskEventController : public QObject
 public:
     explicit RiskEventController(
         RiskEventService& service,
+        FlightDataStateManager& stateManager,
         QObject* parent = nullptr
     );
 
@@ -28,9 +30,8 @@ public:
         const QString& from = DEFAULT_FROM,
         const QString& to = DEFAULT_TO
     );
-    QHttpServerResponse updateRiskEvent
+    QHttpServerResponse acknowledgeRiskEvents
     (
-        const int riskEventId, 
         const QHttpServerRequest& request
     );
     QHttpServerResponse deleteRiskEvent
@@ -41,6 +42,7 @@ public:
 
 private:
     RiskEventService& _service;
+    FlightDataStateManager& _stateManager;
 
 public:
     static const int DEFAULT_COUNT = 1000;

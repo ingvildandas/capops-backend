@@ -38,5 +38,6 @@ public:
         const int riskEventId, 
         const bool acknowledged
     ) = 0;
+    virtual void updateMultipleAcknowledged(const std::vector<int>& riskEventIds) = 0;
     virtual void deleteById(const int riskEventId) = 0;
 };
