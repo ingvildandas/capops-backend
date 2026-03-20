@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y \
     protobuf-compiler \
     libprotobuf-dev \
     qt6-base-dev \
+    qt6-network-dev \
+    qt6-httpserver-dev \
+    qt6-websockets-dev \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
