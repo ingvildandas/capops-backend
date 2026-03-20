@@ -5,12 +5,10 @@
 
 #include "IEnvironmentManager.hpp"
 
-class EnvironmentManagerAppContext : public IEnvironmentManager
+class EnvironmentManagerTest : public IEnvironmentManager
 {
 public:
-    EnvironmentManagerAppContext();
-
-    void loadEnvironmentVariables() const;
+    EnvironmentManagerTest() = default;
 
     QString getDatabaseFilePath() const override;
     quint16 getHttpPort() const override;
@@ -19,13 +17,4 @@ public:
     QString getRedisPort() const override;
     int getProtoBufContractVersion() const override;
     int getRestJsonContractVersion() const override;
-
-private:
-    mutable QString _databaseFilePath;
-    mutable quint16 _httpPort;
-    mutable quint16 _webSocketPort;
-    mutable QString _redisHost;
-    mutable QString _redisPort;
-    mutable int _protoBufContractVersion;
-    mutable int _restJsonContractVersion;
 };

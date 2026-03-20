@@ -15,6 +15,7 @@
 #include "Exceptions/WebSocketException.hpp"
 
 #include "Managers/EnvironmentManager.hpp"
+#include "Managers/EnvironmentManagerAppContext.hpp"
 #include "Managers/FlightDataStateManager.hpp"
 #include "Managers/WebSocketSessionManager.hpp"
 
@@ -33,7 +34,7 @@ namespace
 {
     struct ApplicationContext
     {
-        EnvironmentManager envManager {".env"};
+        EnvironmentManagerAppContext envManager;
         DatabaseConnection conn 
         {
             envManager.getDatabaseFilePath().toStdString()
@@ -54,7 +55,8 @@ namespace
 
         RedisEventBusReceiver redisReceiver 
         {
-            envManager.getRedisUri(), 
+            envManager.getRedisHost(),
+            envManager.getRedisPort(),
             sessionManager, 
             flightDataStateManager, 
             metadataService, 

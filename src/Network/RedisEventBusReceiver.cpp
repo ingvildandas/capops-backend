@@ -28,7 +28,8 @@
 
 RedisEventBusReceiver::RedisEventBusReceiver
 (
-    const QString& redisUri,
+    const QString& redisHost,
+    const QString& redisPort,
     WebSocketSessionManager& sessionManager,
     FlightDataStateManager& flightDataStateManager,
     MetadataService& metadataService,
@@ -38,7 +39,8 @@ RedisEventBusReceiver::RedisEventBusReceiver
     QObject* parent
 )
     :
-    _redisUri(redisUri),
+    _redisHost(redisHost),
+    _redisPort(redisPort),
     _sessionManager(sessionManager),
     _flightDataStateManager(flightDataStateManager),
     _metadataService(metadataService),
@@ -59,7 +61,8 @@ void RedisEventBusReceiver::start()
 
     try
     {
-        _redis = std::make_unique<sw::redis::Redis>(_redisUri.toStdString());
+        QString rediUri = "redis://" + _redisHost + ":" + _redisPort;
+        _redis = std::make_unique<sw::redis::Redis>(rediUri.toStdString());
         _redis->ping();
         _running = true;
     }
