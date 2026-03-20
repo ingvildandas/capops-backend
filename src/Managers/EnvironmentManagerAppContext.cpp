@@ -16,7 +16,7 @@ void EnvironmentManagerAppContext::loadEnvironmentVariables() const
     _httpPort = env.value("HTTP_PORT", "8080").toUShort();
     _webSocketPort = env.value("WEBSOCKET_PORT", "8081").toUShort();
     _redisHost = env.value("REDIS_HOST", "localhost");
-    _redisHost = env.value("REDIS_PORT", "6379");
+    _redisPort = env.value("REDIS_PORT", "6379");
     _protoBufContractVersion = env.value("PROTOBUF_CONTRACT_VERSION", "1").toInt();
     _restJsonContractVersion = env.value("REST_JSON_CONTRACT_VERSION", "1").toInt();
 }
