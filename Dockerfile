@@ -21,7 +21,7 @@ WORKDIR /app
 COPY . .
 
 RUN cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF \
-    && cmake --build build
+    && cmake --build build \
+    && sqlite3 capops.db < scripts/setup.sql
 
-CMD ["sqlite3 capops.db < scripts/setup.sql"]
 CMD ["./build/capops"]
