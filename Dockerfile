@@ -23,4 +23,5 @@ COPY . .
 RUN cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF \
     && cmake --build build
 
+CMD ["sqlite3 capops.db < scripts/setup.sql"]
 CMD ["./build/capops"]
