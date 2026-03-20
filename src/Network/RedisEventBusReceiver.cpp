@@ -59,7 +59,8 @@ void RedisEventBusReceiver::start()
 
     try
     {
-        _redis = std::make_unique<sw::redis::Redis>(_redisUri.toStdString());
+        QString rediUri = "redis:/" + _redisHost + ":" + _redisPort;
+        _redis = std::make_unique<sw::redis::Redis>(rediUri.toStdString());
         _redis->ping();
         _running = true;
     }

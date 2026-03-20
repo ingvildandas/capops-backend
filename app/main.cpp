@@ -54,7 +54,8 @@ namespace
 
         RedisEventBusReceiver redisReceiver 
         {
-            envManager.getRedisUri(), 
+            envManager.getRedisHost(),
+            envManager.getRedisPort(),
             sessionManager, 
             flightDataStateManager, 
             metadataService, 
