@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     qt6-base-dev \
     qt6-httpserver-dev \
     qt6-websockets-dev \
+    sqlite3 \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
