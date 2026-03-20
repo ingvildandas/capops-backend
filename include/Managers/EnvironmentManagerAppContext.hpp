@@ -8,7 +8,9 @@
 class EnvironmentManagerAppContext : public IEnvironmentManager
 {
 public:
-    EnvironmentManagerAppContext() = default;
+    EnvironmentManagerAppContext();
+
+    void loadEnvironmentVariables() const;
 
     QString getDatabaseFilePath() const override;
     quint16 getHttpPort() const override;
@@ -16,4 +18,12 @@ public:
     QString getRedisUri() const override;
     int getProtoBufContractVersion() const override;
     int getRestJsonContractVersion() const override;
+
+private:
+    mutable QString _databaseFilePath;
+    mutable quint16 _httpPort;
+    mutable quint16 _webSocketPort;
+    mutable QString _redisUri;
+    mutable int _protoBufContractVersion;
+    mutable int _restJsonContractVersion;
 };
