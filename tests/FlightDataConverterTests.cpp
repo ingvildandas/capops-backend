@@ -10,8 +10,7 @@
 
 #include "Proto/FlightData.hpp"
 #include "Converters/FlightDataConverter.hpp"
-#include "Managers/EnvironmentManager.hpp"
-#include "Managers/EnvironmentManagerAppContext.hpp"
+#include "Managers/EnvironmentManagerTest.hpp"
 #include "Models/FlightData.hpp"
 #include "Models/Metadata.hpp"
 
@@ -257,7 +256,7 @@ TEST_CASE("Serialize valid FlightData to JSON", "[FlightDataConverter]")
 
     // Act
 
-    EnvironmentManagerAppContext envManager;
+    EnvironmentManagerTest envManager;
     QJsonObject json = FlightDataConverter::toJson(flightData, envManager);
 
     // Assert
