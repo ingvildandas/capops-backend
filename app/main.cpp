@@ -49,7 +49,7 @@ namespace
         SectorSummaryService sectorSummaryService;
         TrackService trackService;
 
-        RiskEventController riskEventController {riskEventService};
+        RiskEventController riskEventController {riskEventService, flightDataStateManager};
         WebSocketController webSocketController {sessionManager};
 
         RedisEventBusReceiver redisReceiver 
