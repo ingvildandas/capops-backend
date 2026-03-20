@@ -15,7 +15,8 @@ public:
     QString getDatabaseFilePath() const override;
     quint16 getHttpPort() const override;
     quint16 getWebSocketPort() const override;
-    QString getRedisUri() const override;
+    QString getRedisHost() const override;
+    QString getRedisPort() const override;
     int getProtoBufContractVersion() const override;
     int getRestJsonContractVersion() const override;
 
@@ -23,7 +24,8 @@ private:
     QString _databaseFilePath;
     quint16 _httpPort;
     quint16 _webSocketPort;
-    QString _redisUri;
+    QString _redisHost;
+    QString _redisPort;
     int _protoBufContractVersion;
     int _restJsonContractVersion;
 };

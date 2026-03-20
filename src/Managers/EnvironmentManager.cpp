@@ -46,11 +46,17 @@ void EnvironmentManager::loadEnvironmentVariables(const QString& envFilePath)
         throw FileException("WEBSOCKET_PORT value is out of range for quint16.");
     }
 
-    QString redisUri = settings.value("REDIS_URI").toString();
-    if (redisUri.isEmpty()) {
-        throw FileException("REDIS_URI is missing or empty.");
+    QString redisHost = settings.value("REDIS_HOST").toString();
+    if (redisHost.isEmpty()) {
+        throw FileException("REDIS_HOST is missing or empty.");
     }
-    _redisUri = redisUri;
+    _redisHost = redisHost;
+
+    QString redisPort = settings.value("REDIS_PORT").toString();
+    if (redisPort.isEmpty()) {
+        throw FileException("REDIS_PORT is missing or empty.");
+    }
+    _redisPort = redisPort;
 
     int protoBufContractVersion = settings.value("PROTOBUF_CONTRACT_VERSION").toInt(&ok);
     if (!ok || protoBufContractVersion <= 0) {
@@ -80,9 +86,14 @@ quint16 EnvironmentManager::getWebSocketPort() const
     return _webSocketPort;
 }
 
-QString EnvironmentManager::getRedisUri() const
+QString EnvironmentManager::getRedisHost() const
 {
-    return _redisUri;
+    return _redisHost;
+}
+
+QString EnvironmentManager::getRedisHost() const
+{
+    return _redisPort;
 }
 
 int EnvironmentManager::getProtoBufContractVersion() const

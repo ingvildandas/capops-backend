@@ -1,33 +1,38 @@
 #include <QString>
 
-#include "Managers/EnvironmentManagerAppContext.hpp"
+#include "Managers/EnvironmentManagerTest.hpp"
 
-QString EnvironmentManagerAppContext::getDatabaseFilePath() const
+QString EnvironmentManagerTest::getDatabaseFilePath() const
 {
     return "capops.db";
 }
 
-quint16 EnvironmentManagerAppContext::getHttpPort() const
+quint16 EnvironmentManagerTest::getHttpPort() const
 {
     return 8080;
 }
 
-quint16 EnvironmentManagerAppContext::getWebSocketPort() const
+quint16 EnvironmentManagerTest::getWebSocketPort() const
 {
     return 8081;
 }
 
-QString EnvironmentManagerAppContext::getRedisUri() const
+QString EnvironmentManagerTest::getRedisHost() const
 {
-    return "redis://localhost:6379";
+    return "redis";
 }
 
-int EnvironmentManagerAppContext::getProtoBufContractVersion() const
+QString EnvironmentManagerTest::getRedisPort() const
+{
+    return "6379";
+}
+
+int EnvironmentManagerTest::getProtoBufContractVersion() const
 {
     return 1;
 }
 
-int EnvironmentManagerAppContext::getRestJsonContractVersion() const
+int EnvironmentManagerTest::getRestJsonContractVersion() const
 {
     return 1;
 }

@@ -15,7 +15,8 @@ void EnvironmentManagerAppContext::loadEnvironmentVariables() const
     _databaseFilePath = env.value("DATABASE_FILE_PATH", "capops.db");
     _httpPort = env.value("HTTP_PORT", "8080").toUShort();
     _webSocketPort = env.value("WEBSOCKET_PORT", "8081").toUShort();
-    _redisUri = env.value("REDIS_URI", "redis://localhost:6379");
+    _redisHost = env.value("REDIS_HOST", "localhost");
+    _redisHost = env.value("REDIS_PORT", "6379");
     _protoBufContractVersion = env.value("PROTOBUF_CONTRACT_VERSION", "1").toInt();
     _restJsonContractVersion = env.value("REST_JSON_CONTRACT_VERSION", "1").toInt();
 }
@@ -35,9 +36,14 @@ quint16 EnvironmentManagerAppContext::getWebSocketPort() const
     return _webSocketPort;
 }
 
-QString EnvironmentManagerAppContext::getRedisUri() const
+QString EnvironmentManagerAppContext::getRedisHost() const
 {
-    return _redisUri;
+    return _redisHost;
+}
+
+QString EnvironmentManagerAppContext::getRedisPort() const
+{
+    return _redisPort;
 }
 
 int EnvironmentManagerAppContext::getProtoBufContractVersion() const
