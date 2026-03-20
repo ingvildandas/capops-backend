@@ -25,7 +25,8 @@ class RedisEventBusReceiver : public QObject
 public:
     RedisEventBusReceiver
     (
-        const QString& redisUri,
+        const QString& redisHost,
+        const QString& redisPort,
         WebSocketSessionManager& sessionManager,
         FlightDataStateManager& flightDataStateManager,
         MetadataService& metadataService,
@@ -46,7 +47,8 @@ private:
     FlightData deserialize(const std::string& payload);
 
 private:
-    QString _redisUri;
+    QString _redisHost;
+    QString _redisPort;
 
     WebSocketSessionManager& _sessionManager;
     FlightDataStateManager& _flightDataStateManager;
