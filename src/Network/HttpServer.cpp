@@ -51,8 +51,8 @@ void HttpServer::registerRiskEventController
             );
         });
         
-    _httpServer.route("/risk-event/id/<arg>", QHttpServerRequest::Method::Put,
-        [&riskEventController](int riskEventId, const QHttpServerRequest& request) {
+    _httpServer.route("/risk-event/acknowledge", QHttpServerRequest::Method::Put,
+        [&riskEventController](const QHttpServerRequest& request) {
             return riskEventController.acknowledgeRiskEvents(request);
         });
         
