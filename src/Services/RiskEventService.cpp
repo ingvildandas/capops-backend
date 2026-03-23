@@ -122,6 +122,13 @@ void RiskEventService::updateState
 )
 {
     auto newMergedRiskEvents = riskEventData.getMergedRiskEvents();
+
+    if (!stateManager.hasRiskEventData())
+    {
+        stateManager.setRiskEventData(riskEventData);
+        return;
+    }
+
     auto stateMergedRiskEvents = 
         stateManager.getState().getRiskEventData().getMergedRiskEvents();
 

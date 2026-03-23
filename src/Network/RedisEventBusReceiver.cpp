@@ -71,6 +71,11 @@ void RedisEventBusReceiver::start()
         throw RedisEventBusException(e.what());
     }
 
+    qRegisterMetaType<FlightData>("FlightData");
+    connect(this, &RedisEventBusReceiver::flightDataReady,
+            &_sessionManager, &WebSocketSessionManager::broadcast,
+            Qt::QueuedConnection);
+
     _subscriberThread = std::thread([this]()
     {
         runSubscriber();
@@ -145,7 +150,7 @@ void RedisEventBusReceiver::handleMessage
 
         auto updatedState = _flightDataStateManager.getState();
 
-        _sessionManager.broadcast(updatedState);
+        emit flightDataReady(updatedState);
     }
     catch (const DatabaseException& e)
     {
