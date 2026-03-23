@@ -39,7 +39,7 @@ public:
     void registerMultipleRiskEvents(const std::vector<RiskEvent>& riskEvents);
     void acknowledgeRiskEvents
     (
-        const std::vector<int>& riskEvents,
+        const std::vector<int>& riskEventIds,
         FlightDataStateManager& stateManager
     );
     void deleteRiskEvent(const int riskEventId);
