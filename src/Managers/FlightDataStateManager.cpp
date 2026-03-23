@@ -36,6 +36,11 @@ FlightData FlightDataStateManager::getState()
     );
 }
 
+bool FlightDataStateManager::hasRiskEventData() const
+{
+    return _state && _state->riskEventData != nullptr;
+}
+
 void FlightDataStateManager::setMetadata(const Metadata& metadata)
 {
     _state->metadata = std::make_unique<Metadata>(metadata);

@@ -16,6 +16,7 @@ public:
     FlightDataStateManager();
 
     FlightData getState();
+    bool hasRiskEventData() const;
 
     void setMetadata(const Metadata& metadata);
     void setRiskEventData(const RiskEventData& riskEventData);

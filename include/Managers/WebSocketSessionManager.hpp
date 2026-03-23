@@ -28,8 +28,10 @@ public:
     QString registerSession(QWebSocket* socket);
     void removeSession(const QString& sessionId);
 
-    void broadcast(const FlightData& dto);
     void sendToClient(const QString& sessionId, const QString& msg);
+
+public slots:
+    void broadcast(const FlightData& dto);
     
 private:
     IEnvironmentManager& _envManager;

@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <QMetaType>
+
 #include "Models/Metadata.hpp"
 #include "Models/RiskEventData.hpp"
 #include "Models/SectorSummaryData.hpp"
@@ -10,6 +12,7 @@
 class FlightData
 {
 public:
+    FlightData() = default;
     FlightData
     (
         const Metadata& metadata,
@@ -29,3 +32,5 @@ private:
     SectorSummaryData _sectorSummaryData;
     TrackData _trackData;
 };
+
+Q_DECLARE_METATYPE(FlightData)

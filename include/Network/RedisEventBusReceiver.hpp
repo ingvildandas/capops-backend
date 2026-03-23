@@ -40,6 +40,9 @@ public:
     void start();
     void stop();
 
+signals:
+    void flightDataReady(const FlightData& flightData);
+
 private:
     void runSubscriber();
     void handleMessage(const std::string& channel, const std::string& payload);
