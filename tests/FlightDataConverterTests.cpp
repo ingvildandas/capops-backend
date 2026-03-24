@@ -288,6 +288,8 @@ TEST_CASE("Serialize valid FlightData to JSON", "[FlightDataConverter]")
     REQUIRE(mergedRiskEventJson["sectorId"].toInt() == 2);
     REQUIRE(mergedRiskEventJson["summaryMessage"].toString() == "Risk severity in sector 2 changed from AT_RISK to CONGESTED");
     REQUIRE(mergedRiskEventJson["lastMessage"].toString() == "Test risk event 3");
+    qDebug() << mergedRiskEventJson["checksum"].toString();
+    REQUIRE(mergedRiskEventJson["checksum"].toString() == "2/3");
 
     const auto sectorSummaryDataJson = json["sectorSummaryData"].toObject();
     REQUIRE(sectorSummaryDataJson["rowsCount"].toInt() == 2);
