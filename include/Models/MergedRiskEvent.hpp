@@ -19,6 +19,7 @@ public:
     std::vector<RiskEvent> getRiskEvents() const;
     QString getSummaryMessage() const;
     QString getLastMessage() const;
+    QString getChecksum() const;
 
     void setRiskEvents(const std::vector<RiskEvent>& riskEvents);
     void addRiskEvents(const std::vector<RiskEvent>& riskEvents);
@@ -30,9 +31,11 @@ private:
     QString _lastMessage;
     QString _previousSeverity;
     QString _currentSeverity;
+    QString _checksum;
 
 private:
     void addRiskEvent(const RiskEvent& riskEvent);
+    void calculateChecksum();
     void updateSummaryInfo();
     void setSummaryInfo
     (

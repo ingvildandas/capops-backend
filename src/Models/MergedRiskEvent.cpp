@@ -16,6 +16,7 @@ MergedRiskEvent::MergedRiskEvent
     : _sectorId(sectorId), _riskEvents(riskEvents)
 {
     updateSummaryInfo();
+    calculateChecksum();
 }
 
 int MergedRiskEvent::getSectorId() const
@@ -38,6 +39,11 @@ QString MergedRiskEvent::getLastMessage() const
     return _lastMessage;
 }
 
+QString MergedRiskEvent::getChecksum() const
+{
+    return _checksum;
+}
+
 void MergedRiskEvent::setRiskEvents(const std::vector<RiskEvent>& riskEvents)
 {
     _riskEvents = riskEvents;
@@ -57,6 +63,12 @@ void MergedRiskEvent::addRiskEvents(const std::vector<RiskEvent>& riskEvents)
 void MergedRiskEvent::addRiskEvent(const RiskEvent& riskEvent)
 {
     _riskEvents.push_back(riskEvent);
+}
+
+void MergedRiskEvent::calculateChecksum()
+{
+    int numRiskEvents = _riskEvents.size();
+    _checksum = QString::number(_sectorId) + QString("/") + QString::number(numRiskEvents);
 }
 
 void MergedRiskEvent::setSummaryInfo
