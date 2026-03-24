@@ -222,10 +222,15 @@ TEST_CASE("Serialize valid FlightData to JSON", "[FlightDataConverter]")
 
     RiskEventData riskEventData(1, riskEvents);
 
-    SectorSummary sectorSummary1(0, 0, 0, 0, 10, 8, "NORMAL", "NORMAL");
-    SectorSummary sectorSummary2(1, 0, 1, 1, 5, 4, "NORMAL", "NORMAL");
-    SectorSummary sectorSummary3(2, 1, 0, 0, 4, 3, "NORMAL", "NORMAL");
-    SectorSummary sectorSummary4(3, 1, 1, 0, 2, 1, "NORMAL", "NORMAL");
+    QVector<QString> icao24List1 { "ABCD1234" };
+    QVector<QString> icao24List2 {};
+    QVector<QString> icao24List3 {};
+    QVector<QString> icao24List4 {};
+
+    SectorSummary sectorSummary1(0, 0, 0, 0, 10, 8, "NORMAL", "NORMAL", icao24List1);
+    SectorSummary sectorSummary2(1, 0, 1, 1, 5, 4, "NORMAL", "NORMAL", icao24List2);
+    SectorSummary sectorSummary3(2, 1, 0, 0, 4, 3, "NORMAL", "NORMAL", icao24List3);
+    SectorSummary sectorSummary4(3, 1, 1, 0, 2, 1, "NORMAL", "NORMAL", icao24List4);
 
     std::vector<SectorSummary> sectorSummaries = 
     {
@@ -263,7 +268,7 @@ TEST_CASE("Serialize valid FlightData to JSON", "[FlightDataConverter]")
 
     const auto metadataJson = json["metadata"].toObject();
     REQUIRE(metadataJson["timestamp"].toString() == "2024-06-01T12:00:00.000Z");
-    REQUIRE(metadataJson["version"].toInt() == 1);
+    REQUIRE(metadataJson["version"].toInt() == 4);
 
     const auto riskEventDataJson = json["riskEventData"].toObject();
     REQUIRE(riskEventDataJson["riskEventCount"].toInt() == 1);
@@ -302,6 +307,10 @@ TEST_CASE("Serialize valid FlightData to JSON", "[FlightDataConverter]")
     REQUIRE(sectorSummaryJson1["localAircraftEffectiveCapacity"].toInt() == 8);
     REQUIRE(sectorSummaryJson1["weatherSeverity"].toString() == "NORMAL");
     REQUIRE(sectorSummaryJson1["riskSeverity"].toString() == "NORMAL");
+    REQUIRE(sectorSummaryJson1["icao24List"].toArray().size() == 1);
+
+    const auto iaco24ListJson = sectorSummaryJson1["icao24List"].toArray();
+    REQUIRE(iaco24ListJson[0].toString() == "ABCD1234");
 
     const auto trackDataJson = json["trackData"].toObject();
     REQUIRE(trackDataJson["totalAircraftCount"].toInt() == 1);
