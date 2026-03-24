@@ -29,10 +29,10 @@ QString EnvironmentManagerTest::getRedisPort() const
 
 int EnvironmentManagerTest::getProtoBufContractVersion() const
 {
-    return 1;
+    return 2;
 }
 
 int EnvironmentManagerTest::getRestJsonContractVersion() const
 {
-    return 1;
+    return 4;
 }

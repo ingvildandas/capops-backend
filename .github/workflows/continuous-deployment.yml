@@ -44,6 +44,6 @@ jobs:
                 -e WEBSOCKET_PORT=8081 \
                 -e REDIS_HOST=redis-server \
                 -e REDIS_PORT=6379 \
-                -e PROTOBUF_CONTRACT_VERSION=1 \
-                -e REST_JSON_CONTRACT_VERSION=1 \
+                -e PROTOBUF_CONTRACT_VERSION=2 \
+                -e REST_JSON_CONTRACT_VERSION=4 \
                 jacobg431/capops-api:latest
