@@ -14,6 +14,12 @@ public:
         const int sectorId,
         const std::vector<RiskEvent>& riskEvents
     );
+    MergedRiskEvent
+    (
+        const int sectorId,
+        const std::vector<RiskEvent>& riskEvents,
+        const QString checksum
+    );
 
     int getSectorId() const;
     std::vector<RiskEvent> getRiskEvents() const;

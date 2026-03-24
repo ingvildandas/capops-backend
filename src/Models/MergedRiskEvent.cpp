@@ -19,6 +19,17 @@ MergedRiskEvent::MergedRiskEvent
     calculateChecksum();
 }
 
+MergedRiskEvent::MergedRiskEvent
+(
+    const int sectorId,
+    const std::vector<RiskEvent>& riskEvents,
+    const QString checksum
+)
+    : _sectorId(sectorId), _riskEvents(riskEvents)
+{
+    updateSummaryInfo();
+}
+
 int MergedRiskEvent::getSectorId() const
 {
     return _sectorId;
