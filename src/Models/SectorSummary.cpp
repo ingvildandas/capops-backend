@@ -11,7 +11,8 @@ SectorSummary::SectorSummary
     const int localAircraftBaseCapacity,
     const int localAircraftEffectiveCapacity,
     const QString& weatherSeverity,
-    const QString& riskSeverity
+    const QString& riskSeverity,
+    const std::vector<std::string>& icao24List
 )   
     :
     _sectorId(sectorId),
@@ -21,44 +22,51 @@ SectorSummary::SectorSummary
     _localAircraftBaseCapacity(localAircraftBaseCapacity),
     _localAircraftEffectiveCapacity(localAircraftEffectiveCapacity),
     _weatherSeverity(weatherSeverity),
-    _riskSeverity(riskSeverity)
+    _riskSeverity(riskSeverity),
+    _icao24List(icao24List)
 {}
 
-const int SectorSummary::getSectorId() const
+int SectorSummary::getSectorId() const
 {
     return _sectorId;
 }
 
-const int SectorSummary::getRow() const
+int SectorSummary::getRow() const
 {
     return _row;
 }
 
-const int SectorSummary::getColumn() const
+int SectorSummary::getColumn() const
 {
     return _colunmn;
 }
 
-const int SectorSummary::getLocalAircraftCount() const
+int SectorSummary::getLocalAircraftCount() const
 {
     return _localAircraftCount;
 }
 
-const int SectorSummary::getLocalAircraftBaseCapacity() const
+int SectorSummary::getLocalAircraftBaseCapacity() const
 {
     return _localAircraftBaseCapacity;
 }
 
-const int SectorSummary::getLocalAircraftEffectiveCapacity() const
+int SectorSummary::getLocalAircraftEffectiveCapacity() const
 {
     return _localAircraftEffectiveCapacity;
 }
 
-const QString& SectorSummary::getWeatherSeverity() const
+QString SectorSummary::getWeatherSeverity() const
 {
     return _weatherSeverity;
 }
-const QString& SectorSummary::getRiskSeverity() const
+
+QString SectorSummary::getRiskSeverity() const
 {
     return _riskSeverity;
+}
+
+std::vector<std::string> SectorSummary::getIcao24List() const
+{
+    return _icao24List;
 }

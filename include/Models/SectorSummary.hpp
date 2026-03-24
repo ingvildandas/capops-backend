@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include <QString>
 
 class SectorSummary
@@ -13,17 +16,19 @@ public:
         const int localAircraftBaseCapacity,
         const int localAircraftEffectiveCapacity,
         const QString& weatherSeverity,
-        const QString& riskSeverity
+        const QString& riskSeverity,
+        const std::vector<std::string>& icao24List
     );
 
-    const int getSectorId() const;
-    const int getRow() const;
-    const int getColumn() const;
-    const int getLocalAircraftCount() const;
-    const int getLocalAircraftBaseCapacity() const;
-    const int getLocalAircraftEffectiveCapacity() const;
-    const QString& getWeatherSeverity() const;
-    const QString& getRiskSeverity() const;
+    int getSectorId() const;
+    int getRow() const;
+    int getColumn() const;
+    int getLocalAircraftCount() const;
+    int getLocalAircraftBaseCapacity() const;
+    int getLocalAircraftEffectiveCapacity() const;
+    QString getWeatherSeverity() const;
+    QString getRiskSeverity() const;
+    std::vector<std::string> getIcao24List() const;
 
 private:
     int _sectorId;
@@ -34,4 +39,5 @@ private:
     int _localAircraftEffectiveCapacity;
     QString _weatherSeverity;
     QString _riskSeverity;
+    std::vector<std::string> _icao24List;
 };
