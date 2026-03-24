@@ -3,6 +3,10 @@
 
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QJsonValue>
+#include <QString>
+#include <QStringList>
+#include <QVector>
 
 #include "Converters/SectorSummaryConverter.hpp"
 #include "Models/SectorSummary.hpp"
@@ -19,6 +23,14 @@ SectorSummary SectorSummaryConverter::fromJson(const QJsonObject& json)
         json["localAircraftEffectiveCapacity"].toInt();
     QString weatherSeverity = json["weatherSeverity"].toString();
     QString riskSeverity = json["riskSeverity"].toString();
+    QJsonArray icao24ListJson = json["icao24List"].toArray();
+
+    QVector<QString> icao24List;
+    icao24List.reserve(icao24ListJson.size());
+    
+    for (const QJsonValue &value : icao24ListJson) {
+        icao24List.append(value.toString());
+    }
     
     return SectorSummary
     (
@@ -29,7 +41,8 @@ SectorSummary SectorSummaryConverter::fromJson(const QJsonObject& json)
         localAircraftBaseCapacity,
         localAircraftEffectiveCapacity,
         weatherSeverity,
-        riskSeverity
+        riskSeverity,
+        icao24List
     );
 }
 
@@ -52,6 +65,13 @@ std::vector<SectorSummary> SectorSummaryConverter::fromJson
 
 QJsonObject SectorSummaryConverter::toJson(const SectorSummary& sectorSummary)
 {
+    
+    QVector<QString> icao24List = sectorSummary.getIcao24List();
+    QJsonArray icao24ListJson;
+    for (const auto& icao24 : icao24List)
+    {
+        icao24ListJson.append(icao24);
+    }
     return 
     {
         { "sectorId", sectorSummary.getSectorId() },
@@ -64,7 +84,8 @@ QJsonObject SectorSummaryConverter::toJson(const SectorSummary& sectorSummary)
             sectorSummary.getLocalAircraftEffectiveCapacity() 
         },
         { "weatherSeverity", sectorSummary.getWeatherSeverity() },
-        { "riskSeverity", sectorSummary.getRiskSeverity() }
+        { "riskSeverity", sectorSummary.getRiskSeverity() },
+        { "icao24List", icao24ListJson }
     };
 }
 
@@ -96,6 +117,12 @@ SectorSummary SectorSummaryConverter::fromProto
         QString::fromStdString(protoSectorSummary.weatherseverity());
     QString riskSeverity = 
         QString::fromStdString(protoSectorSummary.riskseverity());
+    QVector<QString> icao24List;
+
+    for (std::string icao24 : protoSectorSummary.icao24list())
+    {
+        icao24List.push_back(QString::fromStdString(icao24));
+    }
 
     return SectorSummary
     (
@@ -106,7 +133,8 @@ SectorSummary SectorSummaryConverter::fromProto
         localAircraftBaseCapacity,
         localAircraftEffectiveCapacity,
         weatherSeverity,
-        riskSeverity
+        riskSeverity,
+        icao24List
     );
 }
 
