@@ -13,6 +13,7 @@ MergedRiskEvent MergedRiskEventConverter::fromJson(const QJsonObject& json)
     int sectorId = json["sectorId"].toInt();
     QString summaryMessage = json["summaryMessage"].toString();
     QString lastMessage = json["lastMessage"].toString();
+    QString checksum = json["checksum"].toString();
 
     std::vector<RiskEvent> riskEvents;
     QJsonArray riskEventIds = json["riskEventIds"].toArray();
@@ -22,7 +23,7 @@ MergedRiskEvent MergedRiskEventConverter::fromJson(const QJsonObject& json)
         riskEvents.emplace_back(riskEventId.toInt(), sectorId, false, "", QDateTime(), QDateTime(), "");
     }
 
-    MergedRiskEvent mergedRiskEvent(sectorId, riskEvents);
+    MergedRiskEvent mergedRiskEvent(sectorId, riskEvents, checksum);
 
     return mergedRiskEvent;
 }
@@ -33,6 +34,7 @@ QJsonObject MergedRiskEventConverter::toJson
 )
 {
     std::vector<RiskEvent> riskEvents = mergedRiskEvent.getRiskEvents();
+    QString checksum = mergedRiskEvent.getChecksum();
     QJsonArray riskEventIds;
     for (const auto& riskEvent : riskEvents)
     {
@@ -44,7 +46,8 @@ QJsonObject MergedRiskEventConverter::toJson
         { "sectorId", mergedRiskEvent.getSectorId() },
         { "summaryMessage", mergedRiskEvent.getSummaryMessage() },
         { "lastMessage", mergedRiskEvent.getLastMessage() },
-        { "riskEventIds", riskEventIds }
+        { "riskEventIds", riskEventIds },
+        { "checksum", checksum }
     };
 }
 
