@@ -12,7 +12,7 @@ SectorSummary::SectorSummary
     const int localAircraftEffectiveCapacity,
     const QString& weatherSeverity,
     const QString& riskSeverity,
-    const std::vector<std::string>& icao24List
+    const QVector<QString>& icao24List
 )   
     :
     _sectorId(sectorId),
@@ -66,7 +66,7 @@ QString SectorSummary::getRiskSeverity() const
     return _riskSeverity;
 }
 
-std::vector<std::string> SectorSummary::getIcao24List() const
+QVector<QString> SectorSummary::getIcao24List() const
 {
     return _icao24List;
 }

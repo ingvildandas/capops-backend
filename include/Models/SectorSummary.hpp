@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <QString>
+#include <QVector>
 
 class SectorSummary
 {
@@ -17,7 +18,7 @@ public:
         const int localAircraftEffectiveCapacity,
         const QString& weatherSeverity,
         const QString& riskSeverity,
-        const std::vector<std::string>& icao24List
+        const QVector<QString>& icao24List
     );
 
     int getSectorId() const;
@@ -28,7 +29,7 @@ public:
     int getLocalAircraftEffectiveCapacity() const;
     QString getWeatherSeverity() const;
     QString getRiskSeverity() const;
-    std::vector<std::string> getIcao24List() const;
+    QVector<QString> getIcao24List() const;
 
 private:
     int _sectorId;
@@ -39,5 +40,5 @@ private:
     int _localAircraftEffectiveCapacity;
     QString _weatherSeverity;
     QString _riskSeverity;
-    std::vector<std::string> _icao24List;
+    QVector<QString> _icao24List;
 };
