@@ -12,7 +12,7 @@
 class FlightData
 {
 public:
-    FlightData() = default;
+    FlightData() = delete;
     FlightData
     (
         const Metadata& metadata,
