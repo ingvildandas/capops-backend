@@ -1,8 +1,10 @@
 #include <catch2/catch_test_macros.hpp>
 
+#include <unordered_map>
 #include <vector>
 
 #include <QDateTime>
+#include <QString>
 
 #include "Managers/FlightDataStateManager.hpp"
 #include "Models/FlightData.hpp"
@@ -32,7 +34,7 @@ TEST_CASE("Risk events are merged correctly", "[RiskEventService]")
     // Arrange 
 
     MockRiskEventRepository repo;
-    RiskEventService svc(repo);
+    RiskEventService service(repo);
     FlightDataStateManager stateManager;
 
     RiskEvent riskEvent1
@@ -87,7 +89,7 @@ TEST_CASE("Risk events are merged correctly", "[RiskEventService]")
     stateManager.setTrackData(trackData);
 
     // Act
-    svc.updateState(incomingRiskEventData, stateManager);
+    service.updateState(incomingRiskEventData, stateManager);
 
     // Assert
     const auto updatedRiskEventData = stateManager.getState().getRiskEventData();
@@ -128,4 +130,120 @@ TEST_CASE("Risk events are merged correctly", "[RiskEventService]")
             [&](const RiskEvent& r){ return r.getRiskEventId()==3; }
         ) != mergedEvents.end()
     );
+}
+
+TEST_CASE("Risk events are removed from FlightDataState when acknowledged", "[RiskEventService]")
+{
+    MockRiskEventRepository repo;
+    RiskEventService service(repo);
+    FlightDataStateManager stateManager;
+
+    RiskEvent riskEvent1
+    (
+        1, 
+        0, 
+        false, 
+        "NORMAL", 
+        QDateTime::fromString("2024-06-01T12:00:00.000Z"),
+        QDateTime(),
+        "Test risk event 1"
+    );
+    
+    RiskEvent riskEvent2
+    (
+        2, 
+        0, 
+        false, 
+        "CONGESTED", 
+        QDateTime::fromString("2024-06-01T12:10:00.000Z"),
+        QDateTime(),
+        "Test risk event 2"
+    );
+    
+    RiskEvent riskEvent3
+    (
+        3, 
+        0, 
+        false, 
+        "AT_RISK", 
+        QDateTime::fromString("2024-06-01T12:20:00.000Z"),
+        QDateTime(),
+        "Test risk event 3"
+    );
+    
+    RiskEvent riskEvent4
+    (
+        4, 
+        1, 
+        false, 
+        "NORMAL", 
+        QDateTime::fromString("2024-06-01T12:00:00.000Z"),
+        QDateTime(),
+        "Test risk event 4"
+    );
+    
+    RiskEvent riskEvent5
+    (
+        5, 
+        2, 
+        false, 
+        "CONGESTED", 
+        QDateTime::fromString("2024-06-01T12:10:00.000Z"),
+        QDateTime(),
+        "Test risk event 5"
+    );
+    
+    RiskEvent riskEvent6
+    (
+        6, 
+        3, 
+        false, 
+        "AT_RISK", 
+        QDateTime::fromString("2024-06-01T12:20:00.000Z"),
+        QDateTime(),
+        "Test risk event 6"
+    );
+    std::vector<RiskEvent> existingEvents;
+    existingEvents.push_back(riskEvent1);
+    existingEvents.push_back(riskEvent2);
+    existingEvents.push_back(riskEvent3);
+    existingEvents.push_back(riskEvent4);
+    existingEvents.push_back(riskEvent5);
+    existingEvents.push_back(riskEvent6);
+
+    RiskEventData existingRiskEventData
+    (
+        static_cast<int>(existingEvents.size()),
+        existingEvents
+    );
+
+    Metadata metadata(QDateTime::fromString("2024-06-01T12:20:00.000Z"));
+    SectorSummaryData sectorSummaryData(2, 2, -180.0, 180.0, -90.0, 90.0, {});
+    TrackData trackData(0, "WGS84", {});
+
+    stateManager.setMetadata(metadata);
+    stateManager.setRiskEventData(existingRiskEventData);
+    stateManager.setSectorSummaryData(sectorSummaryData);
+    stateManager.setTrackData(trackData);
+
+    std::vector<int> ackIds = {1, 2, 3};
+
+    // Act
+    service.acknowledgeRiskEvents(ackIds, stateManager);
+
+    // Assert
+    const auto updatedRiskEvents = 
+        stateManager.getState().getRiskEventData().getRiskEvents();
+
+    REQUIRE(updatedRiskEvents.size() == 3);
+    REQUIRE(updatedRiskEvents[0].getRiskEventId() == 4);
+    REQUIRE(updatedRiskEvents[1].getRiskEventId() == 5);
+    REQUIRE(updatedRiskEvents[2].getRiskEventId() == 6);
+
+    auto localCopy = updatedRiskEvents;
+    localCopy.clear();
+
+    const auto unchangedRiskEvents = 
+        stateManager.getState().getRiskEventData().getRiskEvents();
+    REQUIRE(unchangedRiskEvents.size() == 3);
 }

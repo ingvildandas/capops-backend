@@ -1,3 +1,4 @@
+#include <unordered_set>
 #include <vector>
 
 #include <QDateTime>
@@ -83,31 +84,32 @@ void RiskEventService::acknowledgeRiskEvents
 
     const auto currentRiskEventData = stateManager.getState().getRiskEventData();
 
-    std::vector<RiskEvent> updatedRiskEvents = currentRiskEventData.getRiskEvents();
-    for (const int riskEventId : riskEventIds)
+    std::vector<RiskEvent> currentRiskEvents = currentRiskEventData.getRiskEvents();
+    
+    std::vector<RiskEvent> updatedRiskEvents;
+    updatedRiskEvents.reserve(currentRiskEvents.size());
+
+    std::unordered_set<int> idsToAck
+    (
+        riskEventIds.begin(),
+        riskEventIds.end()
+    );
+
+    for (const auto& riskEvent : currentRiskEvents)
     {
-        auto it = std::remove_if
-        (
-            updatedRiskEvents.begin(), 
-            updatedRiskEvents.end(), 
-            [&riskEventId](const RiskEvent& currentRiskEvent)
-            {
-                return currentRiskEvent.getRiskEventId() == riskEventId;
-            }
-        );
-        if (it != updatedRiskEvents.end())
+        if (idsToAck.find(riskEvent.getRiskEventId()) == idsToAck.end())
         {
-            updatedRiskEvents.erase(it, updatedRiskEvents.end());
+            updatedRiskEvents.push_back(riskEvent);
         }
     }
 
     RiskEventData updatedRiskEventData
     (
-        updatedRiskEvents.size(), 
+        static_cast<int>(updatedRiskEvents.size()), 
         updatedRiskEvents
     );
 
-    updateState(updatedRiskEventData, stateManager);
+    stateManager.setRiskEventData(updatedRiskEventData);
 }
 
 void RiskEventService::deleteRiskEvent(const int riskEventId)
