@@ -74,7 +74,7 @@ TEST_CASE("Risk events are merged correctly", "[RiskEventService]")
     RiskEventData existingRiskEventData(2, existingRiskEvents);
 
     std::vector<RiskEvent> incomingRiskEvents;
-    existingRiskEvents.push_back(riskEvent3);
+    incomingRiskEvents.push_back(riskEvent3);
     RiskEventData incomingRiskEventData(1, incomingRiskEvents);
     
     Metadata metadata(QDateTime::fromString("2024-06-01T12:20:00.000Z"));
@@ -90,9 +90,10 @@ TEST_CASE("Risk events are merged correctly", "[RiskEventService]")
     svc.updateState(incomingRiskEventData, stateManager);
 
     // Assert
-    const auto updatedMergedRiskEvents = 
-        stateManager.getState().getRiskEventData().getMergedRiskEvents();
-    
+    const auto updatedRiskEventData = stateManager.getState().getRiskEventData();
+    REQUIRE(updatedRiskEventData.getRiskEventCount() == 3);
+
+    const auto updatedMergedRiskEvents = updatedRiskEventData.getMergedRiskEvents();
     REQUIRE(updatedMergedRiskEvents.size() == 1);
 
     const auto& mergedEvents = updatedMergedRiskEvents[0].getRiskEvents();
