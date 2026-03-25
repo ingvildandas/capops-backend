@@ -8,6 +8,8 @@
 #include "Models/FlightData.hpp"
 #include "Models/RiskEvent.hpp"
 #include "Models/RiskEventData.hpp"
+#include "Models/SectorSummaryData.hpp"
+#include "Models/TrackData.hpp"
 #include "Repositories/IRiskEventRepository.hpp"
 #include "Services/RiskEventService.hpp"
 
@@ -74,8 +76,15 @@ TEST_CASE("Risk events are merged correctly", "[RiskEventService]")
     std::vector<RiskEvent> incomingRiskEvents;
     existingRiskEvents.push_back(riskEvent3);
     RiskEventData incomingRiskEventData(1, incomingRiskEvents);
+    
+    Metadata metadata(QDateTime::fromString("2024-06-01T12:20:00.000Z"));
+    SectorSummaryData sectorSummaryData(2, 2, -180.0, 180.0, -90.0, 90.0, {});
+    TrackData trackData(0, "WGS84", {});
 
+    stateManager.setMetadata(metadata);
     stateManager.setRiskEventData(existingRiskEventData);
+    stateManager.setSectorSummaryData(sectorSummaryData);
+    stateManager.setTrackData(trackData);
 
     // Act
     svc.updateState(incomingRiskEventData, stateManager);
