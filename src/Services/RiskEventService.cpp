@@ -121,22 +121,17 @@ void RiskEventService::updateState
     FlightDataStateManager& stateManager
 )
 {
-    auto newMergedRiskEvents = riskEventData.getMergedRiskEvents();
-
     if (!stateManager.hasRiskEventData())
     {
         stateManager.setRiskEventData(riskEventData);
         return;
     }
 
+    auto newMergedRiskEvents = riskEventData.getMergedRiskEvents();
     auto stateMergedRiskEvents = 
         stateManager.getState().getRiskEventData().getMergedRiskEvents();
 
-    if 
-    (
-        newMergedRiskEvents.empty() || 
-        stateMergedRiskEvents.empty()
-    )
+    if (stateMergedRiskEvents.empty())
     {
         stateManager.setRiskEventData(riskEventData);
         return;
