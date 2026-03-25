@@ -153,6 +153,7 @@ if(BUILD_TESTING)
         ${APP_SOURCES}
         tests/test.cpp
         tests/FlightDataConverterTests.cpp
+        tests/RiskEventServiceTests.cpp
     )
 
     target_include_directories(tests
@@ -175,7 +176,6 @@ if(BUILD_TESTING)
     )
 
     include(Catch)
-    catch_discover_tests(tests)
 endif()
 
 # ---- Post-Build ----
@@ -191,4 +191,8 @@ function(copy_runtime_deps target)
 endfunction()
 
 copy_runtime_deps(capops)
-copy_runtime_deps(tests)
+
+if(BUILD_TESTING)
+    catch_discover_tests(tests)
+    copy_runtime_deps(tests)
+endif()

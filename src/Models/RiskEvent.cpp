@@ -2,6 +2,17 @@
 
 #include "Models/RiskEvent.hpp"
 
+RiskEvent::RiskEvent()
+    :
+    _riskEventId(0), 
+    _sectorId(0),
+    _acknowledged(false),
+    _riskSeverity(""),
+    _createdTimestamp(QDateTime::currentDateTimeUtc()),
+    _acknowledgedTimestamp(QDateTime()),
+    _message("")
+{}
+
 RiskEvent::RiskEvent
 (
     const int riskEventId,
