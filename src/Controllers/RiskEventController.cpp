@@ -139,15 +139,24 @@ QHttpServerResponse RiskEventController::acknowledgeRiskEvents
     {
         MergedRiskEvent mergedRiskEvent = MergedRiskEventConverter::fromJson(document.object());
         std::vector<int> riskEventIds;
-        for (const RiskEvent& riskEvent : mergedRiskEvent.getRiskEvents())
+        std::vector<RiskEvent> riskEvents = mergedRiskEvent.getRiskEvents();
+        
+        if (riskEvents.empty())
+        {
+            return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
+        }
+
+        for (const RiskEvent& riskEvent : riskEvents)
         {
             riskEventIds.push_back(riskEvent.getRiskEventId());
         }
+
         _service.acknowledgeRiskEvents
         (
             riskEventIds,
             _stateManager
         );
+
         return QHttpServerResponse(QHttpServerResponder::StatusCode::NoContent);
     }
     catch (const DatabaseException&)
