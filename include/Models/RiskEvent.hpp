@@ -26,6 +26,8 @@ public:
     const QDateTime& getAcknowledgedTimestamp() const;
     const QString& getMessage() const;
 
+    void setRiskEventId(const int riskEventId);
+
 private:
     int _riskEventId;
     int _sectorId;

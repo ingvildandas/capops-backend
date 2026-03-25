@@ -67,3 +67,8 @@ const QString& RiskEvent::getMessage() const
 {
     return _message;
 }
+
+void RiskEvent::setRiskEventId(const int riskEventId)
+{
+    _riskEventId = riskEventId;
+}
