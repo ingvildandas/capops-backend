@@ -6,6 +6,8 @@
 class RiskEvent
 {
 public:
+    RiskEvent();
+
     RiskEvent(
         const int riskEventId,
         const int sectorId,
